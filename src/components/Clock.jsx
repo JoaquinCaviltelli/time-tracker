@@ -22,7 +22,7 @@ const Clock = ({ totalHours, goal, minutesRest}) => {
                 backgroundColor: ['rgba(0, 123, 255, 0.6)', 'rgba(108, 117, 125, 0.6)'],
                 borderColor: ['#fff', '#fff'],
                 borderWidth: 2,
-                cutout: '70%', // Tamaño del agujero para el segundo anillo
+                cutout: '80%', // Tamaño del agujero para el segundo anillo
                 label: 'Días',
             },
             {
@@ -31,7 +31,7 @@ const Clock = ({ totalHours, goal, minutesRest}) => {
                 backgroundColor: ['#4CAF50', 'rgba(108, 117, 125, 0.6)'],
                 borderColor: ['#fff', '#fff'],
                 borderWidth: 2,
-                cutout: '70%', // Tamaño del agujero para el primer anillo
+                cutout: '80%', // Tamaño del agujero para el primer anillo
                 label: 'Horas',
             },
         ],
@@ -62,13 +62,13 @@ const Clock = ({ totalHours, goal, minutesRest}) => {
     };
 
     return (
-        <div className="relative p-6 rounded-lg flex flex-col w-96 h-96">
+        <div className="relative rounded-lg flex flex-col max-w-80">
 
             {/* Gráfico de Donut */}
             <div className="flex items-center justify-center mb-4 relative">
                 <div className="absolute inset-0 flex flex-col items-center justify-center cursor-pointer  rounded-full m-10">
-                    <p  className="text-4xl font-bold text-gray-600 ">{totalHours}:{minutesRest}hs</p>
-                    <p className="text-sm text-gray-500">{daysRemaining} días restantes</p>
+                    <p  className="text-4xl font-bold text-gray-600 ">{totalHours}:{minutesRest < 10 ? `0${minutesRest}` : minutesRest}hs</p>
+                    <p className="text-sm text-gray-500">{daysRemaining} {daysRemaining === 1 ? "día" : "días"} restantes</p>
                 </div>
                 <Doughnut data={data} options={chartOptions} />
             </div>

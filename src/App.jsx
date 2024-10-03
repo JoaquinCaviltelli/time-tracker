@@ -9,6 +9,7 @@ import Historial from "./pages/Historial";
 import Configuracion from "./pages/Configuracion";
 import PrivateRoute from "./components/PrivateRoute";
 import Header from "./components/Header";
+import Footer from "/src/components/Footer.jsx";
 import Loading from "./components/Loading";
 import { useSwipeable } from "react-swipeable";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -53,9 +54,10 @@ const MainApp = () => {
   });
 
   return (
-    <div {...swipeHandlers}>
+    // <div {...swipeHandlers}>
+    <div>
       <Loading loading={loading} />
-      {user && <Header />}
+      {user && <><Header/> </> }
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
@@ -63,6 +65,7 @@ const MainApp = () => {
         <Route path="/configuracion" element={<PrivateRoute><Configuracion /></PrivateRoute>} />
       </Routes>
       <ToastContainer />
+      {user && <><Footer/> </> }
     </div>
   );
 };

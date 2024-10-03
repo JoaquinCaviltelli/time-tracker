@@ -4,13 +4,16 @@ import moment from "moment";
 import { useSwipeable } from "react-swipeable";
 
 const ModalAddHours = () => {
-  const [modalState, setModalState] = useState({ visible: false, animating: false });
+  const [modalState, setModalState] = useState({
+    visible: false,
+    animating: false,
+  });
   const [hoursWorked, setHoursWorked] = useState(0);
   const [minutesWorked, setMinutesWorked] = useState(0);
   const [date, setDate] = useState(moment().format("YYYY-MM-DD"));
   const { addHours } = useContext(HoursContext);
   const modalRef = useRef(null);
-  
+
   // Para las animaciones de los selectores
   const [animateHours, setAnimateHours] = useState(false);
   const [animateMinutes, setAnimateMinutes] = useState(false);
@@ -26,7 +29,10 @@ const ModalAddHours = () => {
     setMinutesWorked(0);
     setDate(moment().format("YYYY-MM-DD"));
     setModalState({ visible: true, animating: true });
-    setTimeout(() => setModalState((prev) => ({ ...prev, animating: false })), 10);
+    setTimeout(
+      () => setModalState((prev) => ({ ...prev, animating: false })),
+      10
+    );
   };
 
   const closeModal = () => {
@@ -52,7 +58,7 @@ const ModalAddHours = () => {
     setHoursWorked((prev) => prev + 1);
     setTimeout(() => setAnimateHours(false), 300); // Duración de la animación
   };
-  
+
   const decrementHours = () => {
     setAnimateHours(true);
     setHoursWorked((prev) => Math.max(prev - 1, 0));
@@ -68,7 +74,9 @@ const ModalAddHours = () => {
 
   const decrementMinutes = () => {
     setAnimateMinutes(true);
-    setMinutesWorked((prev) => (prev >= 5 ? prev - 5 : hoursWorked > 0 ? 55 : 0));
+    setMinutesWorked((prev) =>
+      prev >= 5 ? prev - 5 : hoursWorked > 0 ? 55 : 0
+    );
     if (minutesWorked === 0 && hoursWorked > 0) decrementHours();
     setTimeout(() => setAnimateMinutes(false), 300);
   };
@@ -89,12 +97,15 @@ const ModalAddHours = () => {
 
   return (
     <>
-      <button onClick={openModal} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
-        Agregar Horas
+      <button
+        onClick={openModal}
+        className="bg-blue-500 text-white  hover:bg-blue-600 transition rounded-full w-14 h-14"
+      >
+        <span className="material-icons font-semibold">add</span>
       </button>
 
       {modalState.visible && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-end">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-end z-50">
           <div
             ref={modalRef}
             className={`bg-white p-10 w-screen transform transition-transform duration-300 ease-in-out ${
@@ -102,14 +113,21 @@ const ModalAddHours = () => {
             }`}
           >
             <h2 className="text-4xl font-bold mb-2 text-center text-gray-600">
-              {hoursWorked}:{minutesWorked < 10 ? "0" + minutesWorked : minutesWorked}
+              {hoursWorked}:
+              {minutesWorked < 10 ? "0" + minutesWorked : minutesWorked}
             </h2>
             <form onSubmit={handleSubmit}>
               <div className="flex justify-center mb-4 h-44 items-center">
                 <div className="flex flex-col items-center mx-4">
                   <div {...hoursHandlers} className="relative">
-                    <div className={`flex flex-col items-center h-28 justify-end transition-transform duration-300 ${animateHours ? 'transform translate-y-2' : ''}`}>
-                      <span className="text-gray-400">{hoursWorked > 0 ? hoursWorked - 1 : ""}</span>
+                    <div
+                      className={`flex flex-col items-center h-28 justify-end transition-transform duration-300 ${
+                        animateHours ? "transform translate-y-2" : ""
+                      }`}
+                    >
+                      <span className="text-gray-400">
+                        {hoursWorked > 0 ? hoursWorked - 1 : ""}
+                      </span>
                       <input
                         type="number"
                         value={hoursWorked}
@@ -123,8 +141,14 @@ const ModalAddHours = () => {
                 </div>
                 <div className="flex flex-col items-center mx-4">
                   <div {...minutesHandlers} className="relative">
-                    <div className={`flex flex-col items-center h-28 justify-end transition-transform duration-300 ${animateMinutes ? 'transform translate-y-2' : ''}`}>
-                      <span className="text-gray-400">{minutesWorked > 0 ? minutesWorked - 5 : ""}</span>
+                    <div
+                      className={`flex flex-col items-center h-28 justify-end transition-transform duration-300 ${
+                        animateMinutes ? "transform translate-y-2" : ""
+                      }`}
+                    >
+                      <span className="text-gray-400">
+                        {minutesWorked > 0 ? minutesWorked - 5 : ""}
+                      </span>
                       <input
                         type="number"
                         value={minutesWorked}
@@ -143,11 +167,19 @@ const ModalAddHours = () => {
                 onChange={(e) => setDate(e.target.value)}
                 className="border border-gray-300 p-2 mb-4 w-full rounded"
               />
-              <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">
+              <button
+                type="submit"
+                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
+              >
                 Guardar
               </button>
             </form>
-            <button onClick={closeModal} className="mt-4 text-red-500 hover:underline">Cancelar</button>
+            <button
+              onClick={closeModal}
+              className="mt-4 text-red-500 hover:underline"
+            >
+              Cancelar
+            </button>
           </div>
         </div>
       )}

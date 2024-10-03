@@ -12,32 +12,16 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-gray-800 p-4 text-white">
-      <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-xl font-bold">Registro de Horas</h1>
-        <nav>
-          <ul className="flex space-x-4">
-            <li>
-              <Link to="/" className="hover:text-gray-300">Home</Link>
-            </li>
-            <li>
-              <Link to="/historial" className="hover:text-gray-300">Historial</Link>
-            </li>
-            <li>
-              <Link to="/configuracion" className="hover:text-gray-300">Configuración</Link>
-            </li>
-            {user && (
-              <li>
-                <button
-                  onClick={handleLogout}
-                  className="bg-red-500 px-3 py-1 rounded hover:bg-red-600"
-                >
-                  Cerrar Sesión
-                </button>
-              </li>
-            )}
-          </ul>
-        </nav>
+    <header className="p-4 absolute w-screen">
+      <div className="container mx-auto flex justify-end items-center text-white">
+        {user && (
+          <button
+            onClick={handleLogout}
+            className="bg-red-500 px-3 py-1 rounded hover:bg-red-600"
+          >
+            <span className="material-icons ">logout</span>
+          </button>
+        )}
       </div>
     </header>
   );

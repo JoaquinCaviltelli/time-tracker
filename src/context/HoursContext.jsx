@@ -9,7 +9,7 @@ export const HoursContext = createContext("");
 export const HoursProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [hours, setHours] = useState([]);
-  const [goal, setGoal] = useState(160); // Meta mensual predeterminada
+  const [goal, setGoal] = useState(30); // Meta mensual predeterminada
   const [loading, setLoading] = useState(true); // Indicador de carga
 
   
