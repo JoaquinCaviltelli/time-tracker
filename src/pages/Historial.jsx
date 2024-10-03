@@ -47,23 +47,33 @@ const Historial = () => {
   const finalMinutes = totalHours.minutes % 60;
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Historial de Horas</h1>
+    <div className="container mx-auto p-6 bg-white shadow-md rounded-lg">
+      <h1 className="text-3xl font-semibold text-gray-800 mb-6">Historial de Horas</h1>
       <div className="flex justify-between mb-4">
-        <button onClick={handlePrevMonth} className="bg-gray-300 px-4 py-2 rounded">Mes Anterior</button>
-        <h2 className="text-xl">{currentMonth.format("MMMM YYYY")}</h2>
-        <button onClick={handleNextMonth} className="bg-gray-300 px-4 py-2 rounded">Mes Siguiente</button>
+        <button
+          onClick={handlePrevMonth}
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg transition duration-200"
+        >
+          Mes Anterior
+        </button>
+        <h2 className="text-xl font-semibold text-gray-700">{currentMonth.format("MMMM YYYY")}</h2>
+        <button
+          onClick={handleNextMonth}
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg transition duration-200"
+        >
+          Mes Siguiente
+        </button>
       </div>
       {filteredMonths.length === 0 ? (
         <p className="text-gray-500">No hay horas registradas para este mes.</p>
       ) : (
         filteredMonths.map((month) => (
-          <div key={month}>
-            <h3 className="text-lg font-semibold mt-4 mb-2">{moment(month).format("MMMM YYYY")}</h3>
+          <div key={month} className="mb-6">
+            <h3 className="text-lg font-semibold text-gray-800 mt-4 mb-2">{moment(month).format("MMMM YYYY")}</h3>
             {groupedHours[month].entries.map((hour) => (
               <HourCard key={hour.id} hour={hour} />
             ))}
-            <p className="font-bold mt-2">
+            <p className="font-bold text-gray-800 mt-2">
               Total: {finalHours} horas y {finalMinutes} minutos
             </p>
           </div>

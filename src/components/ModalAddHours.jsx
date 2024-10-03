@@ -15,8 +15,8 @@ const ModalAddHours = () => {
   const modalRef = useRef(null);
 
   // Para las animaciones de los selectores
-  const [animateHours, setAnimateHours] = useState(false);
-  const [animateMinutes, setAnimateMinutes] = useState(false);
+  const [animateHours, setAnimateHours] = useState("");
+  const [animateMinutes, setAnimateMinutes] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -29,10 +29,7 @@ const ModalAddHours = () => {
     setMinutesWorked(0);
     setDate(moment().format("YYYY-MM-DD"));
     setModalState({ visible: true, animating: true });
-    setTimeout(
-      () => setModalState((prev) => ({ ...prev, animating: false })),
-      10
-    );
+    setTimeout(() => setModalState((prev) => ({ ...prev, animating: false })), 10);
   };
 
   const closeModal = () => {
@@ -54,31 +51,29 @@ const ModalAddHours = () => {
   }, []);
 
   const incrementHours = () => {
-    setAnimateHours(true);
+    setAnimateHours("up");
     setHoursWorked((prev) => prev + 1);
-    setTimeout(() => setAnimateHours(false), 300); // Duración de la animación
+    setTimeout(() => setAnimateHours(""), 300); // Duración de la animación
   };
 
   const decrementHours = () => {
-    setAnimateHours(true);
+    setAnimateHours("down");
     setHoursWorked((prev) => Math.max(prev - 1, 0));
-    setTimeout(() => setAnimateHours(false), 300);
+    setTimeout(() => setAnimateHours(""), 300);
   };
 
   const incrementMinutes = () => {
-    setAnimateMinutes(true);
+    setAnimateMinutes("up");
     setMinutesWorked((prev) => (prev < 55 ? prev + 5 : 0));
     if (minutesWorked >= 55) incrementHours();
-    setTimeout(() => setAnimateMinutes(false), 300);
+    setTimeout(() => setAnimateMinutes(""), 300);
   };
 
   const decrementMinutes = () => {
-    setAnimateMinutes(true);
-    setMinutesWorked((prev) =>
-      prev >= 5 ? prev - 5 : hoursWorked > 0 ? 55 : 0
-    );
+    setAnimateMinutes("down");
+    setMinutesWorked((prev) => (prev >= 5 ? prev - 5 : hoursWorked > 0 ? 55 : 0));
     if (minutesWorked === 0 && hoursWorked > 0) decrementHours();
-    setTimeout(() => setAnimateMinutes(false), 300);
+    setTimeout(() => setAnimateMinutes(""), 300);
   };
 
   const hoursHandlers = useSwipeable({
@@ -99,7 +94,7 @@ const ModalAddHours = () => {
     <>
       <button
         onClick={openModal}
-        className="bg-blue-500 text-white  hover:bg-blue-600 transition rounded-full w-14 h-14"
+        className="bg-blue-500 text-white hover:bg-blue-600 transition rounded-full w-14 h-14"
       >
         <span className="material-icons font-semibold">add</span>
       </button>
@@ -122,8 +117,8 @@ const ModalAddHours = () => {
                   <div {...hoursHandlers} className="relative">
                     <div
                       className={`flex flex-col items-center h-28 justify-end transition-transform duration-300 ${
-                        animateHours ? "transform translate-y-2" : ""
-                      }`}
+                        animateHours === "up" ? "transform translate-y-2" : ""
+                      } ${animateHours === "down" ? "transform -translate-y-2" : ""}`}
                     >
                       <span className="text-gray-400">
                         {hoursWorked > 0 ? hoursWorked - 1 : ""}
@@ -143,8 +138,8 @@ const ModalAddHours = () => {
                   <div {...minutesHandlers} className="relative">
                     <div
                       className={`flex flex-col items-center h-28 justify-end transition-transform duration-300 ${
-                        animateMinutes ? "transform translate-y-2" : ""
-                      }`}
+                        animateMinutes === "up" ? "transform translate-y-2" : ""
+                      } ${animateMinutes === "down" ? "transform -translate-y-2" : ""}`}
                     >
                       <span className="text-gray-400">
                         {minutesWorked > 0 ? minutesWorked - 5 : ""}

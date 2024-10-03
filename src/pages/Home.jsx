@@ -52,8 +52,10 @@ const Home = () => {
   const hoursGoal = Math.floor(minutesTotalGoal);
   const minutesGoal = Math.round((minutesTotalGoal - hoursGoal) * 60);
 
+  console.log(user)
+
   return (
-    <div className="flex flex-col justify-between items-center h-screen py-20">
+    <div className="flex flex-col justify-between items-center py-20">
       <h1 className="text-2xl font-bold mb-1">Hola {user.displayName}!!!</h1>
       <div>
 
@@ -67,20 +69,20 @@ const Home = () => {
         </div>
       
       <div className="grid gap-2 grid-cols-1 md:grid-cols-2 w-9/12 mx-auto text-center my-6">
-  <div className="bg-red-500 rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-2 transition-transform transform hover:scale-105">
+  <div className="bg-red-500 rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-2">
     <p className="text-sm font-light text-white">Tu meta es de:</p>
     <p className="text-3xl font-bold text-white">{goal} hs</p>
     <p className="text-sm font-light text-white">este mes</p>
   </div>
   
-  <div className="bg-red-400 rounded-lg shadow-lg flex flex-col items-center justify-center p-4 transition-transform transform hover:scale-105">
+  <div className="bg-red-400 rounded-lg shadow-lg flex flex-col items-center justify-center p-4">
     <p className="text-sm font-light text-white">Te faltan</p>
     <p className="text-3xl font-bold text-white">
       {hoursGoal}:{minutesGoal < 10 ? `0${minutesGoal}` : minutesGoal} hs
     </p>
   </div>
 
-  <div className="bg-red-400 rounded-lg shadow-lg flex flex-col items-center justify-center p-4 transition-transform transform hover:scale-105">
+  <div className="bg-red-400 rounded-lg shadow-lg flex flex-col items-center justify-center p-4">
     <p className="text-sm font-light text-white">Cursos</p>
     <p className="text-3xl font-bold text-white">1</p>
   </div>

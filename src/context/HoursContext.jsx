@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import { auth, db } from "../services/firebase";
 import { collection, addDoc, query, where, onSnapshot, deleteDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut, updateProfile } from "firebase/auth"; // Importamos updateProfile para modificar el displayName
 import { toast } from "react-toastify";
 
 export const HoursContext = createContext("");
@@ -11,8 +11,6 @@ export const HoursProvider = ({ children }) => {
   const [hours, setHours] = useState([]);
   const [goal, setGoal] = useState(30); // Meta mensual predeterminada
   const [loading, setLoading] = useState(true); // Indicador de carga
-
-  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -32,7 +30,7 @@ export const HoursProvider = ({ children }) => {
           setGoal(userDocSnap.data().goal || 30); // Meta por defecto si no se encuentra
         } else {
           // Crear un documento para el usuario con la meta por defecto
-          await setDoc(userDocRef, { goal: 30});
+          await setDoc(userDocRef, { goal: 30 });
         }
 
         setLoading(false); // Dejamos de cargar cuando tenemos los datos
@@ -51,9 +49,21 @@ export const HoursProvider = ({ children }) => {
     }
   };
 
+  // Función para actualizar el displayName del usuario en Firebase
+  const updateDisplayName = async (newDisplayName) => {
+    if (user) {
+      try {
+        await updateProfile(auth.currentUser, { displayName: newDisplayName });
+        setUser({ ...user, displayName: newDisplayName }); // Actualizar el estado local del usuario
+      } catch (error) {
+        console.error("Error al actualizar el displayName:", error);
+        throw new Error("No se pudo actualizar el nombre.");
+      }
+    }
+  };
+
   const addHours = async (date, hours, minutes) => {
     try {
-      // Aquí añades los datos a Firebase o lo que necesites
       await addDoc(collection(db, "hours"), {
         uid: user.uid,
         hoursWorked: hours,
@@ -65,7 +75,6 @@ export const HoursProvider = ({ children }) => {
       toast.error("Error al guardar las horas");
     }
   };
-  
 
   const deleteHours = async (id) => {
     await deleteDoc(doc(db, "hours", id));
@@ -80,7 +89,7 @@ export const HoursProvider = ({ children }) => {
   };
 
   return (
-    <HoursContext.Provider value={{ user, hours, goal, setGoal, addHours, deleteHours, editHours, updateGoal, logout, loading }}>
+    <HoursContext.Provider value={{ user, hours, goal, setGoal, addHours, deleteHours, editHours, updateGoal, updateDisplayName, logout, loading }}>
       {children}
     </HoursContext.Provider>
   );

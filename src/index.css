@@ -2,3 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
+.full-height {
+    height: calc(100vh - env(safe-area-inset-bottom));
+  }
