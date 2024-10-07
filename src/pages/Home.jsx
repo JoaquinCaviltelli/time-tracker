@@ -8,9 +8,7 @@ import moment from "moment"; // Para manejar fechas
 const Home = () => {
   const { hours, goal, user } = useContext(HoursContext);
 
-  const today = moment();
-  const endOfMonth = moment().endOf("month");
-  const daysRemaining = endOfMonth.diff(today, "days");
+
 
   console.log(user.displayName);
 

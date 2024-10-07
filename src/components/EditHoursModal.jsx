@@ -1,9 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, deleteDoc } from "firebase/firestore"; // Importar deleteDoc
 import { db } from "../services/firebase";
 import moment from "moment";
 import { useSwipeable } from "react-swipeable";
+moment.lang('es', {
+  months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
+}
+);
 
 const EditHoursModal = ({ closeModal, selectedEntry }) => {
   const [modalState, setModalState] = useState({
@@ -53,10 +57,21 @@ const EditHoursModal = ({ closeModal, selectedEntry }) => {
     }
   };
 
+  const handleDeleteHours = async () => {
+    const entryRef = doc(db, "hours", selectedEntry.id);
+    try {
+      await deleteDoc(entryRef);
+      toast.success("Registro eliminado correctamente");
+      closeModal();
+    } catch (error) {
+      toast.error("Error al eliminar el registro");
+    }
+  };
+
   const incrementHours = () => {
     setAnimateHours(true);
     setHours((prev) => Math.min(prev + 1, 23));
-    setTimeout(() => setAnimateHours(false), 300); // Duración de la animación
+    setTimeout(() => setAnimateHours(false), 300);
   };
 
   const decrementHours = () => {
@@ -101,8 +116,8 @@ const EditHoursModal = ({ closeModal, selectedEntry }) => {
 
   const closeModalWithAnimation = () => {
     setModalState({ visible: true, animating: true });
+    closeModal();
     setTimeout(() => {
-      closeModal();
     }, 300);
   };
 
@@ -174,6 +189,9 @@ const EditHoursModal = ({ closeModal, selectedEntry }) => {
               Guardar cambios
             </button>
           </form>
+          <button onClick={handleDeleteHours} className="mt-4 text-red-500 hover:underline">
+            Eliminar registro
+          </button>
           <button onClick={closeModalWithAnimation} className="mt-4 text-red-500 hover:underline">
             Cancelar
           </button>

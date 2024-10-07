@@ -13,16 +13,26 @@ const Historial = () => {
 
   const daysWithHours = hours.filter(hour => moment(hour.date).isSame(currentMonth, 'month'));
 
+  // Calcular las horas y minutos trabajados del mes actual
+  const totalMinutesWorked = daysWithHours.reduce((acc, hour) => acc + hour.minutesWorked, 0);
+  const totalHoursWorked = daysWithHours.reduce((acc, hour) => acc + hour.hoursWorked, 0);
+
+  // Convierte minutos trabajados en horas y minutos
+  const totalMinutes = totalMinutesWorked / 60;
+  const hoursFromMinutes = Math.floor(totalMinutes);
+  const minutesRest = Math.round((totalMinutes - hoursFromMinutes) * 60);
+
+  // Total de horas trabajadas
+  const totalHours = totalHoursWorked + hoursFromMinutes;
+
   // Cambiar para que la semana comience el lunes
-  const startDay = currentMonth.clone().startOf('month').startOf('isoWeek'); // isoWeek para comenzar el lunes
+  const startDay = currentMonth.clone().startOf('month').startOf('isoWeek');
   const endDay = currentMonth.clone().endOf('month').endOf('week');
   const day = startDay.clone().subtract(1, 'day');
   const calendar = [];
 
   while (day.isBefore(endDay, 'day')) {
-    calendar.push(
-      Array(7).fill(0).map(() => day.add(1, 'day').clone())
-    );
+    calendar.push(Array(7).fill(0).map(() => day.add(1, 'day').clone()));
   }
 
   const handleDayClick = (day) => {
@@ -36,22 +46,27 @@ const Historial = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 bg-white shadow-md rounded-lg">
+    <div className="container mx-auto p-4">
       <h1 className="text-3xl font-semibold text-gray-800 mb-6">Historial de Horas</h1>
 
-      <div className="flex justify-between mb-4">
+      {/* Mostrar total de horas realizadas */}
+      <h2 className="text-lg font-semibold text-gray-800 mb-4">
+        Total de horas: {totalHours}:{minutesRest < 10 ? `0${minutesRest}` : minutesRest} hs
+      </h2>
+
+      <div className="flex justify-between mb-4 text-xs">
         <button
           onClick={() => setCurrentMonth(prev => moment(prev).subtract(1, 'month'))}
           className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg transition duration-200"
         >
-          Mes Anterior
+          Ant
         </button>
-        <h2 className="text-xl font-semibold text-gray-700">{currentMonth.format("MMMM YYYY")}</h2>
+        <h2 className="text-base font-semibold text-gray-700">{currentMonth.format("MMMM YYYY")}</h2>
         <button
           onClick={() => setCurrentMonth(prev => moment(prev).add(1, 'month'))}
           className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg transition duration-200"
         >
-          Mes Siguiente
+          Sig
         </button>
       </div>
 
@@ -64,21 +79,23 @@ const Historial = () => {
 
       {/* Renderizando el calendario */}
       {calendar.map((week, i) => (
-        <div key={i} className="grid grid-cols-7 gap-1 mb-4 text-xs">
+        <div key={i} className="grid grid-cols-7 gap-1 mb-1 text-xs">
           {week.map((day, index) => {
             const dayHours = daysWithHours.filter(hour => moment(hour.date).isSame(day, 'day'));
-            const totalHours = dayHours.reduce((acc, hour) => acc + hour.hoursWorked + hour.minutesWorked / 60, 0);
+            const totalHoursForDay = dayHours.reduce((acc, hour) => acc + hour.hoursWorked + hour.minutesWorked / 60, 0);
+            const hoursForDay = Math.floor(totalHoursForDay);
+            const minutesForDay = Math.round((totalHoursForDay - hoursForDay) * 60);
 
             return (
               <div
                 key={index}
-                className={`flex flex-col items-center justify-center border rounded-lg p-4 ${day.isSame(currentMonth, 'month') ? '' : 'text-gray-400'} ${dayHours.length > 0 ? 'bg-blue-200' : ''} h-10 cursor-pointer`}
+                className={`flex flex-col items-center justify-start pt-3 border rounded ${day.isSame(currentMonth, 'month') ? '' : 'text-gray-400'} ${dayHours.length > 0 ? 'bg-blue-200' : ''} h-20 cursor-pointer`}
                 onClick={() => handleDayClick(day)}
               >
                 <span className="block text-center">{day.format('D')}</span>
                 {dayHours.length > 0 && (
                   <span className="text-sm text-center block mt-1 text-blue-900 font-semibold">
-                    {totalHours.toFixed(1)} hrs
+                    {hoursForDay}:{minutesForDay < 10 ? `0${minutesForDay}` : minutesForDay}
                   </span>
                 )}
               </div>
