@@ -37,23 +37,23 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <div className="bg-white shadow-md rounded-lg p-6 max-w-sm w-full">
-        <h1 className="text-3xl font-semibold text-center text-gray-800 mb-6">Iniciar Sesión</h1>
+    <div className="flex items-center justify-center px-6 min-h-screen bg-one">
+      <div className="">
+        <h1 className="text-3xl px-3 font-semibold text-center text-light mb-6">Time Tracker</h1>
         <button
           onClick={handleLogin}
-          className="w-full bg-blue-500 text-white font-medium px-4 py-2 rounded-md shadow hover:bg-blue-400 transition duration-200"
+          className="w-full bg-details text-white font-medium px-4 py-2 rounded-md shadow hover:bg-blue-600 transition duration-200"
         >
           Iniciar con Google
         </button>
-        <div className="my-4 flex items-center justify-between">
+        <div className="flex items-center justify-between mt-4">
           <hr className="flex-grow border-gray-300" />
-          <span className="mx-2 text-gray-500">o</span>
+          <span className="mx-2 text-gray-300">o</span>
           <hr className="flex-grow border-gray-300" />
         </div>
         <button
           onClick={handleDemoLogin}
-          className="w-full bg-gray-500 text-white font-medium px-4 py-2 rounded-md shadow hover:bg-gray-400 transition duration-200"
+          className="w-full text-white font-medium text-sm"
         >
           Entrar como Usuario Demo
         </button>

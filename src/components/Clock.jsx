@@ -19,7 +19,7 @@ const Clock = ({ totalHours, goal, minutesRest}) => {
             {
                 // Primer anillo: Días
                 data: [daysPassed, daysRemaining],
-                backgroundColor: ['rgba(0, 123, 255, 0.6)', 'rgba(108, 117, 125, 0.6)'],
+                backgroundColor: ['#4a7766', 'rgba(108, 117, 125, 0.6)'],
                 borderColor: ['#fff', '#fff'],
                 borderWidth: 2,
                 cutout: '80%', // Tamaño del agujero para el segundo anillo
@@ -28,7 +28,7 @@ const Clock = ({ totalHours, goal, minutesRest}) => {
             {
                 // Segundo anillo: Horas
                 data: [totalHours, Math.max(goal - totalHours, 0)],
-                backgroundColor: ['#4CAF50', 'rgba(108, 117, 125, 0.6)'],
+                backgroundColor: ['#007e77', 'rgba(108, 117, 125, 0.6)'],
                 borderColor: ['#fff', '#fff'],
                 borderWidth: 2,
                 cutout: '80%', // Tamaño del agujero para el primer anillo

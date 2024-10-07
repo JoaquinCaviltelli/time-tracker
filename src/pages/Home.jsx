@@ -3,9 +3,7 @@ import { HoursContext } from "../context/HoursContext";
 import ModalAddHours from "../components/ModalAddHours";
 import Clock from "../components/Clock";
 import moment from "moment"; // Para manejar fechas
-import "moment/locale/es";
 
-moment.locale("es");
 
 const Home = () => {
   const { hours, goal, user } = useContext(HoursContext);
@@ -55,7 +53,7 @@ const Home = () => {
   console.log(user)
 
   return (
-    <div className="flex flex-col justify-between items-center py-20">
+    <div className="flex flex-col justify-between items-center pt-10 max-w-lg m-auto">
       <h1 className="text-2xl font-bold mb-1">Hola {user.displayName}!!!</h1>
       <div className="relative w-11/12 flex justify-center mt-10">
 
@@ -69,20 +67,20 @@ const Home = () => {
         </div>
       
       <div className="grid gap-2 grid-cols-6 w-11/12 mx-auto text-center mt-10">
-  <div className="bg-red-500 rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-6">
+  <div className="bg-one rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-6">
     <p className="text-sm font-light text-white">Tu meta es de:</p>
     <p className="text-3xl font-bold text-white">{goal} hs</p>
     <p className="text-sm font-light text-white">este mes</p>
   </div>
   
-  <div className="bg-red-400 rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-4">
+  <div className="bg-acent rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-4">
     <p className="text-sm font-light text-white">Te faltan</p>
     <p className="text-3xl font-bold text-white">
       {hoursGoal}:{minutesGoal < 10 ? `0${minutesGoal}` : minutesGoal} hs
     </p>
   </div>
 
-  <div className="bg-red-400 rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-2">
+  <div className="bg-acent rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-2">
     <p className="text-sm font-light text-white">Cursos</p>
     <p className="text-3xl font-bold text-white">1</p>
   </div>

@@ -57,7 +57,6 @@ const MainApp = () => {
     // <div {...swipeHandlers}>
     <div>
       <Loading loading={loading} />
-      
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
