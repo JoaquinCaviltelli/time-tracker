@@ -116,8 +116,8 @@ const EditHoursModal = ({ closeModal, selectedEntry }) => {
 
   const closeModalWithAnimation = () => {
     setModalState({ visible: true, animating: true });
-    closeModal();
     setTimeout(() => {
+      closeModal();
     }, 300);
   };
 
@@ -128,17 +128,21 @@ const EditHoursModal = ({ closeModal, selectedEntry }) => {
 
   return (
     <div className={`fixed inset-0 bg-black bg-opacity-50 flex justify-center items-end z-50`}>
+
       {modalState.visible && (
         <div
           ref={modalRef}
-          className={`bg-white p-10 w-screen transform transition-transform duration-300 ease-in-out ${
+          className={`bg-white p-6 pb-10 w-screen transform transition-transform duration-300 ease-in-out ${
             modalState.animating ? "translate-y-full" : "translate-y-0"
           }`}
         >
+          <button onClick={closeModalWithAnimation} className="mb-4 text-gray-500 text-md text-right w-full font-black">
+            X
+          </button>
           <h2 className="text-4xl font-bold mb-2 text-center text-gray-600">
             {hours}:{minutes < 10 ? "0" + minutes : minutes}
           </h2>
-          <form onSubmit={handleEditHours}>
+          <form className="max-w-md m-auto" onSubmit={handleEditHours}>
             <div className="flex justify-center mb-4 h-44 items-center">
               <div className="flex flex-col items-center mx-4">
                 <div {...hoursHandlers} className="relative">
@@ -183,18 +187,19 @@ const EditHoursModal = ({ closeModal, selectedEntry }) => {
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="border border-gray-300 p-2 mb-4 w-full rounded"
+              className="border border-gray-300 p-2 mb-4 w-full rounded text-center"
             />
+            <div className="flex w-full justify-between">
+
+          <button onClick={handleDeleteHours} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">
+            Eliminar registro
+          </button>
             <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">
               Guardar cambios
             </button>
+            </div>
           </form>
-          <button onClick={handleDeleteHours} className="mt-4 text-red-500 hover:underline">
-            Eliminar registro
-          </button>
-          <button onClick={closeModalWithAnimation} className="mt-4 text-red-500 hover:underline">
-            Cancelar
-          </button>
+          
         </div>
       )}
     </div>

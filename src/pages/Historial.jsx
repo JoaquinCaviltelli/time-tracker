@@ -46,7 +46,7 @@ const Historial = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 max-w-lg">
       <h1 className="text-3xl font-semibold text-gray-800 mb-6">Historial de Horas</h1>
 
       {/* Mostrar total de horas realizadas */}
