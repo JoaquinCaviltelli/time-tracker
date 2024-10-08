@@ -5,6 +5,7 @@ import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 import { HoursContext } from "../context/HoursContext";
 import { toast } from "react-toastify"; // Para notificaciones
 import logo from "/src/assets/timetracker-logo.png"
+import "/src/body-one.css";
 
 
 const Login = () => {
@@ -39,7 +40,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center px-6 full-height bg-one pt-28">
+    <div className="flex justify-center px-6  bg-one pt-28">
       <div className="">
       <img src={logo} alt="Logo" className="mb-28" />
         

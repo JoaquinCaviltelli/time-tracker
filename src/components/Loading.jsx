@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import "/src/body-one.css";
 
 function LoadingComponent({ loading }) {
   const [isVisible, setIsVisible] = useState(loading);
