@@ -127,7 +127,7 @@ const ModalAddHours = () => {
                         type="number"
                         value={hoursWorked}
                         readOnly
-                        className="border border-gray-300 p-4 w-32 text-center rounded my-2 shadow-md"
+                        className="outline-none border border-gray-300 p-4 w-32 text-center rounded my-2 shadow-md"
                       />
                       <span className="text-gray-400">{hoursWorked + 1}</span>
                     </div>
@@ -148,7 +148,7 @@ const ModalAddHours = () => {
                         type="number"
                         value={minutesWorked}
                         readOnly
-                        className="border border-gray-300 p-4 w-32 text-center rounded mb-2 shadow-md"
+                        className="outline-none border border-gray-300 p-4 w-32 text-center rounded mb-2 shadow-md"
                       />
                       <span className="text-gray-400">{minutesWorked + 5}</span>
                     </div>

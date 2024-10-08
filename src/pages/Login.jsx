@@ -42,7 +42,7 @@ const Login = () => {
       const demoEmail = "demo@example.com"; // Correo del usuario demo
       const demoPassword = "password123"; // Contraseña del usuario demo
       await signInWithEmailAndPassword(auth, demoEmail, demoPassword);
-      toast.success("Has iniciado sesión como usuario demo");
+      
     } catch (error) {
       toast.error("Error al iniciar sesión como usuario demo");
       console.error("Error al iniciar sesión como demo:", error);

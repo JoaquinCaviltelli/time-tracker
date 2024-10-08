@@ -191,10 +191,10 @@ const EditHoursModal = ({ closeModal, selectedEntry }) => {
             />
             <div className="flex w-full justify-between">
 
-          <button onClick={handleDeleteHours} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">
+          <button onClick={handleDeleteHours} className="bg-red-700 text-white px-4 py-2 rounded hover:bg-white transition">
             Eliminar registro
           </button>
-            <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">
+            <button type="submit" className="bg-acent text-white px-4 py-2 rounded hover:bg-white transition">
               Guardar cambios
             </button>
             </div>

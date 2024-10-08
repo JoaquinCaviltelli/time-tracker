@@ -16,6 +16,7 @@ export default {
         light: "#fff",
         details: "#1275a7",
         one: "#4a7766",
+        acent: "#007e77",
       },
       borderColor: {
         one: "#4a7766",

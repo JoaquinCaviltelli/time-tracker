@@ -7,20 +7,20 @@ const Footer = () => {
         <nav>
           <ul className="flex gap-16">
             <li>
-              <Link to="/" className="flex items-center hover:scale-125">
-                <span className="material-icons mr-1">home</span>
+              <Link to="/" className="flex items-center ">
+                <span className="material-icons text-3xl">home</span>
                 
               </Link>
             </li>
             <li>
-              <Link to="/historial" className="flex items-center hover:scale-125">
-                <span className="material-icons mr-1">history</span>
+              <Link to="/historial" className="flex items-center ">
+                <span className="material-icons text-3xl">history</span>
                 
               </Link>
             </li>
             <li>
-              <Link to="/configuracion" className="flex items-center hover:scale-125">
-                <span className="material-icons mr-1">settings</span>
+              <Link to="/configuracion" className="flex items-center ">
+                <span className="material-icons text-3xl">settings</span>
                 
               </Link>
             </li>

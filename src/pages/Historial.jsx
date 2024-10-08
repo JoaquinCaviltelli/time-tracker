@@ -54,19 +54,20 @@ const Historial = () => {
         Total de horas: {totalHours}:{minutesRest < 10 ? `0${minutesRest}` : minutesRest} hs
       </h2>
 
-      <div className="flex justify-between mb-4 text-xs">
+      <div className="flex justify-between items-center mb-4 text-xs">
         <button
           onClick={() => setCurrentMonth(prev => moment(prev).subtract(1, 'month'))}
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg transition duration-200"
+          
         >
-          Ant
+          <span className="material-icons font-extrabold text-3xl text-acent">keyboard_double_arrow_left</span>
         </button>
-        <h2 className="text-base font-semibold text-gray-700">{currentMonth.format("MMMM YYYY")}</h2>
+        <h2 className="text-lg font-bold text-acent">{currentMonth.format("MMMM YYYY")}</h2>
         <button
           onClick={() => setCurrentMonth(prev => moment(prev).add(1, 'month'))}
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg transition duration-200"
+          
         >
-          Sig
+          
+<span className="material-icons font-extrabold text-3xl text-acent">keyboard_double_arrow_right</span>
         </button>
       </div>
 
@@ -89,15 +90,19 @@ const Historial = () => {
             return (
               <div
                 key={index}
-                className={`flex flex-col items-center justify-start pt-3 border rounded ${day.isSame(currentMonth, 'month') ? '' : 'text-gray-400'} ${dayHours.length > 0 ? 'bg-blue-200' : ''} h-20 cursor-pointer`}
+                className={`flex flex-col items-center justify-start pt-3 border rounded ${day.isSame(currentMonth, 'month') ? '' : 'text-gray-400'} ${dayHours.length > 0 ? 'bg-one' : ''} h-20 cursor-pointer`}
                 onClick={() => handleDayClick(day)}
               >
-                <span className="block text-center">{day.format('D')}</span>
-                {dayHours.length > 0 && (
-                  <span className="text-sm text-center block mt-1 text-blue-900 font-semibold">
+                {dayHours.length > 0 ? (
+                  <>
+                <span className="block text-center text-white font-semibold">{day.format('D')}</span>
+                  <span className="text-sm text-center block mt-2 text-white font-semibold">
                     {hoursForDay}:{minutesForDay < 10 ? `0${minutesForDay}` : minutesForDay}
                   </span>
-                )}
+                  </>
+                ):
+                <span className="block text-center ">{day.format('D')}</span>
+                }
               </div>
             );
           })}
