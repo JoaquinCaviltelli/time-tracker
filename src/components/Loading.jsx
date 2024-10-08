@@ -1,8 +1,18 @@
 import { useEffect, useState } from 'react';
-import "/src/body-one.css";
+
 
 function LoadingComponent({ loading }) {
   const [isVisible, setIsVisible] = useState(loading);
+
+  useEffect(() => {
+    // Cambiar el fondo del body al entrar en Home
+    document.body.style.backgroundColor = "#4a7766"; // Cambia este color al que quieras
+
+    // Limpiar el efecto al salir del componente
+    return () => {
+      document.body.style.backgroundColor = ""; // Restaura el color por defecto
+    };
+  }, []);
 
   useEffect(() => {
     if (loading) {

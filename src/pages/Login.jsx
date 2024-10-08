@@ -5,12 +5,22 @@ import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 import { HoursContext } from "../context/HoursContext";
 import { toast } from "react-toastify"; // Para notificaciones
 import logo from "/src/assets/timetracker-logo.png"
-import "/src/body-one.css";
+
 
 
 const Login = () => {
   const { user } = useContext(HoursContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Cambiar el fondo del body al entrar en Home
+    document.body.style.backgroundColor = "#4a7766"; // Cambia este color al que quieras
+
+    // Limpiar el efecto al salir del componente
+    return () => {
+      document.body.style.backgroundColor = ""; // Restaura el color por defecto
+    };
+  }, []);
 
   useEffect(() => {
     if (user) {

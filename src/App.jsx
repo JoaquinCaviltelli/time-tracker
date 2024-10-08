@@ -14,6 +14,7 @@ import Loading from "./components/Loading";
 import { useSwipeable } from "react-swipeable";
 import { useNavigate, useLocation } from "react-router-dom";
 
+
 const App = () => {
   return (
     <HoursProvider>

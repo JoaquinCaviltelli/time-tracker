@@ -51,7 +51,7 @@ const Home = () => {
   console.log(user)
 
   return (
-    <div className="flex flex-col items-center pt-10 max-w-lg m-auto bg-white">
+    <div className="flex flex-col items-center pt-10 max-w-lg m-auto ">
       <h1 className="text-2xl font-bold mb-1">Hola {user.displayName}!!!</h1>
       <div className="relative w-11/12 flex justify-center mt-10">
 
