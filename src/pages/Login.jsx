@@ -39,9 +39,9 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center px-6 min-h-[100vh] bg-one">
+    <div className="flex justify-center px-6 min-h-screen bg-one pt-28 overflow-hidden">
       <div className="">
-      <img src={logo} alt="Logo" className="mb-16" />
+      <img src={logo} alt="Logo" className="mb-28" />
         
         <button
           onClick={handleLogin}
