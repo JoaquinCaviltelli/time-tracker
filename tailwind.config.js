@@ -9,12 +9,21 @@ export default {
       backgroundColor: {
         one: "#4a7766",
         acent: "#007e77",
-        details: "#1275a7"
+        details: "#1275a7",
+        light: "#fff",
       },
       textColor: {
-        light: "#ece7e2",
-        details: "#1275a7"
+        light: "#fff",
+        details: "#1275a7",
+        one: "#4a7766",
       },
+      borderColor: {
+        one: "#4a7766",
+        acent: "#007e77",
+        details: "#1275a7",
+        light: "#fff",
+      },
+
     },
   },
   plugins: [],

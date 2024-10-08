@@ -4,6 +4,8 @@ import { auth, provider } from "../services/firebase";
 import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 import { HoursContext } from "../context/HoursContext";
 import { toast } from "react-toastify"; // Para notificaciones
+import logo from "/src/assets/timetracker-logo.png"
+
 
 const Login = () => {
   const { user } = useContext(HoursContext);
@@ -37,25 +39,26 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center px-6 min-h-screen bg-one">
+    <div className="flex items-center justify-center px-6 min-h-[100vh] bg-one">
       <div className="">
-        <h1 className="text-3xl px-3 font-semibold text-center text-light mb-6">Time Tracker</h1>
+      <img src={logo} alt="Logo" className="mb-16" />
+        
         <button
           onClick={handleLogin}
-          className="w-full bg-details text-white font-medium px-4 py-2 rounded-md shadow hover:bg-blue-600 transition duration-200"
+          className="w-full bg-light text-one font-medium px-4 py-2 rounded-md  "
         >
           Iniciar con Google
         </button>
-        <div className="flex items-center justify-between mt-4">
-          <hr className="flex-grow border-gray-300" />
-          <span className="mx-2 text-gray-300">o</span>
-          <hr className="flex-grow border-gray-300" />
+        <div className="flex items-center justify-between mt-3">
+          <hr className="flex-grow border-light" />
+          <span className="mx-2 text-light">o</span>
+          <hr className="flex-grow border-light" />
         </div>
         <button
           onClick={handleDemoLogin}
-          className="w-full text-white font-medium text-sm"
+          className="w-full text-light font-medium text-sm"
         >
-          Entrar como Usuario Demo
+          Entrar como usuario demo
         </button>
       </div>
     </div>
