@@ -39,7 +39,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center px-6 min-h-screen bg-one pt-28 overflow-hidden">
+    <div className="flex justify-center px-6 full-height bg-one pt-28">
       <div className="">
       <img src={logo} alt="Logo" className="mb-28" />
         
