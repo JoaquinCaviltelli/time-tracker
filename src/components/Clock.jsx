@@ -28,7 +28,7 @@ const Clock = ({ totalHours, goal, minutesRest}) => {
             {
                 // Segundo anillo: Horas
                 data: [totalHours, Math.max(goal - totalHours, 0)],
-                backgroundColor: ['#007e77', 'rgba(108, 117, 125, 0.6)'],
+                backgroundColor: ['#2f4858', 'rgba(108, 117, 125, 0.6)'],
                 borderColor: ['#fff', '#fff'],
                 borderWidth: 2,
                 cutout: '80%', // Tamaño del agujero para el primer anillo

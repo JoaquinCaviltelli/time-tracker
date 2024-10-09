@@ -36,14 +36,14 @@ const EditGoalModal = ({ onClose }) => {
     <div className="fixed z-50 inset-0 flex justify-center items-center">
       <div className="bg-one p-6 rounded-lg w-full h-full text-white flex">
         <div className="max-w-lg m-auto">
-          <h2 className="text-3xl text-center mb-8">Meta de horas</h2>
+          <h2 className="text-2xl font-bold text-center mb-16">Meta de horas</h2>
 
           <div className="flex justify-center items-center mb-4">
             <button
               onClick={decreaseGoal}
               className=" text-one bg-white p-2 flex  rounded-md"
             >
-              <span className="material-icons font-extrabold text-5xl">remove</span>
+              <span className="material-icons font-extrabold text-3xl">remove</span>
             </button>
             <input
               type="number"
@@ -54,21 +54,21 @@ const EditGoalModal = ({ onClose }) => {
             />
             <button
               onClick={increaseGoal}
-              className="  text-one bg-white p-2 flex  rounded-md"
+              className="text-one bg-white p-2 flex  rounded-md"
             >
-              <span className="material-icons font-extrabold text-5xl">add</span>
+              <span className="material-icons font-extrabold text-3xl">add</span>
             </button>
           </div>
 
           <button
             onClick={handleSaveGoal}
-            className="bg-white text-one font-semibold rounded-lg shadow hover:bg-one w-full p-3"
+            className="bg-white text-one text-sm font-semibold rounded-lg shadow hover:bg-one w-full p-3"
           >
             Guardar meta
           </button>
           <button
             onClick={onClose}
-            className="mt-4 bg-red-800 text-white rounded-lg shadow hover:bg-one w-full p-3"
+            className="mt-24 bg-one border border-white text-white text-sm font-semibold rounded-lg shadow hover:bg-one w-full p-3"
           >
             Cancelar
           </button>

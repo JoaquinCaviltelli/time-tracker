@@ -8,7 +8,7 @@ export default {
       },
       backgroundColor: {
         one: "#4a7766",
-        acent: "#007e77",
+        acent: "#2f4858",
         details: "#1275a7",
         light: "#fff",
       },
@@ -16,11 +16,11 @@ export default {
         light: "#fff",
         details: "#1275a7",
         one: "#4a7766",
-        acent: "#007e77",
+        acent: "#2f4858",
       },
       borderColor: {
         one: "#4a7766",
-        acent: "#007e77",
+        acent: "#2f4858",
         details: "#1275a7",
         light: "#fff",
       },
