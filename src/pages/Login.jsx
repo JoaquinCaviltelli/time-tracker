@@ -67,7 +67,7 @@ const Login = () => {
         </div>
         <button
           onClick={handleDemoLogin}
-          className="w-full text-light font-medium text-sm"
+          className="w-full text-light font-medium text-sm hover:text-one"
         >
           Entrar como usuario demo
         </button>

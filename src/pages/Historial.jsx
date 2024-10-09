@@ -23,7 +23,7 @@ const Historial = () => {
 
   const handleShare = () => {
     const mes = currentMonth.format("MMMM YYYY");
-    const mensaje = `Informe del mes: ${mes}\nHoras: ${totalHours}:${minutesRest < 10 ? `0${minutesRest}` : minutesRest} hs\nCursos: 0`;
+    const mensaje = `Informe del mes: ${mes}\nHoras: ${totalHours}:${minutesRest < 10 ? `0${minutesRest}` : minutesRest} hs\nCursos: 1`;
     const url = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
     window.open(url, '_blank');
   };
@@ -61,7 +61,7 @@ const Historial = () => {
         >
           <span className="material-icons font-extrabold text-3xl text-acent">keyboard_double_arrow_left</span>
         </button>
-        <h2 className="text-lg font-bold text-acent">{currentMonth.format("MMMM YYYY")}</h2>
+        <h2 className="text-2xl font-bold text-acent py-3">{currentMonth.format("MMMM YYYY")}</h2>
         <button
           onClick={() => setCurrentMonth(prev => moment(prev).add(1, 'month'))}
         >

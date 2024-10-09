@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Historial from "./pages/Historial";
 import Configuracion from "./pages/Configuracion";
+import Agenda from "./pages/Agenda";
 import PrivateRoute from "./components/PrivateRoute";
 import Header from "./components/Header";
 import Footer from "/src/components/Footer.jsx";
@@ -63,6 +64,7 @@ const MainApp = () => {
         <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
         <Route path="/historial" element={<PrivateRoute><Historial /></PrivateRoute>} />
         <Route path="/configuracion" element={<PrivateRoute><Configuracion /></PrivateRoute>} />
+        <Route path="/agenda" element={<PrivateRoute><Agenda /></PrivateRoute>} />
       </Routes>
       <ToastContainer />
       {user && <><Footer/> </> }

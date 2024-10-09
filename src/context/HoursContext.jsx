@@ -1,7 +1,18 @@
 import { createContext, useState, useEffect } from "react";
 import { auth, db } from "../services/firebase";
-import { collection, addDoc, query, where, onSnapshot, deleteDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import { onAuthStateChanged, signOut, updateProfile } from "firebase/auth"; // Importamos updateProfile para modificar el displayName
+import {
+  collection,
+  addDoc,
+  query,
+  where,
+  onSnapshot,
+  deleteDoc,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { onAuthStateChanged, signOut, updateProfile } from "firebase/auth";
 import { toast } from "react-toastify";
 
 export const HoursContext = createContext("");
@@ -9,6 +20,7 @@ export const HoursContext = createContext("");
 export const HoursProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [hours, setHours] = useState([]);
+  const [contacts, setContacts] = useState([]); // Estado para contactos
   const [goal, setGoal] = useState(30); // Meta mensual predeterminada
   const [loading, setLoading] = useState(true); // Indicador de carga
 
@@ -32,6 +44,13 @@ export const HoursProvider = ({ children }) => {
           // Crear un documento para el usuario con la meta por defecto
           await setDoc(userDocRef, { goal: 30 });
         }
+
+        // Cargar contactos
+        const contactsRef = collection(db, "users", currentUser.uid, "contacts");
+        onSnapshot(contactsRef, (snapshot) => {
+          const contactsData = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+          setContacts(contactsData);
+        });
 
         setLoading(false); // Dejamos de cargar cuando tenemos los datos
       } else {
@@ -84,12 +103,54 @@ export const HoursProvider = ({ children }) => {
     await updateDoc(doc(db, "hours", id), { hoursWorked: newHours });
   };
 
+  const addContact = async (name, phone, address, description, visits) => {
+    if (user) {
+      const contactsRef = collection(db, "users", user.uid, "contacts");
+      await addDoc(contactsRef, { name, phone, address, description, visits });
+      toast.success("Contacto añadido correctamente");
+    }
+  };
+
+  const deleteContact = async (id) => {
+    if (user) {
+      const contactRef = doc(db, "users", user.uid, "contacts", id);
+      await deleteDoc(contactRef);
+      toast.success("Contacto eliminado");
+    }
+  };
+
+  const editContact = async (id, updatedData) => {
+    if (user) {
+      const contactRef = doc(db, "users", user.uid, "contacts", id);
+      await updateDoc(contactRef, updatedData);
+      toast.success("Contacto actualizado");
+    }
+  };
+
   const logout = () => {
     signOut(auth);
   };
 
   return (
-    <HoursContext.Provider value={{ user, hours, goal, setGoal, addHours, deleteHours, editHours, updateGoal, updateDisplayName, logout, loading }}>
+    <HoursContext.Provider
+      value={{
+        user,
+        hours,
+        contacts, // Incluyendo contactos en el contexto
+        goal,
+        setGoal,
+        addHours,
+        deleteHours,
+        editHours,
+        addContact,
+        deleteContact,
+        editContact,
+        updateGoal,
+        updateDisplayName,
+        logout,
+        loading,
+      }}
+    >
       {children}
     </HoursContext.Provider>
   );

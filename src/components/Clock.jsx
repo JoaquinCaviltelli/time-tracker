@@ -67,8 +67,8 @@ const Clock = ({ totalHours, goal, minutesRest}) => {
             {/* Gráfico de Donut */}
             <div className="flex items-center justify-center mb-4 relative">
                 <div className="absolute inset-0 flex flex-col items-center justify-center cursor-pointer  rounded-full m-10">
-                    <p  className="text-4xl font-bold text-gray-600 ">{totalHours}:{minutesRest < 10 ? `0${minutesRest}` : minutesRest}h</p>
-                    <p className="text-sm text-gray-500">{daysRemaining} {daysRemaining === 1 ? "día" : "días"} restantes</p>
+                    <p  className="text-4xl font-bold text-acent ">{totalHours}:{minutesRest < 10 ? `0${minutesRest}` : minutesRest}h</p>
+                    <p className="text-sm font-bold text-one">{daysRemaining} {daysRemaining === 1 ? "día" : "días"} restantes</p>
                 </div>
                 <Doughnut data={data} options={chartOptions} />
             </div>

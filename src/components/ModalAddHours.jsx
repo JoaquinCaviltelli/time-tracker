@@ -14,13 +14,12 @@ const ModalAddHours = () => {
   const { addHours } = useContext(HoursContext);
   const modalRef = useRef(null);
 
-  // Para las animaciones de los selectores
-  const [animateHours, setAnimateHours] = useState("");
-  const [animateMinutes, setAnimateMinutes] = useState("");
+  const [animateHours, setAnimateHours] = useState(false);
+  const [animateMinutes, setAnimateMinutes] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addHours(date, parseFloat(hoursWorked), parseFloat(minutesWorked));
+    addHours(date, parseInt(hoursWorked), parseInt(minutesWorked));
     closeModal();
   };
 
@@ -29,11 +28,14 @@ const ModalAddHours = () => {
     setMinutesWorked(0);
     setDate(moment().format("YYYY-MM-DD"));
     setModalState({ visible: true, animating: true });
-    setTimeout(() => setModalState((prev) => ({ ...prev, animating: false })), 10);
+
+    setTimeout(() => {
+      setModalState((prev) => ({ ...prev, animating: false }));
+    }, 10);
   };
 
   const closeModal = () => {
-    setModalState((prev) => ({ ...prev, animating: true }));
+    setModalState({ visible: true, animating: true });
     setTimeout(() => {
       setModalState({ visible: false, animating: false });
     }, 300);
@@ -51,29 +53,29 @@ const ModalAddHours = () => {
   }, []);
 
   const incrementHours = () => {
-    setAnimateHours("up");
-    setHoursWorked((prev) => prev + 1);
-    setTimeout(() => setAnimateHours(""), 300); // Duración de la animación
+    setAnimateHours(true);
+    setHoursWorked((prev) => Math.min(prev + 1, 23));
+    setTimeout(() => setAnimateHours(false), 300);
   };
 
   const decrementHours = () => {
-    setAnimateHours("down");
+    setAnimateHours(true);
     setHoursWorked((prev) => Math.max(prev - 1, 0));
-    setTimeout(() => setAnimateHours(""), 300);
+    setTimeout(() => setAnimateHours(false), 300);
   };
 
   const incrementMinutes = () => {
-    setAnimateMinutes("up");
+    setAnimateMinutes(true);
     setMinutesWorked((prev) => (prev < 55 ? prev + 5 : 0));
     if (minutesWorked >= 55) incrementHours();
-    setTimeout(() => setAnimateMinutes(""), 300);
+    setTimeout(() => setAnimateMinutes(false), 300);
   };
 
   const decrementMinutes = () => {
-    setAnimateMinutes("down");
+    setAnimateMinutes(true);
     setMinutesWorked((prev) => (prev >= 5 ? prev - 5 : hoursWorked > 0 ? 55 : 0));
     if (minutesWorked === 0 && hoursWorked > 0) decrementHours();
-    setTimeout(() => setAnimateMinutes(""), 300);
+    setTimeout(() => setAnimateMinutes(false), 300);
   };
 
   const hoursHandlers = useSwipeable({
@@ -103,13 +105,15 @@ const ModalAddHours = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-end z-50">
           <div
             ref={modalRef}
-            className={`bg-white p-10 w-screen transform transition-transform duration-300 ease-in-out ${
+            className={`bg-white p-6 pb-10 w-screen transform transition-transform duration-300 ease-in-out ${
               modalState.animating ? "translate-y-full" : "translate-y-0"
             }`}
           >
+            <button onClick={closeModal} className="mb-4 text-gray-500 text-md text-right w-full font-black">
+              X
+            </button>
             <h2 className="text-4xl font-bold mb-2 text-center text-gray-600">
-              {hoursWorked}:
-              {minutesWorked < 10 ? "0" + minutesWorked : minutesWorked}
+              {hoursWorked}:{minutesWorked < 10 ? "0" + minutesWorked : minutesWorked}
             </h2>
             <form onSubmit={handleSubmit}>
               <div className="flex justify-center mb-4 h-44 items-center">
@@ -117,17 +121,15 @@ const ModalAddHours = () => {
                   <div {...hoursHandlers} className="relative">
                     <div
                       className={`flex flex-col items-center h-28 justify-end transition-transform duration-300 ${
-                        animateHours === "up" ? "transform translate-y-2" : ""
-                      } ${animateHours === "down" ? "transform -translate-y-2" : ""}`}
+                        animateHours ? "transform translate-y-2" : ""
+                      }`}
                     >
-                      <span className="text-gray-400">
-                        {hoursWorked > 0 ? hoursWorked - 1 : ""}
-                      </span>
+                      <span className="text-gray-400">{hoursWorked > 0 ? hoursWorked - 1 : ""}</span>
                       <input
                         type="number"
                         value={hoursWorked}
                         readOnly
-                        className="outline-none border border-gray-300 p-4 w-32 text-center rounded my-2 shadow-md"
+                        className="border border-gray-300 p-4 w-32 text-center rounded my-2 shadow-md"
                       />
                       <span className="text-gray-400">{hoursWorked + 1}</span>
                     </div>
@@ -138,17 +140,15 @@ const ModalAddHours = () => {
                   <div {...minutesHandlers} className="relative">
                     <div
                       className={`flex flex-col items-center h-28 justify-end transition-transform duration-300 ${
-                        animateMinutes === "up" ? "transform translate-y-2" : ""
-                      } ${animateMinutes === "down" ? "transform -translate-y-2" : ""}`}
+                        animateMinutes ? "transform translate-y-2" : ""
+                      }`}
                     >
-                      <span className="text-gray-400">
-                        {minutesWorked > 0 ? minutesWorked - 5 : ""}
-                      </span>
+                      <span className="text-gray-400">{minutesWorked > 0 ? minutesWorked - 5 : ""}</span>
                       <input
                         type="number"
                         value={minutesWorked}
                         readOnly
-                        className="outline-none border border-gray-300 p-4 w-32 text-center rounded mb-2 shadow-md"
+                        className="border border-gray-300 p-4 w-32 text-center rounded my-2 shadow-md"
                       />
                       <span className="text-gray-400">{minutesWorked + 5}</span>
                     </div>
@@ -160,21 +160,17 @@ const ModalAddHours = () => {
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="border border-gray-300 p-2 mb-4 w-full rounded"
+                className="border border-gray-300 p-2 mb-4 w-full rounded text-center"
               />
-              <button
-                type="submit"
-                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
-              >
-                Guardar
-              </button>
+              <div className="flex w-full justify-between">
+                <button onClick={closeModal} className="bg-red-700 text-white px-4 py-2 rounded hover:bg-white transition">
+                  Cancelar
+                </button>
+                <button type="submit" className="bg-acent text-white px-4 py-2 rounded hover:bg-white transition">
+                  Guardar cambios
+                </button>
+              </div>
             </form>
-            <button
-              onClick={closeModal}
-              className="mt-4 text-red-500 hover:underline"
-            >
-              Cancelar
-            </button>
           </div>
         </div>
       )}
