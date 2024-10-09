@@ -17,7 +17,7 @@ const EditDisplayNameModal = ({ onClose, initialDisplayName, onSave }) => {
   return (
     <div className="fixed z-50 inset-0 flex justify-center items-center">
       <div className="bg-one p-6 rounded-lg w-full h-full text-white flex flex-col">
-          <h2 className="text-base mt-6 text-center mb-16">Editar nombre</h2>
+          <h2 className="text-base mt-6 text-center">Editar nombre</h2>
         <div className="max-w-lg m-auto flex flex-col">
 
           <input

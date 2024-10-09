@@ -49,11 +49,9 @@ const Historial = () => {
 
   return (
     <div className="container mx-auto p-4 max-w-lg">
-      <h1 className="text-3xl font-semibold text-acent mb-6">Historial de Horas</h1>
+      {/* <h1 className="text-3xl font-semibold text-acent mb-6">Historial de Horas</h1> */}
 
-      <h2 className="text-lg font-semibold text-acent mb-4">
-        Total de horas: {totalHours}:{minutesRest < 10 ? `0${minutesRest}` : minutesRest}h
-      </h2>
+      
 
       
 
@@ -117,12 +115,15 @@ const Historial = () => {
           selectedEntry={selectedHour} 
         />
       )}
-      <div className="w-full flex justify-end mt-4">
+      <div className="w-full flex justify-between items-center mt-4">
 
-
+      <p className="text-sm font-medium text-acent">
+        Total de horas: {totalHours}:{minutesRest < 10 ? `0${minutesRest}` : minutesRest}h <br />
+        Cursos: 1
+      </p>
 <button 
         onClick={handleShare} 
-        className="mb-4 px-4 py-2 bg-one text-white rounded"
+        className="px-4 py-2 bg-one text-white rounded"
         >
         Entregar informe
       </button>

@@ -30,9 +30,9 @@ const Configuracion = () => {
       <div className="">
         <button
           onClick={() => setIsGoalModalOpen(true)}
-          className="bg-one text-white rounded hover:bg-white w-full p-6"
+          className="bg-one text-white rounded hover:bg-white w-full p-6 pt-8"
         >
-          <span className="text-3xl font-bold">{goal}h</span><br />
+          <span className="text-3xl  font-bold">{goal}h</span><br />
           <span className="font-light text-sm">Editar meta</span>
         </button>
       </div>
@@ -41,7 +41,7 @@ const Configuracion = () => {
       <div>
         <button
           onClick={() => setIsDisplayNameModalOpen(true)} // Abrir el nuevo modal
-          className="bg-one text-white rounded w-full p-6"
+          className="bg-one text-white rounded w-full p-6 pt-8"
         >
           <span className="text-3xl font-bold">{displayName}</span><br />
           <span className="font-light text-sm">Editar nombre</span>
