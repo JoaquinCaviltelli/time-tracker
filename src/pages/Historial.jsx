@@ -49,10 +49,10 @@ const Historial = () => {
 
   return (
     <div className="container mx-auto p-4 max-w-lg">
-      <h1 className="text-3xl font-semibold text-gray-800 mb-6">Historial de Horas</h1>
+      <h1 className="text-3xl font-semibold text-acent mb-6">Historial de Horas</h1>
 
-      <h2 className="text-lg font-semibold text-gray-800 mb-4">
-        Total de horas: {totalHours}:{minutesRest < 10 ? `0${minutesRest}` : minutesRest} hs
+      <h2 className="text-lg font-semibold text-acent mb-4">
+        Total de horas: {totalHours}:{minutesRest < 10 ? `0${minutesRest}` : minutesRest}h
       </h2>
 
       
@@ -73,7 +73,7 @@ const Historial = () => {
 
       <div className="grid grid-cols-7 gap-1 mb-2">
         {["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map(day => (
-          <div key={day} className="text-center font-semibold text-gray-700">{day}</div>
+          <div key={day} className="text-center font-semibold text-acent">{day}</div>
         ))}
       </div>
 

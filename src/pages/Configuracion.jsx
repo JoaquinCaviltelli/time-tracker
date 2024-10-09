@@ -1,84 +1,70 @@
 import { useContext, useState } from "react";
 import { HoursContext } from "../context/HoursContext";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";  // Importamos toast
+import { toast } from "react-toastify";
+import EditGoalModal from "../components/EditGoalModal"; // Modal de meta
+import EditDisplayNameModal from "../components/EditDisplayNameModal"; // Importar el nuevo modal
 
 const Configuracion = () => {
   const { goal, updateGoal, user, updateDisplayName, logout } = useContext(HoursContext);
   const [newGoal, setNewGoal] = useState(goal);
-  const [displayName, setDisplayName] = useState(user?.displayName || ""); // 
-
+  const [displayName, setDisplayName] = useState(user?.displayName || "");
+  const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
+  const [isDisplayNameModalOpen, setIsDisplayNameModalOpen] = useState(false); // Estado para el nuevo modal
   const navigate = useNavigate();
 
- 
-
-
-  const handleSaveDisplayName = async () => {
-
-    try {
-      await updateGoal(newGoal); // Guardar la nueva meta en Firestore
-        // Mostrar notificación de éxito
-    } catch (error) {
-      toast.error("Error al actualizar la meta. Inténtalo de nuevo.");  // Mostrar notificación de error en caso de fallo
-    }
-
-    try {
-      await updateDisplayName(displayName); // Actualizar el nombre en Firebase
-      
-    } catch (error) {
-      toast.error("Error al actualizar el nombre. Inténtalo de nuevo.");
-    }
-
-    navigate("/login")
+  const handleSaveDisplayName = async (newDisplayName) => {
+    await updateDisplayName(newDisplayName);
+    setDisplayName(newDisplayName); // Actualiza el estado local con el nuevo nombre
   };
-
 
   const handleLogout = async () => {
-    await logout(); // Redirigimos al login después de cerrar sesión
+    await logout();
   };
 
- 
-
   return (
-    <div className="container mx-auto p-6 bg-white max-w-lg m-auto">
-      <h1 className="text-3xl mt-16 font-semibold text-gray-700 mb-6">Configuración</h1>
+    <div className="container mx-auto p-6 bg-white max-w-lg m-auto flex flex-col gap-2">
+      <h1 className="text-3xl mt-16 font-extrabold text-acent mb-6">Configuración</h1>
 
       {/* Actualizar Meta */}
       <div className="">
-        <label className="block text-gray-700 mb-2">Meta de horas mensuales</label>
-        <input
-          type="number"
-          value={newGoal}
-          onChange={(e) => setNewGoal(parseInt(e.target.value, 10))}
-          className="border border-gray-300 rounded-lg p-3 mb-4 w-full focus:outline-none"
-          placeholder="Ingresa tu meta"
-        />
-        
-      </div>
-
-      {/* Actualizar Nombre */}
-      <div className="mb-6">
-        <label className="block text-gray-700 mb-2">Nombre de usuario</label>
-        <input
-          type="text"
-          value={displayName}
-          onChange={(e) => setDisplayName(e.target.value)}
-          className="border border-gray-300 rounded-lg p-3 mb-4 w-full focus:outline-none "
-          placeholder="Ingresa tu nombre"
-        />
         <button
-          onClick={handleSaveDisplayName}
-          className="bg-one text-white rounded hover:bg-white w-full p-3"
+          onClick={() => setIsGoalModalOpen(true)}
+          className="bg-one text-white rounded hover:bg-white w-full p-6"
         >
-          Guardar Cambios
+          <span className="text-3xl font-bold">{goal}h</span><br />
+          <span className="font-light text-sm">Editar meta</span>
         </button>
       </div>
+
+      {/* Editar Nombre */}
+      <div>
+        <button
+          onClick={() => setIsDisplayNameModalOpen(true)} // Abrir el nuevo modal
+          className="bg-one text-white rounded w-full p-6"
+        >
+          <span className="text-3xl font-bold">{displayName}</span><br />
+          <span className="font-light text-sm">Editar nombre</span>
+        </button>
+      </div>
+
       <button
-            onClick={handleLogout}
-            className="bg-red-800 mt-10 w-full text-white p-3 rounded hover:bg-red-600"
-          >
-            cerrar sesion
-          </button>
+        onClick={handleLogout}
+        className="bg-acent  w-full text-white p-3 rounded hover:bg-white"
+      >
+        cerrar sesión
+      </button>
+
+      {/* Modal para editar la meta */}
+      {isGoalModalOpen && <EditGoalModal onClose={() => setIsGoalModalOpen(false)} />}
+      {/* Modal para editar el nombre */}
+      {isDisplayNameModalOpen && (
+        <EditDisplayNameModal
+          onClose={() => setIsDisplayNameModalOpen(false)}
+          initialDisplayName={displayName}
+          onSave={handleSaveDisplayName}
+        />
+      )}
     </div>
   );
 };

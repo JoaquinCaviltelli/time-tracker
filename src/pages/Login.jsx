@@ -72,7 +72,7 @@ const Login = () => {
           Entrar como usuario demo
         </button>
       </div>
-      <p className="fixed bottom-5 text-xs text-center text-white opacity-40">Derechos reservados Joaquin Cavitelli</p>
+      <p className="fixed bottom-5 text-xs text-center text-white opacity-40">Diseñado por Joaquin Cavitelli</p>
     </div>
   );
 };

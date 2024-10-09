@@ -65,15 +65,14 @@ const Home = () => {
           onClick={() => setIsModalOpen(true)} // Abrir modal al hacer clic
         >
           <p className="text-sm font-light text-light">Tu meta es de:</p>
-          <p className="text-3xl font-bold text-light">{goal} hs</p>
+          <p className="text-3xl font-bold text-light">{goal}h</p>
           <p className="text-sm font-light text-light">este mes</p>
         </div>
 
         <div className="bg-acent rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-4">
           <p className="text-sm font-light text-light">Te faltan</p>
           <p className="text-3xl font-bold text-light">
-            {hoursGoal}:{minutesGoal < 10 ? `0${minutesGoal}` : minutesGoal} hs
-          </p>
+            {hoursGoal}:{minutesGoal < 10 ? `0${minutesGoal}` : minutesGoal}h         </p>
         </div>
 
         <div className="bg-acent rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-2">
