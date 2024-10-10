@@ -118,11 +118,11 @@ const VisitsPage = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <h2 className="text-3xl font-extrabold text-acent mb-6">Cursos</h2>
+    <div className="container mx-auto p-6 pb-28">
+      <h2 className="text-3xl mt-16 font-extrabold text-acent mb-6">Cursos</h2>
       <div className="grid grid-cols-1 gap-4">
         {Object.entries(groupedEntries).map(([contactId, contactEntries]) => (
-          <div key={contactId} className="border p-4 rounded shadow">
+          <div key={contactId} className="border bg-one text-white p-5 rounded cursor-pointer">
             <h3 className="text-xl font-bold cursor-pointer" onClick={() => toggleContact(contactId)}>
               {contacts[contactId] || "Desconocido"}
             </h3>

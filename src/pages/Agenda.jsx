@@ -81,18 +81,27 @@ const Agenda = () => {
             >
               <div
                 className="w-full"
-                onClick={() => handleEditContact(contact)}
+                
               >
                 <p className="font-semibold text-lg mb-1">{contact.name}</p>
                 <p className="text-xs font-light">{contact.phone}</p>
                 <p className="text-xs font-light">{contact.address}</p>
               </div>
+              <div className="flex gap-2">
+
+              <button
+                onClick={() => handleEditContact(contact)}
+                className="text-white border rounded p-2 flex items-center"
+                >
+                <span className="material-icons">edit</span>
+              </button>
               <button
                 onClick={() => handleDeleteContact(contact.id)}
                 className="text-white border rounded p-2 flex items-center"
-              >
+                >
                 <span className="material-icons">delete</span>
               </button>
+                </div>
             </div>
           ))
         ) : (
