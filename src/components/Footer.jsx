@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <header className="bg-white p-4 text-gray-600 bottom-0 w-full fixed border-t-2 shadow-up">
-      <div className="container mx-auto flex justify-center items-center w-full">
-        <nav>
-          <ul className="flex gap-16">
+      <div className="container px-12 mx-auto flex justify-center items-center w-full">
+        <nav className="w-full">
+          <ul className="flex w-full justify-between items-center">
             <li>
               <Link to="/" className="flex items-center">
                 <span className="material-icons text-3xl">home</span>

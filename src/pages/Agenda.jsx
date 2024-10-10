@@ -1,16 +1,16 @@
 import { useContext, useState, useEffect } from "react";
 import { HoursContext } from "../context/HoursContext";
 import ContactModal from "/src/components/ContacModal.jsx";
-import VisitsModal from "/src/components/VisitsModal.jsx";
 import { collection, onSnapshot, doc, deleteDoc } from "firebase/firestore";
 import { db } from "../services/firebase";
+import { useNavigate } from "react-router-dom";
 
 const Agenda = () => {
   const { user } = useContext(HoursContext);
   const [contacts, setContacts] = useState([]);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-  const [isVisitsModalOpen, setIsVisitsModalOpen] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
@@ -39,9 +39,7 @@ const Agenda = () => {
   };
 
   const handleDeleteContact = async (contactId) => {
-    if (
-      window.confirm("¿Estás seguro de que quieres eliminar este contacto?")
-    ) {
+    if (window.confirm("¿Estás seguro de que quieres eliminar este contacto?")) {
       try {
         const contactRef = doc(db, "users", user.uid, "contacts", contactId);
         await deleteDoc(contactRef);
@@ -51,20 +49,20 @@ const Agenda = () => {
     }
   };
 
-  const handleOpenVisitsModal = () => {
-    setIsVisitsModalOpen(true);
+  const handleOpenVisitsPage = () => {
+    navigate("/visitas"); // Cambiado a navegación a la nueva página
   };
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-6 pb-28">
       <h1 className="text-3xl mt-16 font-extrabold text-acent mb-6">Agenda</h1>
 
       <div className="flex justify-between mb-4">
         <button
-          onClick={handleOpenVisitsModal}
-          className="bg-acent text-white px-6 py-2 rounded "
+          onClick={handleOpenVisitsPage} // Cambiado a función de navegación
+          className="bg-acent text-white px-6 py-2 rounded"
         >
-          Visitas
+          Cursos
         </button>
         <button
           onClick={handleAddContact}
@@ -91,7 +89,7 @@ const Agenda = () => {
               </div>
               <button
                 onClick={() => handleDeleteContact(contact.id)}
-                className="text-white  border rounded p-2 flex  items-center"
+                className="text-white border rounded p-2 flex items-center"
               >
                 <span className="material-icons">delete</span>
               </button>
@@ -107,10 +105,6 @@ const Agenda = () => {
           closeModal={() => setIsContactModalOpen(false)}
           contact={selectedContact}
         />
-      )}
-
-      {isVisitsModalOpen && (
-        <VisitsModal onClose={() => setIsVisitsModalOpen(false)} user={user} />
       )}
     </div>
   );

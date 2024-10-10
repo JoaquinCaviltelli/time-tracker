@@ -60,7 +60,7 @@ const AddCourseModal = ({ onClose }) => {
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
-          className="bg-transparent outline-none w-full p-4 text-center"
+          className="bg-transparent outline-none w-full p-4 text-center placeholder:text-center"
         />
 
         <textarea

@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { HoursContext } from "../context/HoursContext";
 import EditHoursModal from "../components/EditHoursModal";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../services/firebase";
 import moment from "moment";
 import 'moment/locale/es';
@@ -13,6 +13,7 @@ const Historial = () => {
   const [selectedHour, setSelectedHour] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [monthlyCourses, setMonthlyCourses] = useState(0);
+  const [courses, setCourses] = useState([]);
 
   const daysWithHours = hours.filter(hour => moment(hour.date).isSame(currentMonth, 'month'));
 
@@ -24,23 +25,31 @@ const Historial = () => {
   const minutesRest = Math.round((totalMinutes - hoursFromMinutes) * 60);
   const totalHours = totalHoursWorked + hoursFromMinutes;
 
-  // Nuevo efecto para obtener el número de cursos en el mes actual
   useEffect(() => {
     if (user) {
       const coursesRef = collection(db, "users", user.uid, "courses");
+  
       const unsubscribe = onSnapshot(coursesRef, (snapshot) => {
-        const coursesThisMonth = snapshot.docs.filter((doc) => 
-          moment(doc.data().date).isSame(currentMonth, 'month')
+        const coursesData = snapshot.docs.map((doc) => doc.data());
+        
+        // Filtrar cursos del mes actual
+        const coursesThisMonth = coursesData.filter((course) =>
+          moment(course.date).isSame(currentMonth, 'month')
         );
-        setMonthlyCourses(coursesThisMonth.length);
+  
+        // Obtener cursos únicos del mes actual por contactId
+        const uniqueCoursesThisMonth = new Set(coursesThisMonth.map((course) => course.contactId));
+        setCourses([...uniqueCoursesThisMonth]);  // Cambiar para reflejar solo los del mes actual
       });
+  
       return () => unsubscribe();
     }
   }, [user, currentMonth]);
+  
 
   const handleShare = () => {
     const mes = currentMonth.format("MMMM YYYY");
-    const mensaje = `Informe del mes: ${mes}\nHoras: ${totalHours}:${minutesRest < 10 ? `0${minutesRest}` : minutesRest} hs\nCursos: ${monthlyCourses}`;
+    const mensaje = `Informe de ${mes}:\nHoras: ${totalHours}:${minutesRest < 10 ? `0${minutesRest}` : minutesRest}h\nCursos: ${courses.length}`;
     const url = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
     window.open(url, '_blank');
   };
@@ -129,7 +138,7 @@ const Historial = () => {
       <div className="w-full flex justify-between items-center mt-4">
         <p className="text-sm font-medium text-acent">
           Total de horas: {totalHours}:{minutesRest < 10 ? `0${minutesRest}` : minutesRest}h <br />
-          Cursos: {monthlyCourses}
+          Cursos: {courses.length}
         </p>
         <button 
           onClick={handleShare} 

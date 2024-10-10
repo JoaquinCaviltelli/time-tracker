@@ -60,16 +60,25 @@ const Home = () => {
   useEffect(() => {
     if (user) {
       const courseRef = collection(db, "users", user.uid, "courses");
-      const q = query(courseRef, where("date", ">=", moment().startOf("month").format("YYYY-MM-DD")));
+      const startOfMonth = moment().startOf("month").format("YYYY-MM-DD");
+      const endOfMonth = moment().endOf("month").format("YYYY-MM-DD");
+      
+      // Filtrar por rango de fechas del mes actual
+      const q = query(courseRef, where("date", ">=", startOfMonth), where("date", "<=", endOfMonth));
+      
       const unsubscribe = onSnapshot(q, (snapshot) => {
         const uniqueCourses = new Set();
         const coursesData = snapshot.docs.map((doc) => doc.data());
+        
+        // Filtramos y agregamos solo los contactId únicos
         coursesData.forEach((course) => uniqueCourses.add(course.contactId));
+        
         setCourses([...uniqueCourses]);
       });
+  
       return () => unsubscribe();
     }
-  }, [user]);
+  }, [user, currentMonth, currentYear]);
 
   return (
     <div className="flex flex-col items-center pt-10 max-w-lg m-auto ">
