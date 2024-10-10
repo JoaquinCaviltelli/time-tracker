@@ -1,15 +1,18 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { HoursContext } from "../context/HoursContext";
 import EditHoursModal from "../components/EditHoursModal";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "../services/firebase";
 import moment from "moment";
 import 'moment/locale/es';
 moment.locale('es');
 
 const Historial = () => {
-  const { hours } = useContext(HoursContext);
+  const { user, hours } = useContext(HoursContext);
   const [currentMonth, setCurrentMonth] = useState(moment().startOf('month'));
   const [selectedHour, setSelectedHour] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [monthlyCourses, setMonthlyCourses] = useState(0);
 
   const daysWithHours = hours.filter(hour => moment(hour.date).isSame(currentMonth, 'month'));
 
@@ -21,9 +24,23 @@ const Historial = () => {
   const minutesRest = Math.round((totalMinutes - hoursFromMinutes) * 60);
   const totalHours = totalHoursWorked + hoursFromMinutes;
 
+  // Nuevo efecto para obtener el número de cursos en el mes actual
+  useEffect(() => {
+    if (user) {
+      const coursesRef = collection(db, "users", user.uid, "courses");
+      const unsubscribe = onSnapshot(coursesRef, (snapshot) => {
+        const coursesThisMonth = snapshot.docs.filter((doc) => 
+          moment(doc.data().date).isSame(currentMonth, 'month')
+        );
+        setMonthlyCourses(coursesThisMonth.length);
+      });
+      return () => unsubscribe();
+    }
+  }, [user, currentMonth]);
+
   const handleShare = () => {
     const mes = currentMonth.format("MMMM YYYY");
-    const mensaje = `Informe del mes: ${mes}\nHoras: ${totalHours}:${minutesRest < 10 ? `0${minutesRest}` : minutesRest} hs\nCursos: 1`;
+    const mensaje = `Informe del mes: ${mes}\nHoras: ${totalHours}:${minutesRest < 10 ? `0${minutesRest}` : minutesRest} hs\nCursos: ${monthlyCourses}`;
     const url = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
     window.open(url, '_blank');
   };
@@ -49,12 +66,6 @@ const Historial = () => {
 
   return (
     <div className="container mx-auto p-4 max-w-lg">
-      {/* <h1 className="text-3xl font-semibold text-acent mb-6">Historial de Horas</h1> */}
-
-      
-
-      
-
       <div className="flex justify-between items-center mb-4 text-xs">
         <button
           onClick={() => setCurrentMonth(prev => moment(prev).subtract(1, 'month'))}
@@ -116,18 +127,17 @@ const Historial = () => {
         />
       )}
       <div className="w-full flex justify-between items-center mt-4">
-
-      <p className="text-sm font-medium text-acent">
-        Total de horas: {totalHours}:{minutesRest < 10 ? `0${minutesRest}` : minutesRest}h <br />
-        Cursos: 1
-      </p>
-<button 
-        onClick={handleShare} 
-        className="px-4 py-2 bg-one text-white rounded"
+        <p className="text-sm font-medium text-acent">
+          Total de horas: {totalHours}:{minutesRest < 10 ? `0${minutesRest}` : minutesRest}h <br />
+          Cursos: {monthlyCourses}
+        </p>
+        <button 
+          onClick={handleShare} 
+          className="px-4 py-2 bg-one text-white rounded"
         >
-        Entregar informe
-      </button>
-        </div>
+          Entregar informe
+        </button>
+      </div>
     </div>
   );
 };

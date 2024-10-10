@@ -103,10 +103,10 @@ export const HoursProvider = ({ children }) => {
     await updateDoc(doc(db, "hours", id), { hoursWorked: newHours });
   };
 
-  const addContact = async (name, phone, address, description, visits) => {
+  const addContact = async (name, phone, address, description) => {
     if (user) {
       const contactsRef = collection(db, "users", user.uid, "contacts");
-      await addDoc(contactsRef, { name, phone, address, description, visits });
+      await addDoc(contactsRef, { name, phone, address, description });
       toast.success("Contacto añadido correctamente");
     }
   };

@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { db } from "../services/firebase";
 import { HoursContext } from "../context/HoursContext";
-import { doc, updateDoc, addDoc, collection, deleteDoc } from "firebase/firestore";
+import { doc, updateDoc, addDoc, collection } from "firebase/firestore";
 
 const ContactModal = ({ closeModal, contact }) => {
   const { user } = useContext(HoursContext);
@@ -17,7 +17,6 @@ const ContactModal = ({ closeModal, contact }) => {
       setAddress(contact.address);
       setDescription(contact.description);
     } else {
-      // Limpia los campos si no hay contacto seleccionado
       setName("");
       setPhone("");
       setAddress("");
@@ -40,71 +39,56 @@ const ContactModal = ({ closeModal, contact }) => {
     }
   };
 
-  const handleDelete = async () => {
-    if (contact && window.confirm("¿Estás seguro de que quieres eliminar este contacto?")) {
-      try {
-        const contactRef = doc(db, "users", user.uid, "contacts", contact.id);
-        await deleteDoc(contactRef);
-        closeModal();
-      } catch (error) {
-        console.error("Error al eliminar el contacto:", error);
-      }
-    }
-  };
-
   return (
-    <div className="fixed inset-0 bg-white flex items-center justify-center z-50">
-      <div className="bg-white p-6 w-full max-w-md">
-        <h2 className="text-2xl font-semibold mb-4">{contact ? "Editar Contacto" : "Agregar Contacto"}</h2>
-        
-        <label className="block mb-2">
-          Nombre:
-          <input 
-            type="text" 
-            value={name} 
-            onChange={(e) => setName(e.target.value)} 
-            className="border w-full p-2 rounded mt-1"
-          />
-        </label>
-        <label className="block mb-2">
-          Teléfono:
-          <input 
-            type="text" 
-            value={phone} 
-            onChange={(e) => setPhone(e.target.value)} 
-            className="border w-full p-2 rounded mt-1"
-          />
-        </label>
-        <label className="block mb-2">
-          Dirección:
-          <input 
-            type="text" 
-            value={address} 
-            onChange={(e) => setAddress(e.target.value)} 
-            className="border w-full p-2 rounded mt-1"
-          />
-        </label>
-        <label className="block mb-2">
-          Descripción:
-          <textarea 
-            value={description} 
-            onChange={(e) => setDescription(e.target.value)} 
-            className="border w-full p-2 rounded mt-1"
-          />
-        </label>
-        
+    <div className="fixed inset-0 bg-one flex flex-col justify-between pb-32 items-center z-50">
+      <h2 className="text-sm my-6 text-white">
+        {contact ? "Editar Contacto" : "Agregar Contacto"}
+      </h2>
+      <div className="p-6 w-full max-w-lg flex flex-col gap-10">
+        <input
+          type="text"
+          placeholder="nombre"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="border-b text-white bg-transparent outline-none w-full p-2 text-center text-xl mb-1 font-medium placeholder:text-white placeholder:text-sm placeholder:opacity-50"
+        />
 
-        <div className="flex justify-between space-x-2">
-          <button onClick={closeModal} className="px-4 py-2 bg-acent rounded text-white">
-            Cancelar
-          </button>
-          {contact && (
-            <button onClick={handleDelete} className="px-4 py-2 bg-red-600 text-white rounded">
-              Eliminar
-            </button>
-          )}
-          <button onClick={handleSave} className="px-4 py-2 bg-one text-white rounded">
+        <input
+          type="number"
+          placeholder="telefono"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          className="border-b text-white bg-transparent outline-none w-full p-2 text-center text-sm mb-1 font-medium placeholder:text-white placeholder:text-sm placeholder:opacity-50"
+        />
+
+        <input
+          type="text"
+          placeholder="direccion"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          className="border-b text-white bg-transparent outline-none w-full p-2 text-center text-sm mb-1 font-medium placeholder:text-white placeholder:text-sm placeholder:opacity-50"
+        />
+
+        <input
+          type="text"
+          placeholder="descripcion"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="border-b text-white bg-transparent outline-none w-full p-2 text-center text-sm mb-1 font-medium placeholder:text-white placeholder:text-sm placeholder:opacity-50"
+        />
+
+        <div className="flex flex-col justify-between gap-3 mt-10">
+          <button
+            onClick={handleSave}
+            className="py-2 font-semibold bg-white text-one rounded"
+          >
             Guardar
+          </button>
+          <button
+            onClick={closeModal}
+            className="py-2 bg-transparent rounded text-white border"
+          >
+            Cancelar
           </button>
         </div>
       </div>
