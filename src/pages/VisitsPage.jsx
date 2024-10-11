@@ -1,179 +1,145 @@
-import { useState, useContext, useEffect } from "react";
-import { HoursContext } from "../context/HoursContext";
+import { useState, useEffect, useContext } from "react";
+import { useParams } from "react-router-dom";
 import { db } from "../services/firebase";
-import { collection, onSnapshot, doc, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  onSnapshot,
+  doc,
+  updateDoc,
+  deleteDoc,
+  addDoc,
+} from "firebase/firestore";
+import { HoursContext } from "../context/HoursContext";
 import moment from "moment";
+import EditCourseModal from "/src/components/EditCourseModal.jsx"; // Importamos el modal para agregar/editar curso
 
 const VisitsPage = () => {
+  const { contactId } = useParams(); // Obtenemos el contacto de la URL o props
   const { user } = useContext(HoursContext);
-  const [contacts, setContacts] = useState({});
-  const [entries, setEntries] = useState([]);
-  const [isEditing, setIsEditing] = useState(null);
-  const [editData, setEditData] = useState({ date: "", description: "", id: "" });
-  const [expandedContact, setExpandedContact] = useState(null);
+  const [courses, setCourses] = useState([]);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState(null); // Curso seleccionado para editar
+  const [isAdding, setIsAdding] = useState(false); // Flag para distinguir entre agregar/editar
 
   useEffect(() => {
     if (user) {
-      const fetchContacts = () => {
-        const contactsRef = collection(db, "users", user.uid, "contacts");
-        onSnapshot(contactsRef, (snapshot) => {
-          const contactsMap = {};
-          snapshot.forEach((doc) => {
-            contactsMap[doc.id] = doc.data().name;
-          });
-          setContacts(contactsMap);
-        });
-      };
-
-      const fetchEntries = () => {
-        const visitsRef = collection(db, "users", user.uid, "visits");
-        const coursesRef = collection(db, "users", user.uid, "courses");
-
-        onSnapshot(visitsRef, (snapshot) => {
-          const visitsData = snapshot.docs.map((doc) => ({
-            ...doc.data(),
-            id: `visit-${doc.id}`,
-            type: "visit",
-          }));
-
-          setEntries((prevEntries) => [
-            ...prevEntries.filter((entry) => entry.type !== "visit"),
-            ...visitsData,
-          ]);
-        });
-
-        onSnapshot(coursesRef, (snapshot) => {
-          const coursesData = snapshot.docs.map((doc) => ({
-            ...doc.data(),
-            id: `course-${doc.id}`,
-            type: "course",
-          }));
-
-          setEntries((prevEntries) => [
-            ...prevEntries.filter((entry) => entry.type !== "course"),
-            ...coursesData,
-          ]);
-        });
-      };
-
-      fetchContacts();
-      fetchEntries();
-    }
-  }, [user]);
-
-  const groupedEntries = entries.reduce((acc, entry) => {
-    const contactId = entry.contactId || "Desconocido";
-    if (!acc[contactId]) {
-      acc[contactId] = [];
-    }
-    acc[contactId].push(entry);
-    return acc;
-  }, {});
-
-  const handleEdit = (entry) => {
-    setIsEditing(entry.id);
-    setEditData({ date: entry.date, description: entry.description, id: entry.id });
-  };
-
-  const handleSave = async () => {
-    if (!editData.id) return;
-
-    const docRef = doc(db, "users", user.uid, editData.type === "visit" ? "visits" : "courses", editData.id.replace(/^(visit-|course-)/, ""));
-    
-    try {
-      const docSnap = await getDoc(docRef);
-      if (!docSnap.exists()) {
-        console.error("No existe el documento:", docRef.path);
-        return;
-      }
-
-      await updateDoc(docRef, {
-        date: editData.date,
-        description: editData.description,
+      const coursesRef = collection(db, "users", user.uid, "courses");
+      const unsubscribe = onSnapshot(coursesRef, (snapshot) => {
+        const coursesData = snapshot.docs
+          .map((doc) => ({ ...doc.data(), id: doc.id }))
+          .filter((course) => course.contactId === contactId) // Solo mostramos los cursos del contacto actual
+          .sort((a, b) => new Date(b.date) - new Date(a.date)); // Ordenamos por fecha más reciente
+        setCourses(coursesData);
       });
-      setIsEditing(null);
-      setEditData({ date: "", description: "", id: "" });
-    } catch (error) {
-      console.error("Error al actualizar:", error);
+      return () => unsubscribe();
     }
-  };
+  }, [user, contactId]);
 
-  const handleDelete = async (entry) => {
-    const docRef = doc(db, "users", user.uid, entry.type === "visit" ? "visits" : "courses", entry.id.replace(/^(visit-|course-)/, ""));
-  
-    try {
-      await deleteDoc(docRef);
-      // Si se elimina un contacto, se mantiene como "Desconocido"
-      if (entry.contactId) {
-        setContacts((prevContacts) => ({ ...prevContacts, [entry.contactId]: "Desconocido" }));
+  const handleDeleteCourse = async (courseId) => {
+    if (window.confirm("¿Estás seguro de que deseas eliminar este curso?")) {
+      try {
+        const courseRef = doc(db, "users", user.uid, "courses", courseId);
+        await deleteDoc(courseRef);
+      } catch (error) {
+        console.error("Error al eliminar el curso:", error);
       }
-      setEntries((prevEntries) => prevEntries.filter((item) => item.id !== entry.id));
-    } catch (error) {
-      console.error("Error al eliminar:", error);
     }
   };
 
-  const toggleContact = (contactId) => {
-    setExpandedContact(expandedContact === contactId ? null : contactId);
+  const handleAddCourse = () => {
+    setSelectedCourse(null); // No hay curso seleccionado, ya que es un nuevo curso
+    setIsAdding(true); // Indicamos que estamos agregando un curso
+    setIsEditModalOpen(true); // Abrimos el modal para agregar curso
+  };
+
+  const handleEditCourse = (course) => {
+    setSelectedCourse(course); // Establecemos el curso que queremos editar
+    setIsAdding(false); // No estamos agregando, estamos editando
+    setIsEditModalOpen(true); // Abrimos el modal de edición
+  };
+
+  const handleAddNewCourse = async (newCourse) => {
+    try {
+      const courseRef = collection(db, "users", user.uid, "courses");
+      await addDoc(courseRef, {
+        ...newCourse,
+        contactId, // Asociamos el curso con el contacto seleccionado
+      });
+      setIsEditModalOpen(false); // Cerramos el modal
+    } catch (error) {
+      console.error("Error al agregar el curso:", error);
+    }
+  };
+
+  const handleUpdateCourse = async (updatedCourse) => {
+    try {
+      const courseRef = doc(db, "users", user.uid, "courses", updatedCourse.id);
+      await updateDoc(courseRef, {
+        date: updatedCourse.date,
+        description: updatedCourse.description,
+      });
+      setIsEditModalOpen(false); // Cerramos el modal
+      setSelectedCourse(null); // Limpiamos el curso seleccionado
+    } catch (error) {
+      console.error("Error al actualizar el curso:", error);
+    }
   };
 
   return (
     <div className="container mx-auto p-6 pb-28">
-      <h2 className="text-3xl mt-16 font-extrabold text-acent mb-6">Cursos</h2>
-      <div className="grid grid-cols-1 gap-4">
-        {Object.entries(groupedEntries).map(([contactId, contactEntries]) => (
-          <div key={contactId} className="border bg-one text-white p-5 rounded cursor-pointer">
-            <h3 className="text-xl font-bold cursor-pointer" onClick={() => toggleContact(contactId)}>
-              {contacts[contactId] || "Desconocido"}
-            </h3>
-            {expandedContact === contactId && (
-              <ul className="space-y-2">
-                {contactEntries
-                  .sort((a, b) => moment(b.date).diff(moment(a.date)))
-                  .map((entry) => (
-                    <li key={entry.id} className="border-b py-2 flex justify-between items-center">
-                      {isEditing === entry.id ? (
-                        <div className="w-full">
-                          <input
-                            type="date"
-                            value={editData.date}
-                            onChange={(e) => setEditData({ ...editData, date: e.target.value })}
-                            className="border p-2 rounded mb-2 w-full"
-                          />
-                          <textarea
-                            value={editData.description}
-                            onChange={(e) => setEditData({ ...editData, description: e.target.value })}
-                            className="border p-2 rounded mb-2 w-full"
-                            placeholder="Descripción"
-                          />
-                        </div>
-                      ) : (
-                        <>
-                          <div className="w-full">
-                            <p className="text-lg">{moment(entry.date).format("YYYY-MM-DD")}</p>
-                            <p>{entry.description}</p>
-                          </div>
-                          <div className="flex space-x-2">
-                            <button onClick={() => handleEdit(entry)} className="bg-blue-500 text-white px-2 py-1 rounded">Editar</button>
-                            <button onClick={() => handleDelete(entry)} className="bg-red-500 text-white px-2 py-1 rounded">
-                              <span className="material-icons">delete</span>
-                            </button>
-                          </div>
-                        </>
-                      )}
-                      {isEditing === entry.id && (
-                        <div className="flex space-x-2">
-                          <button onClick={handleSave} className="bg-green-500 text-white px-2 py-1 rounded">Guardar</button>
-                          <button onClick={() => setIsEditing(null)} className="bg-gray-300 px-2 py-1 rounded">Cancelar</button>
-                        </div>
-                      )}
-                    </li>
-                  ))}
-              </ul>
-            )}
-          </div>
-        ))}
+      <h1 className="text-3xl font-extrabold text-acent mb-6">Visitas</h1>
+
+      <button
+        onClick={handleAddCourse}
+        className="bg-acent text-white px-6 py-2 rounded mb-6"
+      >
+        Agregar Curso
+      </button>
+
+      <div className="space-y-4">
+        {courses.length > 0 ? (
+          courses.map((course) => (
+            <div
+              key={course.id}
+              className="border bg-one p-4 rounded text-white flex justify-between items-center"
+            >
+              <div>
+                <p className="font-semibold">{course.description}</p>
+                <p className="text-sm text-gray-300">
+                  {moment(course.date).format("LL")}
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handleEditCourse(course)}
+                  className="text-white border p-2 rounded"
+                >
+                  Editar
+                </button>
+                <button
+                  onClick={() => handleDeleteCourse(course.id)}
+                  className="text-white border p-2 rounded"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="text-gray-500">
+            No hay cursos registrados para este contacto.
+          </p>
+        )}
       </div>
+
+      {isEditModalOpen && (
+        <EditCourseModal
+          course={isAdding ? null : selectedCourse} // Si estamos agregando, pasamos null
+          contactId={contactId} // Pasamos el ID del contacto seleccionado
+          onClose={() => setIsEditModalOpen(false)}
+          onSave={isAdding ? handleAddNewCourse : handleUpdateCourse} // Guardamos dependiendo de si estamos agregando o editando
+        />
+      )}
     </div>
   );
 };

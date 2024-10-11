@@ -10,12 +10,10 @@ import Configuracion from "./pages/Configuracion";
 import Agenda from "./pages/Agenda";
 import VisitsPage from "./pages/VisitsPage";
 import PrivateRoute from "./components/PrivateRoute";
-import Header from "./components/Header";
 import Footer from "/src/components/Footer.jsx";
 import Loading from "./components/Loading";
 import { useSwipeable } from "react-swipeable";
 import { useNavigate, useLocation } from "react-router-dom";
-
 
 const App = () => {
   return (
@@ -30,22 +28,21 @@ const App = () => {
 const MainApp = () => {
   const { loading, user } = useContext(HoursContext);
   const navigate = useNavigate();
-  const location = useLocation(); // Para obtener la ruta actual
+  const location = useLocation();
 
-  // Funciones para manejar la navegación
   const handleSwipeLeft = () => {
-    if (location.pathname === '/') {
-      navigate('/historial');
-    } else if (location.pathname === '/historial') {
-      navigate('/configuracion');
+    if (location.pathname === "/") {
+      navigate("/historial");
+    } else if (location.pathname === "/historial") {
+      navigate("/configuracion");
     }
   };
 
   const handleSwipeRight = () => {
-    if (location.pathname === '/historial') {
-      navigate('/');
-    } else if (location.pathname === '/configuracion') {
-      navigate('/historial');
+    if (location.pathname === "/historial") {
+      navigate("/");
+    } else if (location.pathname === "/configuracion") {
+      navigate("/historial");
     }
   };
 
@@ -57,19 +54,57 @@ const MainApp = () => {
   });
 
   return (
-    // <div {...swipeHandlers}>
     <div>
       <Loading loading={loading} />
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
-        <Route path="/historial" element={<PrivateRoute><Historial /></PrivateRoute>} />
-        <Route path="/configuracion" element={<PrivateRoute><Configuracion /></PrivateRoute>} />
-        <Route path="/agenda" element={<PrivateRoute><Agenda /></PrivateRoute>} />
-        <Route path="/visitas" element={<PrivateRoute><VisitsPage /></PrivateRoute>}/>
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/historial"
+          element={
+            <PrivateRoute>
+              <Historial />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/configuracion"
+          element={
+            <PrivateRoute>
+              <Configuracion />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/agenda"
+          element={
+            <PrivateRoute>
+              <Agenda />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/visitas/:contactId"
+          element={
+            <PrivateRoute>
+              <VisitsPage />
+            </PrivateRoute>
+          }
+        />
       </Routes>
       <ToastContainer />
-      {user && <><Footer/> </> }
+      {user && (
+        <>
+          <Footer />{" "}
+        </>
+      )}
     </div>
   );
 };

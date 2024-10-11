@@ -163,7 +163,7 @@ const ModalAddHours = () => {
                 className="border border-gray-300 p-2 mb-4 w-full rounded text-center"
               />
               <div className="flex w-full justify-between">
-                <button onClick={closeModal} className="bg-red-700 text-white px-4 py-2 rounded hover:bg-white transition">
+                <button type="button" onClick={closeModal} className="bg-red-700 text-white px-4 py-2 rounded hover:bg-white transition">
                   Cancelar
                 </button>
                 <button type="submit" className="bg-acent text-white px-4 py-2 rounded hover:bg-white transition">

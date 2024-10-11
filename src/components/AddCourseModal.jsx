@@ -40,13 +40,13 @@ const AddCourseModal = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-one flex flex-col justify-between pb-32 items-center z-50 text-white">
-      <h2 className="text-sm my-6">Agregar Curso</h2>
+    <div className="fixed inset-0 bg-white flex flex-col justify-between pb-32 items-center z-50 text-acent">
+      <h2 className="text-sm font-semibold my-6">Agregar Curso</h2>
       <div className="p-6 w-full max-w-lg flex flex-col gap-10">
         <select
           value={selectedContact}
           onChange={(e) => setSelectedContact(e.target.value)}
-          className="bg-transparent outline-none w-full p-4 text-center"
+          className="border-b text-acent bg-transparent outline-none w-full p-2  text-sm mb-1 font-medium placeholder:text-acent placeholder:text-sm placeholder:opacity-50"
         >
           <option value="">Seleccione un contacto</option>
           {contacts.map((contact) => (
@@ -60,27 +60,27 @@ const AddCourseModal = ({ onClose }) => {
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
-          className="bg-transparent outline-none w-full p-4 text-center placeholder:text-center"
+          className="border-b text-acent bg-transparent outline-none w-full p-2  text-sm mb-1 font-medium placeholder:text-acent placeholder:text-sm placeholder:opacity-50"
         />
 
-        <textarea
+        <input
+          type="text"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          rows="2"
-          className="bg-transparent rounded outline-none w-full p-4 border text-center placeholder:text-white placeholder:text-sm placeholder:opacity-50"
-          placeholder="Leccion estudiada"
-        ></textarea>
+          className="border-b text-acent bg-transparent outline-none w-full p-2  text-sm mb-1 font-medium placeholder:text-acent placeholder:text-sm placeholder:opacity-50"
+          placeholder="Lección estudiada"
+        />
 
         <div className="flex flex-col justify-between gap-3 mt-10">
           <button
             onClick={handleAddCourse}
-            className="py-2 font-semibold bg-white text-one rounded"
+            className="py-2 font-semibold bg-one text-white rounded"
           >
             Agregar
           </button>
           <button
             onClick={onClose}
-            className="py-2 bg-transparent rounded text-white border"
+            className="py-2 bg-transparent font-semibold rounded text-one border border-one"
           >
             Cancelar
           </button>

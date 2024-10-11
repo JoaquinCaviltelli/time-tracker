@@ -39,7 +39,9 @@ const Agenda = () => {
   };
 
   const handleDeleteContact = async (contactId) => {
-    if (window.confirm("¿Estás seguro de que quieres eliminar este contacto?")) {
+    if (
+      window.confirm("¿Estás seguro de que quieres eliminar este contacto?")
+    ) {
       try {
         const contactRef = doc(db, "users", user.uid, "contacts", contactId);
         await deleteDoc(contactRef);
@@ -49,8 +51,8 @@ const Agenda = () => {
     }
   };
 
-  const handleOpenVisitsPage = () => {
-    navigate("/visitas"); // Cambiado a navegación a la nueva página
+  const handleOpenVisitsPage = (contactId) => {
+    navigate(`/visitas/${contactId}`); // Navega a la página de visitas con el ID del contacto
   };
 
   return (
@@ -58,12 +60,6 @@ const Agenda = () => {
       <h1 className="text-3xl mt-16 font-extrabold text-acent mb-6">Agenda</h1>
 
       <div className="flex justify-between mb-4">
-        <button
-          onClick={handleOpenVisitsPage} // Cambiado a función de navegación
-          className="bg-acent text-white px-6 py-2 rounded"
-        >
-          Cursos
-        </button>
         <button
           onClick={handleAddContact}
           className="bg-acent text-white px-6 py-2 rounded"
@@ -79,29 +75,31 @@ const Agenda = () => {
               key={contact.id}
               className="border bg-one text-white p-5 rounded cursor-pointer flex justify-between gap-4 items-center"
             >
-              <div
-                className="w-full"
-                
-              >
+              <div className="w-full">
                 <p className="font-semibold text-lg mb-1">{contact.name}</p>
                 <p className="text-xs font-light">{contact.phone}</p>
                 <p className="text-xs font-light">{contact.address}</p>
               </div>
               <div className="flex gap-2">
-
-              <button
-                onClick={() => handleEditContact(contact)}
-                className="text-white border rounded p-2 flex items-center"
+                <button
+                  onClick={() => handleEditContact(contact)}
+                  className="text-white border rounded p-2 flex items-center"
                 >
-                <span className="material-icons">edit</span>
-              </button>
-              <button
-                onClick={() => handleDeleteContact(contact.id)}
-                className="text-white border rounded p-2 flex items-center"
+                  <span className="material-icons">edit</span>
+                </button>
+                <button
+                  onClick={() => handleDeleteContact(contact.id)}
+                  className="text-white border rounded p-2 flex items-center"
                 >
-                <span className="material-icons">delete</span>
-              </button>
-                </div>
+                  <span className="material-icons">delete</span>
+                </button>
+                <button
+                  onClick={() => handleOpenVisitsPage(contact.id)} // Navegar a la página de visitas del contacto
+                  className="text-white border rounded p-2 flex items-center"
+                >
+                  <span className="material-icons">visibility</span>
+                </button>
+              </div>
             </div>
           ))
         ) : (
