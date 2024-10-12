@@ -57,14 +57,14 @@ const Agenda = () => {
 
   return (
     <div className="container mx-auto p-6 pb-28">
-      <h1 className="text-3xl mt-16 font-extrabold text-acent mb-6">Agenda</h1>
+      <div className="flex justify-between mt-16 mb-6 items-center">
+      <h1 className="text-3xl font-extrabold text-acent ">Agenda</h1>
 
-      <div className="flex justify-between mb-4">
         <button
           onClick={handleAddContact}
-          className="bg-acent text-white px-6 py-2 rounded"
+          className="text-white bg-one border rounded p-2 flex items-center"
         >
-          Agregar
+          <span className="material-icons">add</span>
         </button>
       </div>
 
@@ -82,6 +82,12 @@ const Agenda = () => {
               </div>
               <div className="flex gap-2">
                 <button
+                  onClick={() => handleOpenVisitsPage(contact.id)} // Navegar a la página de visitas del contacto
+                  className="text-white border rounded p-2 flex items-center"
+                >
+                  <span className="material-icons">visibility</span>
+                </button>
+                <button
                   onClick={() => handleEditContact(contact)}
                   className="text-white border rounded p-2 flex items-center"
                 >
@@ -92,12 +98,6 @@ const Agenda = () => {
                   className="text-white border rounded p-2 flex items-center"
                 >
                   <span className="material-icons">delete</span>
-                </button>
-                <button
-                  onClick={() => handleOpenVisitsPage(contact.id)} // Navegar a la página de visitas del contacto
-                  className="text-white border rounded p-2 flex items-center"
-                >
-                  <span className="material-icons">visibility</span>
                 </button>
               </div>
             </div>

@@ -12,6 +12,8 @@ import {
 import { HoursContext } from "../context/HoursContext";
 import moment from "moment";
 import EditCourseModal from "/src/components/EditCourseModal.jsx"; // Importamos el modal para agregar/editar curso
+import { useNavigate } from "react-router-dom";
+
 
 const VisitsPage = () => {
   const { contactId } = useParams(); // Obtenemos el contacto de la URL o props
@@ -20,7 +22,8 @@ const VisitsPage = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null); // Curso seleccionado para editar
   const [isAdding, setIsAdding] = useState(false); // Flag para distinguir entre agregar/editar
-
+  const navigate = useNavigate();
+  
   useEffect(() => {
     if (user) {
       const coursesRef = collection(db, "users", user.uid, "courses");
@@ -85,17 +88,28 @@ const VisitsPage = () => {
     }
   };
 
+  const back = ()=> {
+  navigate("/agenda")
+  }
+
   return (
     <div className="container mx-auto p-6 pb-28">
-      <h1 className="text-3xl font-extrabold text-acent mb-6">Visitas</h1>
+      <div className="flex justify-between mt-16 mb-6 items-center">
+        <h1 className="text-3xl font-extrabold text-acent ">Curso</h1>
 
-      <button
-        onClick={handleAddCourse}
-        className="bg-acent text-white px-6 py-2 rounded mb-6"
-      >
-        Agregar Curso
-      </button>
-
+        <button
+          onClick={handleAddCourse}
+          className="text-white bg-one border rounded p-2 flex items-center"
+        >
+          <span className="material-icons">add</span>
+        </button>
+        <button
+          onClick={back}
+          className="text-white bg-acent border rounded p-2 flex items-cente absolute right-6 top-6"
+        >
+          <span className="material-icons">close</span>
+        </button>
+      </div>
       <div className="space-y-4">
         {courses.length > 0 ? (
           courses.map((course) => (

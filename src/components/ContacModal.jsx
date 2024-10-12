@@ -40,8 +40,8 @@ const ContactModal = ({ closeModal, contact }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-white flex flex-col justify-between pb-32 items-center z-50">
-      <h2 className="text-sm font-semibold my-6 text-acent">
+    <div className="fixed inset-0 bg-white flex flex-col  items-center z-50 text-acent mt-6">
+      <h2 className="text-sm font-semibold mb-24">
         {contact ? "Editar Contacto" : "Agregar Contacto"}
       </h2>
       <div className="p-6 w-full max-w-lg flex flex-col gap-10">

@@ -24,8 +24,8 @@ const EditCourseModal = ({ course, contactId, onClose, onSave }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-white flex flex-col justify-between pb-32 items-center z-50 text-acent">
-      <h2 className="text-sm font-semibold my-6">
+    <div className="fixed inset-0 bg-white flex flex-col  items-center z-50 text-acent mt-6">
+      <h2 className="text-sm font-semibold mb-24">
         {course ? "Editar Curso" : "Agregar Curso"}
       </h2>
       <div className="p-6 w-full max-w-lg flex flex-col gap-10">

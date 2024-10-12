@@ -34,7 +34,7 @@ const EditGoalModal = ({ onClose }) => {
 
   return (
     <div className="fixed z-50 inset-0">
-      <div className="bg-one p-6 rounded-lg w-full h-full text-white flex flex-col">
+      <div className="bg-one p-6 w-full h-full text-white flex flex-col">
           <h2 className="text-base mt-6 text-center">Editar meta</h2>
         <div className="max-w-md m-auto w-full">
 
