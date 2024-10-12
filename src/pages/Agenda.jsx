@@ -1,7 +1,15 @@
 import { useContext, useState, useEffect } from "react";
 import { HoursContext } from "../context/HoursContext";
 import ContactModal from "/src/components/ContacModal.jsx";
-import { collection, onSnapshot, doc, deleteDoc } from "firebase/firestore";
+import {
+  collection,
+  onSnapshot,
+  doc,
+  deleteDoc,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { db } from "../services/firebase";
 import { useNavigate } from "react-router-dom";
 
@@ -38,15 +46,46 @@ const Agenda = () => {
     setIsContactModalOpen(true);
   };
 
+  // Función para eliminar el contacto y las visitas/cursos asociados
   const handleDeleteContact = async (contactId) => {
     if (
-      window.confirm("¿Estás seguro de que quieres eliminar este contacto?")
+      window.confirm(
+        "¿Estás seguro de que quieres eliminar este contacto y toda la información relacionada?"
+      )
     ) {
       try {
+        // 1. Eliminar el contacto
         const contactRef = doc(db, "users", user.uid, "contacts", contactId);
         await deleteDoc(contactRef);
+
+        // 2. Eliminar las visitas asociadas
+        const visitsRef = collection(db, "users", user.uid, "visits");
+        const visitsQuery = query(
+          visitsRef,
+          where("contactId", "==", contactId)
+        );
+        const visitsSnapshot = await getDocs(visitsQuery);
+        visitsSnapshot.forEach(async (visitDoc) => {
+          await deleteDoc(visitDoc.ref); // Eliminar cada visita
+        });
+
+        // 3. Eliminar los cursos asociados
+        const coursesRef = collection(db, "users", user.uid, "courses");
+        const coursesQuery = query(
+          coursesRef,
+          where("contactId", "==", contactId)
+        );
+        const coursesSnapshot = await getDocs(coursesQuery);
+        coursesSnapshot.forEach(async (courseDoc) => {
+          await deleteDoc(courseDoc.ref); // Eliminar cada curso
+        });
+
+        console.log("Contacto, visitas y cursos eliminados con éxito.");
       } catch (error) {
-        console.error("Error al eliminar el contacto:", error);
+        console.error(
+          "Error al eliminar el contacto o sus datos relacionados:",
+          error
+        );
       }
     }
   };
@@ -58,7 +97,7 @@ const Agenda = () => {
   return (
     <div className="container mx-auto p-6 pb-28">
       <div className="flex justify-between mt-16 mb-6 items-center">
-      <h1 className="text-3xl font-extrabold text-acent ">Agenda</h1>
+        <h1 className="text-3xl font-extrabold text-acent ">Agenda</h1>
 
         <button
           onClick={handleAddContact}

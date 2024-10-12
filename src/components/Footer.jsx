@@ -13,12 +13,12 @@ const Footer = () => {
             </li>
             <li>
               <Link to="/historial" className="flex items-center">
-                <span className="material-icons text-3xl">history</span>
+                <span className="material-icons text-3xl">calendar_today</span>
               </Link>
             </li>
             <li>
               <Link to="/agenda" className="flex items-center">
-                <span className="material-icons text-3xl">contacts</span>
+                <span className="material-icons text-3xl">group</span>
               </Link>
             </li>
             <li>
