@@ -12,6 +12,7 @@ import VisitsPage from "./pages/VisitsPage";
 import PrivateRoute from "./components/PrivateRoute";
 import Footer from "/src/components/Footer.jsx";
 import Loading from "./components/Loading";
+import NotFound from "./pages/NotFound"; // Importa tu componente NotFound
 import { useSwipeable } from "react-swipeable";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -98,13 +99,11 @@ const MainApp = () => {
             </PrivateRoute>
           }
         />
+        {/* Agrega la ruta para la página 404 */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <ToastContainer />
-      {user && (
-        <>
-          <Footer />{" "}
-        </>
-      )}
+      {user && <Footer />}
     </div>
   );
 };

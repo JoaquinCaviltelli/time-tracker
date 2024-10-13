@@ -23,6 +23,18 @@ const Home = () => {
   const endOfMonth = moment().endOf("month"); // Fin del mes actual
   const remainingDays = endOfMonth.diff(today, "days") + 1; // Días restantes del mes
 
+
+   useEffect(() => {
+     // Cambiar el fondo del body al entrar en Home
+     document.body.style.backgroundColor = "#fff"; // Cambia este color al que quieras
+
+     // Limpiar el efecto al salir del componente
+     return () => {
+       document.body.style.backgroundColor = ""; // Restaura el color por defecto
+     };
+   }, []);
+  
+  
   useEffect(() => {
     if (user) {
       const fetchHours = async () => {
@@ -154,7 +166,7 @@ const Home = () => {
       {hoursGoal > 0 ? `${hoursGoal}h` : ""}{" "}
       {minutesGoal > 0 ? `${minutesGoal}m` : ""}
     </p>
-    <p className="text-xs font-light text-light opacity-70">
+    <p className="text-xs font-light text-light">
       tienes que hacer{" "} 
       {dailyHours > 0 ? `${dailyHours}h` : ""}{" "}
       {dailyMinutes > 0 ? `${dailyMinutes}m` : ""} por día
