@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { HoursContext } from "../context/HoursContext";
 import EditHoursModal from "../components/EditHoursModal";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { collection, onSnapshot, query } from "firebase/firestore";
 import { db } from "../services/firebase";
 import moment from "moment";
 import "moment/locale/es";
@@ -15,6 +15,8 @@ const Historial = () => {
   const [selectedHour, setSelectedHour] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [courses, setCourses] = useState([]);
+
+  const today = moment(); // Definir el día de hoy
 
   useEffect(() => {
     if (user) {
@@ -58,16 +60,14 @@ const Historial = () => {
       const unsubscribe = onSnapshot(coursesRef, (snapshot) => {
         const coursesData = snapshot.docs.map((doc) => doc.data());
 
-        // Filtrar cursos del mes actual
         const coursesThisMonth = coursesData.filter((course) =>
           moment(course.date).isSame(currentMonth, "month")
         );
 
-        // Obtener cursos únicos del mes actual por contactId
         const uniqueCoursesThisMonth = new Set(
           coursesThisMonth.map((course) => course.contactId)
         );
-        setCourses([...uniqueCoursesThisMonth]); // Reflejar solo los cursos del mes actual
+        setCourses([...uniqueCoursesThisMonth]);
       });
 
       return () => unsubscribe();
@@ -96,18 +96,18 @@ const Historial = () => {
     );
   }
 
- const handleDayClick = (day) => {
-   const dayHours = daysWithHours.filter((hour) =>
-     moment(hour.date).isSame(day, "day")
-   );
-   if (dayHours.length > 0) {
-     console.log("Selected hour entry:", dayHours[0]); // Verifica la entrada seleccionada
-     setSelectedHour(dayHours[0]);
-     setShowEditModal(true);
-   } else {
-     alert("No hay horas registradas para este día.");
-   }
- };
+  const handleDayClick = (day) => {
+    const dayHours = daysWithHours.filter((hour) =>
+      moment(hour.date).isSame(day, "day")
+    );
+    if (dayHours.length > 0) {
+      console.log("Selected hour entry:", dayHours[0]);
+      setSelectedHour(dayHours[0]);
+      setShowEditModal(true);
+    } else {
+      alert("No hay horas registradas para este día.");
+    }
+  };
 
   return (
     <div className="container mx-auto p-4 max-w-lg">
@@ -158,20 +158,28 @@ const Historial = () => {
               (totalHoursForDay - hoursForDay) * 60
             );
 
+            // Clase para marcar el día de hoy
+            const isToday = day.isSame(today, "day");
+
             return (
               <div
                 key={index}
                 className={`flex flex-col items-center justify-start pt-3 border rounded ${
-                  day.isSame(currentMonth, "month") ? "" : "text-gray-400"
-                } ${dayHours.length > 0 ? "bg-one" : ""} h-20 cursor-pointer`}
+                  day.isSame(currentMonth, "month") ? "" : "text-gray-300"
+                  }
+                  ${dayHours.length > 0 ? "bg-one text-white" : ""} 
+                  ${
+                   isToday ? "bg-gray-200" : ""
+                  } 
+                 h-20 cursor-pointer`} // Aplicar color de fondo y texto si es hoy
                 onClick={() => handleDayClick(day)}
               >
                 {dayHours.length > 0 ? (
                   <>
-                    <span className="block text-center text-white font-semibold">
+                    <span className="block text-center font-semibold">
                       {day.format("D")}
                     </span>
-                    <span className="text-sm text-center block mt-2 text-white font-semibold">
+                    <span className="text-sm text-center block mt-2 font-semibold">
                       {hoursForDay}:
                       {minutesForDay < 10 ? `0${minutesForDay}` : minutesForDay}
                     </span>

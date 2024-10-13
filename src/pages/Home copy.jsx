@@ -9,13 +9,13 @@ import { collection, query, where, onSnapshot } from "firebase/firestore";
 import moment from "moment";
 
 const Home = () => {
-  const { user, goal } = useContext(HoursContext);
+  const { user, goal } = useContext(HoursContext); // Aquí removemos `hours` porque ahora se obtiene directamente
   const [hours, setHours] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCourseModalOpen, setIsCourseModalOpen] = useState(false);
   const [courses, setCourses] = useState([]);
   const [contacts, setContacts] = useState([]);
-  const [goalReached, setGoalReached] = useState(false);
+  const [goalReached, setGoalReached] = useState(false); // Estado para la meta alcanzada
 
   const currentMonth = moment().month();
   const currentYear = moment().year();
@@ -47,22 +47,22 @@ const Home = () => {
     );
   });
 
- useEffect(() => {
-   const fetchContacts = async () => {
-     const q = query(collection(db, "users", user.uid, "contacts"));
-     onSnapshot(q, (snapshot) => {
-       const contactsData = snapshot.docs.map((doc) => ({
-         ...doc.data(),
-         id: doc.id,
-       }));
-       setContacts(contactsData);
-     });
-   };
+  useEffect(() => {
+    const fetchContacts = async () => {
+      const q = query(collection(db, "users", user.uid, "contacts"));
+      onSnapshot(q, (snapshot) => {
+        const contactsData = snapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setContacts(contactsData);
+      });
+    };
 
-   if (user) {
-     fetchContacts();
-   }
- }, [user]);
+    if (user) {
+      fetchContacts();
+    }
+  }, [user]);
 
   const totalMinutesWorked = filteredHours.reduce(
     (acc, curr) => acc + curr.minutesWorked,
@@ -72,22 +72,20 @@ const Home = () => {
     (acc, curr) => acc + curr.hoursWorked,
     0
   );
-
-  // Calcular el total de horas y minutos trabajados
   const totalMinutes = totalMinutesWorked / 60;
   const hoursFromMinutes = Math.floor(totalMinutes);
   const minutesRest = Math.round((totalMinutes - hoursFromMinutes) * 60);
   const totalHours = totalHoursWorked + hoursFromMinutes;
 
-  // Calcular el tiempo restante para alcanzar la meta en minutos
   const totalMinutesGoal = goal * 60 - (totalHours * 60 + minutesRest);
-  const hoursGoal = Math.floor(totalMinutesGoal / 60); // Horas totales restantes
-  const minutesGoal = Math.round(totalMinutesGoal % 60); // Minutos totales restantes
+  const minutesTotalGoal = totalMinutesGoal / 60;
+  const hoursGoal = Math.floor(minutesTotalGoal);
+  const minutesGoal = Math.round((minutesTotalGoal - hoursGoal) * 60);
 
-  // Calcular las horas y minutos diarios que debes trabajar para alcanzar la meta
+  // Cálculo de horas y minutos diarios necesarios
   const dailyMinutesGoal = totalMinutesGoal / remainingDays;
-  const dailyHours = Math.floor(dailyMinutesGoal / 60); // Horas por día
-  const dailyMinutes = Math.round(dailyMinutesGoal % 60); // Minutos por día
+  const dailyHours = Math.floor(dailyMinutesGoal);
+  const dailyMinutes = Math.round((dailyMinutesGoal - dailyHours) * 60);
 
   // Verificar si se alcanzó la meta
   useEffect(() => {
@@ -98,29 +96,29 @@ const Home = () => {
     }
   }, [totalHours, minutesRest, goal]);
 
-   useEffect(() => {
-     if (user) {
-       const courseRef = collection(db, "users", user.uid, "courses");
-       const startOfMonth = moment().startOf("month").format("YYYY-MM-DD");
-       const endOfMonth = moment().endOf("month").format("YYYY-MM-DD");
+  useEffect(() => {
+    if (user) {
+      const courseRef = collection(db, "users", user.uid, "courses");
+      const startOfMonth = moment().startOf("month").format("YYYY-MM-DD");
+      const endOfMonth = moment().endOf("month").format("YYYY-MM-DD");
 
-       const q = query(
-         courseRef,
-         where("date", ">=", startOfMonth),
-         where("date", "<=", endOfMonth)
-       );
+      const q = query(
+        courseRef,
+        where("date", ">=", startOfMonth),
+        where("date", "<=", endOfMonth)
+      );
 
-       const unsubscribe = onSnapshot(q, (snapshot) => {
-         const uniqueCourses = new Set();
-         const coursesData = snapshot.docs.map((doc) => doc.data());
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const uniqueCourses = new Set();
+        const coursesData = snapshot.docs.map((doc) => doc.data());
 
-         coursesData.forEach((course) => uniqueCourses.add(course.contactId));
-         setCourses([...uniqueCourses]);
-       });
+        coursesData.forEach((course) => uniqueCourses.add(course.contactId));
+        setCourses([...uniqueCourses]);
+      });
 
-       return () => unsubscribe();
-     }
-   }, [user, currentMonth, currentYear]);
+      return () => unsubscribe();
+    }
+  }, [user, currentMonth, currentYear]);
 
   return (
     <div className="flex flex-col items-center pt-10 max-w-lg m-auto">
@@ -140,28 +138,25 @@ const Home = () => {
         </div>
 
         {goalReached ? (
-  <div className="bg-acent rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-4">
-    <p className="text-sm font-light text-light">Has alcanzado la</p>
-    <p className="text-lg font-bold text-light">meta!</p>
-    <p className="text-sm font-light text-light">
-      adicional: {totalHours - goal}h {minutesRest > 0 ? `${minutesRest}m` : ""}
-    </p>
-  </div>
-) : (
-  <div className="bg-acent rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-4">
-    <p className="text-sm font-light text-light">Te faltan</p>
-    <p className="text-3xl font-bold text-light">
-      {hoursGoal > 0 ? `${hoursGoal}h` : ""}{" "}
-      {minutesGoal > 0 ? `${minutesGoal}m` : ""}
-    </p>
-    <p className="text-xs font-light text-light opacity-70">
-      tienes que hacer{" "} 
-      {dailyHours > 0 ? `${dailyHours}h` : ""}{" "}
-      {dailyMinutes > 0 ? `${dailyMinutes}m` : ""} por día
-    </p>
-  </div>
-)}
-
+          <div className="bg-acent rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-4">
+            <p className="text-sm font-light text-light">Has alcanzado la</p>
+            <p className="text-lg font-bold text-light">meta!</p>
+            <p className="text-sm font-light text-light">
+              adicional: {totalHours - goal}h {minutesRest}m
+            </p>
+          </div>
+        ) : (
+          <div className="bg-acent rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-4">
+            <p className="text-sm font-light text-light">Te faltan</p>
+            <p className="text-3xl font-bold text-light">
+              {hoursGoal}:{minutesGoal < 10 ? `0${minutesGoal}` : minutesGoal}h
+            </p>
+            <p className="text-xs font-light text-light">
+              Necesitas trabajar {dailyHours}h{" "}
+              {dailyMinutes < 10 ? `0${dailyMinutes}` : dailyMinutes}m diarios.
+            </p>
+          </div>
+        )}
 
         <div
           className="bg-acent rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-2 cursor-pointer"
