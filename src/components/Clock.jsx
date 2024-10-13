@@ -12,7 +12,7 @@ const Clock = ({ totalHours, goal, minutesRest}) => {
     const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
     const currentDay = today.getDate();
     const daysPassed = currentDay;
-    const daysRemaining = daysInMonth - daysPassed;
+    const daysRemaining = daysInMonth - daysPassed + 1;
 
     const data = {
         datasets: [

@@ -169,7 +169,7 @@ const Historial = () => {
                   }
                   ${dayHours.length > 0 ? "bg-one text-white" : ""} 
                   ${
-                   isToday ? "bg-gray-200" : ""
+                   isToday ? "bg-gray-500 text-white" : ""
                   } 
                  h-20 cursor-pointer`} // Aplicar color de fondo y texto si es hoy
                 onClick={() => handleDayClick(day)}
