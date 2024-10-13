@@ -9,7 +9,8 @@ import { collection, query, where, onSnapshot } from "firebase/firestore";
 import moment from "moment";
 
 const Home = () => {
-  const { hours, goal, user } = useContext(HoursContext);
+  const { user, goal } = useContext(HoursContext); // Aquí removemos `hours` porque ahora se obtiene directamente
+  const [hours, setHours] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCourseModalOpen, setIsCourseModalOpen] = useState(false);
   const [courses, setCourses] = useState([]);
@@ -18,6 +19,23 @@ const Home = () => {
 
   const currentMonth = moment().month();
   const currentYear = moment().year();
+
+  useEffect(() => {
+    if (user) {
+      const fetchHours = async () => {
+        const hoursRef = collection(db, "users", user.uid, "hours");
+        const q = query(hoursRef);
+        onSnapshot(q, (snapshot) => {
+          const hoursData = snapshot.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+          }));
+          setHours(hoursData);
+        });
+      };
+      fetchHours();
+    }
+  }, [user]);
 
   const filteredHours = hours.filter((entry) => {
     const entryDate = moment(entry.date);

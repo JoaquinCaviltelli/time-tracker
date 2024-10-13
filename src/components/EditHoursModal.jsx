@@ -1,22 +1,26 @@
 import { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
-import { doc, updateDoc, deleteDoc } from "firebase/firestore"; // Importar deleteDoc
+import { doc, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
 import { db } from "../services/firebase";
 import moment from "moment";
 import { useSwipeable } from "react-swipeable";
-moment.lang('es', {
-  months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
-}
-);
+moment.lang("es", {
+  months:
+    "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
+      "_"
+    ),
+});
 
-const EditHoursModal = ({ closeModal, selectedEntry }) => {
+const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
   const [modalState, setModalState] = useState({
     visible: true,
     animating: true,
   });
-  const [hours, setHours] = useState(selectedEntry.hoursWorked);
-  const [minutes, setMinutes] = useState(selectedEntry.minutesWorked);
-  const [date, setDate] = useState(moment(selectedEntry.date).format("YYYY-MM-DD"));
+  const [hours, setHours] = useState(selectedEntry?.hoursWorked ?? 0);
+  const [minutes, setMinutes] = useState(selectedEntry?.minutesWorked ?? 0);
+  const [date, setDate] = useState(
+    selectedEntry?.date ? moment(selectedEntry.date).format("YYYY-MM-DD") : ""
+  );
   const modalRef = useRef(null);
 
   // Para las animaciones de los selectores
@@ -24,9 +28,17 @@ const EditHoursModal = ({ closeModal, selectedEntry }) => {
   const [animateMinutes, setAnimateMinutes] = useState(false);
 
   useEffect(() => {
-    setHours(selectedEntry.hoursWorked);
-    setMinutes(selectedEntry.minutesWorked);
-    setDate(moment(selectedEntry.date).format("YYYY-MM-DD"));
+    if (selectedEntry) {
+      setHours(selectedEntry.hoursWorked ?? 0);
+      setMinutes(selectedEntry.minutesWorked ?? 0);
+      setDate(
+        selectedEntry.date
+          ? moment(selectedEntry.date).format("YYYY-MM-DD")
+          : ""
+      );
+    } else {
+      console.error("selectedEntry es undefined");
+    }
   }, [selectedEntry]);
 
   useEffect(() => {
@@ -38,13 +50,26 @@ const EditHoursModal = ({ closeModal, selectedEntry }) => {
 
   const handleEditHours = async (e) => {
     e.preventDefault();
+    if (!userId || !selectedEntry?.id) {
+      toast.error("Usuario o entrada no válidos");
+      return;
+    }
+
     if (hours < 0 || minutes < 0 || minutes >= 60) {
       toast.error("Horas o minutos no válidos");
       return;
     }
 
     try {
-      const entryRef = doc(db, "hours", selectedEntry.id);
+      const entryRef = doc(db, "users", userId, "hours", selectedEntry.id);
+
+      // Verifica si el documento existe antes de actualizar
+      const docSnapshot = await getDoc(entryRef);
+      if (!docSnapshot.exists()) {
+        toast.error("El registro no existe");
+        return;
+      }
+
       await updateDoc(entryRef, {
         hoursWorked: parseInt(hours),
         minutesWorked: parseInt(minutes),
@@ -54,17 +79,24 @@ const EditHoursModal = ({ closeModal, selectedEntry }) => {
       closeModal();
     } catch (error) {
       toast.error("Error al actualizar el registro");
+      console.error(error);
     }
   };
 
   const handleDeleteHours = async () => {
-    const entryRef = doc(db, "hours", selectedEntry.id);
+    if (!userId || !selectedEntry?.id) {
+      toast.error("Usuario o entrada no válidos");
+      return;
+    }
+
     try {
+      const entryRef = doc(db, "users", userId, "hours", selectedEntry.id);
       await deleteDoc(entryRef);
       toast.success("Registro eliminado correctamente");
       closeModal();
     } catch (error) {
       toast.error("Error al eliminar el registro");
+      console.error(error);
     }
   };
 
@@ -127,8 +159,9 @@ const EditHoursModal = ({ closeModal, selectedEntry }) => {
   }, []);
 
   return (
-    <div className={`fixed inset-0 bg-black bg-opacity-50 flex justify-center items-end z-50`}>
-
+    <div
+      className={`fixed inset-0 bg-black bg-opacity-50 flex justify-center items-end z-50`}
+    >
       {modalState.visible && (
         <div
           ref={modalRef}
@@ -136,7 +169,10 @@ const EditHoursModal = ({ closeModal, selectedEntry }) => {
             modalState.animating ? "translate-y-full" : "translate-y-0"
           }`}
         >
-          <button onClick={closeModalWithAnimation} className="mb-4 text-gray-500 text-md text-right w-full font-black">
+          <button
+            onClick={closeModalWithAnimation}
+            className="mb-4 text-gray-500 text-md text-right w-full font-black"
+          >
             X
           </button>
           <h2 className="text-4xl font-bold mb-2 text-center text-gray-600">
@@ -151,7 +187,9 @@ const EditHoursModal = ({ closeModal, selectedEntry }) => {
                       animateHours ? "transform translate-y-2" : ""
                     }`}
                   >
-                    <span className="text-gray-400">{hours > 0 ? hours - 1 : ""}</span>
+                    <span className="text-gray-400">
+                      {hours > 0 ? hours - 1 : ""}
+                    </span>
                     <input
                       type="number"
                       value={hours}
@@ -170,7 +208,9 @@ const EditHoursModal = ({ closeModal, selectedEntry }) => {
                       animateMinutes ? "transform translate-y-2" : ""
                     }`}
                   >
-                    <span className="text-gray-400">{minutes > 0 ? minutes - 5 : ""}</span>
+                    <span className="text-gray-400">
+                      {minutes > 0 ? minutes - 5 : ""}
+                    </span>
                     <input
                       type="number"
                       value={minutes}
@@ -190,16 +230,20 @@ const EditHoursModal = ({ closeModal, selectedEntry }) => {
               className="border border-gray-300 p-2 mb-4 w-full rounded text-center"
             />
             <div className="flex w-full justify-between">
-
-          <button onClick={handleDeleteHours} className="bg-red-700 text-white px-4 py-2 rounded hover:bg-white transition">
-            Eliminar registro
-          </button>
-            <button type="submit" className="bg-acent text-white px-4 py-2 rounded hover:bg-white transition">
-              Guardar cambios
-            </button>
+              <button
+                onClick={handleDeleteHours}
+                className="bg-red-700 text-white px-4 py-2 rounded hover:bg-white transition"
+              >
+                Eliminar registro
+              </button>
+              <button
+                type="submit"
+                className="bg-acent text-white px-4 py-2 rounded hover:bg-white transition"
+              >
+                Guardar cambios
+              </button>
             </div>
           </form>
-          
         </div>
       )}
     </div>
