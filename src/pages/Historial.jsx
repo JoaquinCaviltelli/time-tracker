@@ -104,8 +104,6 @@ const Historial = () => {
       console.log("Selected hour entry:", dayHours[0]);
       setSelectedHour(dayHours[0]);
       setShowEditModal(true);
-    } else {
-      alert("No hay horas registradas para este día.");
     }
   };
 
@@ -137,7 +135,7 @@ const Historial = () => {
 
       <div className="grid grid-cols-7 gap-1 mb-2">
         {["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map((day) => (
-          <div key={day} className="text-center font-semibold text-acent">
+          <div key={day} className="text-center text-sm font-medium text-acent">
             {day}
           </div>
         ))}
@@ -167,9 +165,9 @@ const Historial = () => {
                 className={` pt-2 border rounded ${
                   day.isSame(currentMonth, "month") ? "" : "text-gray-300"
                 }
-                  ${dayHours.length > 0 ? "bg-one text-white" : ""} 
-                  ${isToday ? "bg-gray-500 text-white" : ""} 
-                 h-14 cursor-pointer`} // Aplicar color de fondo y texto si es hoy
+                ${dayHours.length && !isToday > 0 ? "bg-one text-white" : ""} 
+                ${isToday ? "bg-gray-500 text-white" : ""} 
+                 h-16 cursor-pointer`} // Aplicar color de fondo y texto si es hoy
                 onClick={() => handleDayClick(day)}
               >
                 {dayHours.length > 0 ? (

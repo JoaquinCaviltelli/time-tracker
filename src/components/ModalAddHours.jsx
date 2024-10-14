@@ -160,7 +160,7 @@ const ModalAddHours = () => {
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="border border-gray-300 p-2 mb-4 w-full rounded text-center"
+                className="border outline-none border-gray-300 p-4 mb-4 w-full rounded text-center bg-white placeholder:text-center"
               />
               <div className="flex w-full justify-between">
                 <button type="button" onClick={closeModal} className="bg-red-700 text-white px-4 py-2 rounded hover:bg-white transition">
