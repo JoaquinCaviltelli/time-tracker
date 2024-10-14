@@ -107,7 +107,7 @@ const Agenda = () => {
         </button>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-2">
         {contacts.length > 0 ? (
           contacts.map((contact) => (
             <div
@@ -118,6 +118,7 @@ const Agenda = () => {
                 <p className="font-semibold text-lg mb-1">{contact.name}</p>
                 <p className="text-xs font-light">{contact.phone}</p>
                 <p className="text-xs font-light">{contact.address}</p>
+                <p className="text-xs font-light">{contact.description}</p>
               </div>
               <div className="flex gap-2">
                 <button

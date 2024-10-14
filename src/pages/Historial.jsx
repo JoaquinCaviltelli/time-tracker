@@ -117,19 +117,19 @@ const Historial = () => {
             setCurrentMonth((prev) => moment(prev).subtract(1, "month"))
           }
         >
-          <span className="material-icons font-extrabold text-3xl text-acent">
+          <span className="material-icons font-extrabold text-xl text-acent">
             keyboard_double_arrow_left
           </span>
         </button>
-        <h2 className="text-2xl font-bold text-acent py-3">
-          {currentMonth.format("MMMM YYYY")}
+        <h2 className="text-xl font-bold text-acent py-3">
+          {currentMonth.format("MMMM")}
         </h2>
         <button
           onClick={() =>
             setCurrentMonth((prev) => moment(prev).add(1, "month"))
           }
         >
-          <span className="material-icons font-extrabold text-3xl text-acent">
+          <span className="material-icons font-extrabold text-xl text-acent">
             keyboard_double_arrow_right
           </span>
         </button>
@@ -164,14 +164,12 @@ const Historial = () => {
             return (
               <div
                 key={index}
-                className={`flex flex-col items-center justify-start pt-3 border rounded ${
+                className={` pt-2 border rounded ${
                   day.isSame(currentMonth, "month") ? "" : "text-gray-300"
-                  }
+                }
                   ${dayHours.length > 0 ? "bg-one text-white" : ""} 
-                  ${
-                   isToday ? "bg-gray-500 text-white" : ""
-                  } 
-                 h-20 cursor-pointer`} // Aplicar color de fondo y texto si es hoy
+                  ${isToday ? "bg-gray-500 text-white" : ""} 
+                 h-14 cursor-pointer`} // Aplicar color de fondo y texto si es hoy
                 onClick={() => handleDayClick(day)}
               >
                 {dayHours.length > 0 ? (
@@ -179,7 +177,7 @@ const Historial = () => {
                     <span className="block text-center font-semibold">
                       {day.format("D")}
                     </span>
-                    <span className="text-sm text-center block mt-2 font-semibold">
+                    <span className="text-center block pt-2 font-semibold">
                       {hoursForDay}:
                       {minutesForDay < 10 ? `0${minutesForDay}` : minutesForDay}
                     </span>
@@ -206,7 +204,7 @@ const Historial = () => {
           userId={user.uid} // Pasa el userId a EditHoursModal
         />
       )}
-      <div className="w-full flex justify-between items-center mt-4">
+      <div className="w-full flex justify-between mt-4">
         <p className="text-sm font-medium text-acent">
           Total de horas: {totalHours}:
           {minutesRest < 10 ? `0${minutesRest}` : minutesRest}h <br />
@@ -214,9 +212,9 @@ const Historial = () => {
         </p>
         <button
           onClick={handleShare}
-          className="px-4 py-2 bg-one text-white rounded"
+          className="text-white border rounded p-2 flex items-center bg-one"
         >
-          Entregar informe
+          <span className="material-icons">share</span>
         </button>
       </div>
     </div>
