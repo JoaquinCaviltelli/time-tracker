@@ -18,6 +18,8 @@ const Agenda = () => {
   const [contacts, setContacts] = useState([]);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
+  const [searchTerm, setSearchTerm] = useState(""); // Estado para el término de búsqueda
+  const [filteredContacts, setFilteredContacts] = useState([]); // Estado para contactos filtrados
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,6 +38,15 @@ const Agenda = () => {
     }
   }, [user]);
 
+  // Filtrar contactos según el término de búsqueda
+  useEffect(() => {
+    setFilteredContacts(
+      contacts.filter((contact) =>
+        contact.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+  }, [contacts, searchTerm]);
+
   const handleAddContact = () => {
     setSelectedContact(null);
     setIsContactModalOpen(true);
@@ -46,7 +57,6 @@ const Agenda = () => {
     setIsContactModalOpen(true);
   };
 
-  // Función para eliminar el contacto y las visitas/cursos asociados
   const handleDeleteContact = async (contactId) => {
     if (
       window.confirm(
@@ -54,11 +64,9 @@ const Agenda = () => {
       )
     ) {
       try {
-        // 1. Eliminar el contacto
         const contactRef = doc(db, "users", user.uid, "contacts", contactId);
         await deleteDoc(contactRef);
 
-        // 2. Eliminar las visitas asociadas
         const visitsRef = collection(db, "users", user.uid, "visits");
         const visitsQuery = query(
           visitsRef,
@@ -66,10 +74,9 @@ const Agenda = () => {
         );
         const visitsSnapshot = await getDocs(visitsQuery);
         visitsSnapshot.forEach(async (visitDoc) => {
-          await deleteDoc(visitDoc.ref); // Eliminar cada visita
+          await deleteDoc(visitDoc.ref);
         });
 
-        // 3. Eliminar los cursos asociados
         const coursesRef = collection(db, "users", user.uid, "courses");
         const coursesQuery = query(
           coursesRef,
@@ -77,7 +84,7 @@ const Agenda = () => {
         );
         const coursesSnapshot = await getDocs(coursesQuery);
         coursesSnapshot.forEach(async (courseDoc) => {
-          await deleteDoc(courseDoc.ref); // Eliminar cada curso
+          await deleteDoc(courseDoc.ref);
         });
 
         console.log("Contacto, visitas y cursos eliminados con éxito.");
@@ -91,13 +98,13 @@ const Agenda = () => {
   };
 
   const handleOpenVisitsPage = (contactId) => {
-    navigate(`/visitas/${contactId}`); // Navega a la página de visitas con el ID del contacto
+    navigate(`/visitas/${contactId}`);
   };
 
   return (
     <div className="container mx-auto p-6 pb-28">
       <div className="flex justify-between mt-16 mb-6 items-center">
-        <h1 className="text-3xl font-extrabold text-acent ">Agenda</h1>
+        <h1 className="text-3xl font-extrabold text-acent">Agenda</h1>
 
         <button
           onClick={handleAddContact}
@@ -105,11 +112,22 @@ const Agenda = () => {
         >
           <span className="material-icons">add</span>
         </button>
+
+
       </div>
+      {/* Campo de búsqueda */}
+      <input
+        type="text"
+        placeholder="Buscar por nombre"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="border text-acent p-2 mb-4 rounded w-full outline-none"
+      />
+
 
       <div className="space-y-2">
-        {contacts.length > 0 ? (
-          contacts.map((contact) => (
+        {filteredContacts.length > 0 ? (
+          filteredContacts.map((contact) => (
             <div
               key={contact.id}
               className="border bg-one text-white p-5 rounded cursor-pointer flex justify-between gap-4 items-center"
@@ -122,7 +140,7 @@ const Agenda = () => {
               </div>
               <div className="flex gap-2">
                 <button
-                  onClick={() => handleOpenVisitsPage(contact.id)} // Navegar a la página de visitas del contacto
+                  onClick={() => handleOpenVisitsPage(contact.id)}
                   className="text-white border rounded p-2 flex items-center"
                 >
                   <span className="material-icons">visibility</span>

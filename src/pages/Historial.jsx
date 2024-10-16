@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { HoursContext } from "../context/HoursContext";
+import { useNavigate } from "react-router-dom";
 import EditHoursModal from "../components/EditHoursModal";
 import { collection, onSnapshot, query } from "firebase/firestore";
 import { db } from "../services/firebase";
@@ -15,9 +16,10 @@ const Historial = () => {
   const [selectedHour, setSelectedHour] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [courses, setCourses] = useState([]);
-
+  
   const today = moment(); // Definir el día de hoy
-
+  const navigate = useNavigate();
+  
   useEffect(() => {
     if (user) {
       const fetchHours = async () => {
@@ -109,6 +111,12 @@ const Historial = () => {
 
   return (
     <div className="container mx-auto p-4 max-w-lg">
+       <button
+        onClick={() => navigate("/YearlySummary")}
+        className="text-white bg-one border rounded p-2 mt-4 w-full"
+      >
+        Ver Resumen Anual
+      </button>
       <div className="flex justify-between items-center mb-4 text-xs">
         <button
           onClick={() =>
@@ -215,6 +223,7 @@ const Historial = () => {
           <span className="material-icons">share</span>
         </button>
       </div>
+     
     </div>
   );
 };

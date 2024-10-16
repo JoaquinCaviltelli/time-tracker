@@ -9,6 +9,7 @@ import Historial from "./pages/Historial";
 import Configuracion from "./pages/Configuracion";
 import Agenda from "./pages/Agenda";
 import VisitsPage from "./pages/VisitsPage";
+import YearlySummary from "./pages/YearlySummary";
 import PrivateRoute from "./components/PrivateRoute";
 import Footer from "/src/components/Footer.jsx";
 import Loading from "./components/Loading";
@@ -96,6 +97,14 @@ const MainApp = () => {
           element={
             <PrivateRoute>
               <VisitsPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/YearlySummary"
+          element={
+            <PrivateRoute>
+              <YearlySummary />
             </PrivateRoute>
           }
         />
