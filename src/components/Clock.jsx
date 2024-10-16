@@ -62,7 +62,7 @@ const Clock = ({ totalHours, goal, minutesRest}) => {
     };
 
     return (
-        <div className="relative rounded-lg flex flex-col max-w-80">
+        <div className="relative rounded-lg flex flex-col max-w-60">
 
             {/* Gráfico de Donut */}
             <div className="flex items-center justify-center mb-4 relative">

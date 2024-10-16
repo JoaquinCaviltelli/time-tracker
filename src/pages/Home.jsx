@@ -167,7 +167,7 @@ const Home = () => {
       {minutesGoal > 0 ? `${minutesGoal}m` : ""}
     </p>
     <p className="text-xs font-light text-light">
-      tienes que hacer{" "} 
+  
       {dailyHours > 0 ? `${dailyHours}h` : ""}{" "}
       {dailyMinutes > 0 ? `${dailyMinutes}m` : ""} por día
     </p>
@@ -176,7 +176,7 @@ const Home = () => {
 
 
         <div
-          className="bg-acent rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-2 cursor-pointer"
+          className="bg-acent rounded-lg shadow-lg flex flex-col items-center  p-4 col-span-2 cursor-pointer"
           onClick={() => setIsCourseModalOpen(true)}
         >
           <p className="text-sm font-light text-light">Cursos</p>
