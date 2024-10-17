@@ -140,6 +140,7 @@ const Home = () => {
         <Clock totalHours={totalHours} goal={goal} minutesRest={minutesRest} />
         <ModalAddHours />
       </div>
+   
 
       <div className="grid gap-2 grid-cols-6 w-11/12 mx-auto text-center mt-10">
         <div

@@ -1,31 +1,31 @@
 import { useState, useContext, useRef, useEffect } from "react";
 import { HoursContext } from "../context/HoursContext";
 import moment from "moment";
-import { useSwipeable } from "react-swipeable";
+import TimePicker from "./TimePicker";
 
 const ModalAddHours = () => {
   const [modalState, setModalState] = useState({
     visible: false,
     animating: false,
   });
-  const [hoursWorked, setHoursWorked] = useState(0);
-  const [minutesWorked, setMinutesWorked] = useState(0);
   const [date, setDate] = useState(moment().format("YYYY-MM-DD"));
   const { addHours } = useContext(HoursContext);
   const modalRef = useRef(null);
 
-  const [animateHours, setAnimateHours] = useState(false);
-  const [animateMinutes, setAnimateMinutes] = useState(false);
+  // Para capturar las horas y minutos seleccionados en el TimePicker
+  const [selectedHour, setSelectedHour] = useState("00");
+  const [selectedMinute, setSelectedMinute] = useState("00");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addHours(date, parseInt(hoursWorked), parseInt(minutesWorked));
+    // Convertir a enteros y añadir horas
+    addHours(date, parseInt(selectedHour), parseInt(selectedMinute));
     closeModal();
   };
 
   const openModal = () => {
-    setHoursWorked(0);
-    setMinutesWorked(0);
+    setSelectedHour("00");
+    setSelectedMinute("00");
     setDate(moment().format("YYYY-MM-DD"));
     setModalState({ visible: true, animating: true });
 
@@ -52,46 +52,6 @@ const ModalAddHours = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const incrementHours = () => {
-    setAnimateHours(true);
-    setHoursWorked((prev) => Math.min(prev + 1, 23));
-    setTimeout(() => setAnimateHours(false), 300);
-  };
-
-  const decrementHours = () => {
-    setAnimateHours(true);
-    setHoursWorked((prev) => Math.max(prev - 1, 0));
-    setTimeout(() => setAnimateHours(false), 300);
-  };
-
-  const incrementMinutes = () => {
-    setAnimateMinutes(true);
-    setMinutesWorked((prev) => (prev < 55 ? prev + 5 : 0));
-    if (minutesWorked >= 55) incrementHours();
-    setTimeout(() => setAnimateMinutes(false), 300);
-  };
-
-  const decrementMinutes = () => {
-    setAnimateMinutes(true);
-    setMinutesWorked((prev) => (prev >= 5 ? prev - 5 : hoursWorked > 0 ? 55 : 0));
-    if (minutesWorked === 0 && hoursWorked > 0) decrementHours();
-    setTimeout(() => setAnimateMinutes(false), 300);
-  };
-
-  const hoursHandlers = useSwipeable({
-    onSwipedUp: incrementHours,
-    onSwipedDown: decrementHours,
-    preventDefaultTouchmoveEvent: true,
-    trackMouse: true,
-  });
-
-  const minutesHandlers = useSwipeable({
-    onSwipedUp: incrementMinutes,
-    onSwipedDown: decrementMinutes,
-    preventDefaultTouchmoveEvent: true,
-    trackMouse: true,
-  });
-
   return (
     <>
       <button
@@ -113,55 +73,27 @@ const ModalAddHours = () => {
               X
             </button>
             <h2 className="text-4xl font-bold mb-2 text-center text-gray-600">
-              {hoursWorked}:{minutesWorked < 10 ? "0" + minutesWorked : minutesWorked}
+              {selectedHour}:{selectedMinute}
             </h2>
+
             <form onSubmit={handleSubmit}>
-              <div className="flex justify-center mb-4 h-44 items-center">
-                <div className="flex flex-col items-center mx-4">
-                  <div {...hoursHandlers} className="relative">
-                    <div
-                      className={`flex flex-col items-center h-28 justify-end transition-transform duration-300 ${
-                        animateHours ? "transform translate-y-2" : ""
-                      }`}
-                    >
-                      <span className="text-gray-400">{hoursWorked > 0 ? hoursWorked - 1 : ""}</span>
-                      <input
-                        type="number"
-                        value={hoursWorked}
-                        readOnly
-                        className="border border-gray-300 p-4 w-32 text-center rounded my-2 shadow-md"
-                      />
-                      <span className="text-gray-400">{hoursWorked + 1}</span>
-                    </div>
-                  </div>
-                  <span className="text-gray-500">Horas</span>
-                </div>
-                <div className="flex flex-col items-center mx-4">
-                  <div {...minutesHandlers} className="relative">
-                    <div
-                      className={`flex flex-col items-center h-28 justify-end transition-transform duration-300 ${
-                        animateMinutes ? "transform translate-y-2" : ""
-                      }`}
-                    >
-                      <span className="text-gray-400">{minutesWorked > 0 ? minutesWorked - 5 : ""}</span>
-                      <input
-                        type="number"
-                        value={minutesWorked}
-                        readOnly
-                        className="border border-gray-300 p-4 w-32 text-center rounded my-2 shadow-md"
-                      />
-                      <span className="text-gray-400">{minutesWorked + 5}</span>
-                    </div>
-                  </div>
-                  <span className="text-gray-500">Minutos</span>
-                </div>
+              <div className="flex justify-center mb-4">
+                {/* Aquí se inserta el TimePicker */}
+                <TimePicker
+                  selectedHour={selectedHour}
+                  selectedMinute={selectedMinute}
+                  setSelectedHour={setSelectedHour}
+                  setSelectedMinute={setSelectedMinute}
+                />
               </div>
+
               <input
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 className="border outline-none border-gray-300 p-4 mb-4 w-full rounded text-center bg-white placeholder:text-center"
               />
+
               <div className="flex w-full justify-between">
                 <button type="button" onClick={closeModal} className="bg-red-700 text-white px-4 py-2 rounded hover:bg-white transition">
                   Cancelar

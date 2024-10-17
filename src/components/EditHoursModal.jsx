@@ -4,6 +4,8 @@ import { doc, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
 import { db } from "../services/firebase";
 import moment from "moment";
 import { useSwipeable } from "react-swipeable";
+import TimePicker from "./TimePicker"; // Importar el TimePicker
+
 moment.lang("es", {
   months:
     "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
@@ -12,25 +14,28 @@ moment.lang("es", {
 });
 
 const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
+
+   // Para capturar las horas y minutos seleccionados en el TimePicker
+   const [selectedHour, setSelectedHour] = useState("00");
+   const [selectedMinute, setSelectedMinute] = useState("00");
+
   const [modalState, setModalState] = useState({
     visible: true,
     animating: true,
   });
-  const [hours, setHours] = useState(selectedEntry?.hoursWorked ?? 0);
-  const [minutes, setMinutes] = useState(selectedEntry?.minutesWorked ?? 0);
+  const [hours, setHours] = useState(selectedEntry?.hoursWorked ?? "00");
+  const [minutes, setMinutes] = useState(
+    selectedEntry?.minutesWorked ?? "00"
+  );
   const [date, setDate] = useState(
     selectedEntry?.date ? moment(selectedEntry.date).format("YYYY-MM-DD") : ""
   );
   const modalRef = useRef(null);
 
-  // Para las animaciones de los selectores
-  const [animateHours, setAnimateHours] = useState(false);
-  const [animateMinutes, setAnimateMinutes] = useState(false);
-
   useEffect(() => {
     if (selectedEntry) {
-      setHours(selectedEntry.hoursWorked ?? 0);
-      setMinutes(selectedEntry.minutesWorked ?? 0);
+      setSelectedHour(selectedEntry.hoursWorked ?? "00");
+      setSelectedMinute(selectedEntry.minutesWorked ?? "00");
       setDate(
         selectedEntry.date
           ? moment(selectedEntry.date).format("YYYY-MM-DD")
@@ -100,46 +105,6 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
     }
   };
 
-  const incrementHours = () => {
-    setAnimateHours(true);
-    setHours((prev) => Math.min(prev + 1, 23));
-    setTimeout(() => setAnimateHours(false), 300);
-  };
-
-  const decrementHours = () => {
-    setAnimateHours(true);
-    setHours((prev) => Math.max(prev - 1, 0));
-    setTimeout(() => setAnimateHours(false), 300);
-  };
-
-  const incrementMinutes = () => {
-    setAnimateMinutes(true);
-    setMinutes((prev) => (prev < 55 ? prev + 5 : 0));
-    if (minutes >= 55) incrementHours();
-    setTimeout(() => setAnimateMinutes(false), 300);
-  };
-
-  const decrementMinutes = () => {
-    setAnimateMinutes(true);
-    setMinutes((prev) => (prev >= 5 ? prev - 5 : hours > 0 ? 55 : 0));
-    if (minutes === 0 && hours > 0) decrementHours();
-    setTimeout(() => setAnimateMinutes(false), 300);
-  };
-
-  const hoursHandlers = useSwipeable({
-    onSwipedUp: incrementHours,
-    onSwipedDown: decrementHours,
-    preventDefaultTouchmoveEvent: true,
-    trackMouse: true,
-  });
-
-  const minutesHandlers = useSwipeable({
-    onSwipedUp: incrementMinutes,
-    onSwipedDown: decrementMinutes,
-    preventDefaultTouchmoveEvent: true,
-    trackMouse: true,
-  });
-
   const handleClickOutside = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
       closeModalWithAnimation();
@@ -174,55 +139,19 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
             className="mb-4 text-gray-500 text-md text-right w-full font-black"
           >
             X
-          </button>
-          <h2 className="text-4xl font-bold mb-2 text-center text-gray-600">
-            {hours}:{minutes < 10 ? "0" + minutes : minutes}
-          </h2>
+          </button><h2 className="text-4xl font-bold mb-2 text-center text-gray-600">
+              {selectedHour}:{selectedMinute}
+            </h2>
+
+
           <form className="max-w-md m-auto" onSubmit={handleEditHours}>
-            <div className="flex justify-center mb-4 h-44 items-center">
-              <div className="flex flex-col items-center mx-4">
-                <div {...hoursHandlers} className="relative">
-                  <div
-                    className={`flex flex-col items-center h-28 justify-end transition-transform duration-300 ${
-                      animateHours ? "transform translate-y-2" : ""
-                    }`}
-                  >
-                    <span className="text-gray-400">
-                      {hours > 0 ? hours - 1 : ""}
-                    </span>
-                    <input
-                      type="number"
-                      value={hours}
-                      readOnly
-                      className="border border-gray-300 p-4 w-32 text-center rounded my-2 shadow-md"
-                    />
-                    <span className="text-gray-400">{hours + 1}</span>
-                  </div>
-                </div>
-                <span className="text-gray-500">Horas</span>
-              </div>
-              <div className="flex flex-col items-center mx-4">
-                <div {...minutesHandlers} className="relative">
-                  <div
-                    className={`flex flex-col items-center h-28 justify-end transition-transform duration-300 ${
-                      animateMinutes ? "transform translate-y-2" : ""
-                    }`}
-                  >
-                    <span className="text-gray-400">
-                      {minutes > 0 ? minutes - 5 : ""}
-                    </span>
-                    <input
-                      type="number"
-                      value={minutes}
-                      readOnly
-                      className="border border-gray-300 p-4 w-32 text-center rounded my-2 shadow-md"
-                    />
-                    <span className="text-gray-400">{minutes + 5}</span>
-                  </div>
-                </div>
-                <span className="text-gray-500">Minutos</span>
-              </div>
-            </div>
+          {/* Reemplazar los selectores de horas y minutos con el TimePicker */}
+          <TimePicker
+            selectedHour={hours}
+            selectedMinute={minutes}
+            setSelectedHour={setHours}
+            setSelectedMinute={setMinutes}
+          />
             <input
               type="date"
               value={date}
@@ -238,7 +167,7 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
               </button>
               <button
                 type="submit"
-                className="bg-acent text-white px-4 py-2 rounded hover:bg-white transition"
+                className="bg-accent text-white px-4 py-2 rounded hover:bg-white transition"
               >
                 Guardar cambios
               </button>
