@@ -54,24 +54,27 @@ const TimePicker = ({ selectedHour, selectedMinute, setSelectedHour, setSelected
   }, [selectedHour, selectedMinute]);
 
   return (
-    <div className="flex flex-col items-center p-4 w-full max-w-xs mx-auto">
+    <div className="w-full py-4">
       {/* <h2 className="text-xl font-bold mb-4 text-gray-600">Select Time</h2> */}
 
-      <div className="flex justify-center w-full gap-3">
-        <div className="picker flex flex-col items-center">
+      <div className="flex w-full">
+        <div className="picker flex flex-col  w-full">
           <div
             className="scroll-container h-[160px] overflow-y-scroll relative scrollbar-hidden"
             ref={hourRef}
             onScroll={(e) => handleScroll(e, "hour")}
           >
-            <div className="h-16"></div>
+            <div className="h-16 "></div>
             {hours.map((hour, index) => (
               <div
                 key={index}
-                className={` text-xl time-item py-2 text-center text-one ${
+                className={` text-xl time-item p-2 text-right  text-one ${
                   selectedHour === hour ? "text-accent font-bold" : "opacity-30"
                 }`}
-                style={{ height: `${itemHeight}px`, lineHeight: `${itemHeight}px` }}
+                style={{
+                  height: `${itemHeight}px`,
+                  lineHeight: `${itemHeight}px`,
+                }}
               >
                 {hour}
               </div>
@@ -80,7 +83,7 @@ const TimePicker = ({ selectedHour, selectedMinute, setSelectedHour, setSelected
           </div>
         </div>
 
-        <div className="picker flex flex-col items-center">
+        <div className="flex flex-col w-full">
           <div
             className="scroll-container h-[160px] overflow-y-scroll relative scrollbar-hidden"
             ref={minuteRef}
@@ -90,10 +93,15 @@ const TimePicker = ({ selectedHour, selectedMinute, setSelectedHour, setSelected
             {minutes.map((minute, index) => (
               <div
                 key={index}
-                className={`time-item text-xl py-2 text-center text-one ${
-                  selectedMinute === minute ? "text-accent font-bold" : "opacity-30"
+                className={`time-item text-xl p-2 text-left text-one ${
+                  selectedMinute === minute
+                    ? "text-accent font-bold"
+                    : "opacity-30"
                 }`}
-                style={{ height: `${itemHeight}px`, lineHeight: `${itemHeight}px` }}
+                style={{
+                  height: `${itemHeight}px`,
+                  lineHeight: `${itemHeight}px`,
+                }}
               >
                 {minute}
               </div>

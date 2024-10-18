@@ -139,19 +139,19 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
             className="mb-4 text-gray-500 text-md text-right w-full font-black"
           >
             X
-          </button><h2 className="text-4xl font-bold mb-2 text-center text-gray-600">
-              {selectedHour}:{selectedMinute}
-            </h2>
-
+          </button>
+          <h2 className="text-4xl font-bold mb-2 text-center text-gray-600">
+            {hours}:{minutes}
+          </h2>
 
           <form className="max-w-md m-auto" onSubmit={handleEditHours}>
-          {/* Reemplazar los selectores de horas y minutos con el TimePicker */}
-          <TimePicker
-            selectedHour={hours}
-            selectedMinute={minutes}
-            setSelectedHour={setHours}
-            setSelectedMinute={setMinutes}
-          />
+            {/* Reemplazar los selectores de horas y minutos con el TimePicker */}
+            <TimePicker
+              selectedHour={hours}
+              selectedMinute={minutes}
+              setSelectedHour={setHours}
+              setSelectedMinute={setMinutes}
+            />
             <input
               type="date"
               value={date}
@@ -167,7 +167,7 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
               </button>
               <button
                 type="submit"
-                className="bg-accent text-white px-4 py-2 rounded hover:bg-white transition"
+                className="bg-one text-white px-4 py-2 rounded hover:bg-white transition"
               >
                 Guardar cambios
               </button>
