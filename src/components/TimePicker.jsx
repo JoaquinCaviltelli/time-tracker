@@ -60,16 +60,16 @@ const TimePicker = ({ selectedHour, selectedMinute, setSelectedHour, setSelected
       <div className="flex w-full">
         <div className="picker flex flex-col  w-full">
           <div
-            className="scroll-container h-[160px] overflow-y-scroll relative scrollbar-hidden"
+            className="scroll-container h-[140px] overflow-y-scroll relative scrollbar-hidden"
             ref={hourRef}
             onScroll={(e) => handleScroll(e, "hour")}
           >
-            <div className="h-16 "></div>
+            <div className="h-10 "></div>
             {hours.map((hour, index) => (
               <div
                 key={index}
-                className={` text-xl time-item p-2 text-right  text-one ${
-                  selectedHour === hour ? "text-accent font-bold" : "opacity-30"
+                className={` text-4xl time-item p-2 text-right  text-one ${
+                  selectedHour === hour ? "text-accent font-bold" : "opacity-30 text-xl"
                 }`}
                 style={{
                   height: `${itemHeight}px`,
@@ -85,18 +85,18 @@ const TimePicker = ({ selectedHour, selectedMinute, setSelectedHour, setSelected
 
         <div className="flex flex-col w-full">
           <div
-            className="scroll-container h-[160px] overflow-y-scroll relative scrollbar-hidden"
+            className="scroll-container h-[140px] overflow-y-scroll relative scrollbar-hidden"
             ref={minuteRef}
             onScroll={(e) => handleScroll(e, "minute")}
           >
-            <div className="h-16"></div>
+            <div className="h-10"></div>
             {minutes.map((minute, index) => (
               <div
                 key={index}
-                className={`time-item text-xl p-2 text-left text-one ${
+                className={`time-item text-4xl p-2 text-left text-one ${
                   selectedMinute === minute
                     ? "text-accent font-bold"
-                    : "opacity-30"
+                    : "opacity-30 text-xl"
                 }`}
                 style={{
                   height: `${itemHeight}px`,

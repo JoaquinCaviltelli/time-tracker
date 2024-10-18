@@ -69,12 +69,12 @@ const ModalAddHours = () => {
               modalState.animating ? "translate-y-full" : "translate-y-0"
             }`}
           >
-            <button onClick={closeModal} className="mb-4 text-gray-500 text-md text-right w-full font-black">
+            {/* <button onClick={closeModal} className="mb-4 text-gray-500 text-md text-right w-full font-black">
               X
-            </button>
-            <h2 className="text-4xl font-bold mb-2 text-center text-gray-600">
+            </button> */}
+            {/* <h2 className="text-4xl font-bold mb-2 text-center text-gray-600">
               {selectedHour}:{selectedMinute}
-            </h2>
+            </h2> */}
 
             <form onSubmit={handleSubmit}>
               <div className="flex justify-center mb-4">
