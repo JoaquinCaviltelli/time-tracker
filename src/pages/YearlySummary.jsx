@@ -14,10 +14,10 @@ const YearlySummary = () => {
   const { user } = useContext(HoursContext);
   const [monthlyHours, setMonthlyHours] = useState(Array(12).fill(0));
   const [totalYearlyHours, setTotalYearlyHours] = useState(0);
+  const [totalYearlyMinutes, setTotalYearlyMinutes] = useState(0); // Para los minutos restantes
 
   const navigate = useNavigate();
   useEffect(() => {
-
     if (user) {
       const startMonth = 8; // Septiembre
       const endMonth = 7; // Agosto
@@ -26,11 +26,11 @@ const YearlySummary = () => {
       const startYear = now.month() >= startMonth ? currentYear : currentYear - 1;
       const endYear = startYear + 1;
 
-
       const hoursRef = collection(db, "users", user.uid, "hours");
       onSnapshot(hoursRef, (snapshot) => {
         const hoursData = Array(12).fill(0);
-        let totalHours = 0;
+        let totalHoursWorked = 0;
+        let totalMinutesWorked = 0;
 
         snapshot.docs.forEach((doc) => {
           const { date, hoursWorked, minutesWorked } = doc.data();
@@ -43,14 +43,24 @@ const YearlySummary = () => {
             (year === endYear && month <= endMonth)
           ) {
             const index = (month - startMonth + 12) % 12;
-            const totalWorkedHours = hoursWorked + minutesWorked / 60;
-            hoursData[index] += totalWorkedHours;
-            totalHours += totalWorkedHours;
+
+            // Sumar horas y minutos por separado
+            hoursData[index] += hoursWorked + minutesWorked / 60; 
+            totalHoursWorked += hoursWorked;
+            totalMinutesWorked += minutesWorked;
           }
         });
 
+        // Aplicar el cálculo que mencionas
+        const totalMinutes = totalMinutesWorked / 60;
+        const hoursFromMinutes = Math.floor(totalMinutes);
+        const minutesRest = Math.round((totalMinutes - hoursFromMinutes) * 60);
+        const totalHours = totalHoursWorked + hoursFromMinutes;
+
+        // Guardar el resultado total
         setMonthlyHours(hoursData);
-        setTotalYearlyHours(totalHours.toFixed(2));
+        setTotalYearlyHours(totalHours);
+        setTotalYearlyMinutes(minutesRest);
       });
     }
   }, [user]);
@@ -108,10 +118,9 @@ const YearlySummary = () => {
       },
     },
   };
-  
 
   return (
-    <div className="container mx-auto p-6 pb-28">
+    <div className="container max-w-xl mx-auto p-6 pb-28">
       <div className="flex justify-between mt-16 mb-6 items-center">
 
       <h1 className="text-3xl font-extrabold text-acent">
@@ -120,8 +129,8 @@ const YearlySummary = () => {
       </div>
       <div className="bg-white  mb-4">
         <div className=" mb-4">
-          <p className="text-sm font-semibold text-gray-700">
-            Total de Horas: <span className="text-acent">{Math.round(totalYearlyHours)}h</span>
+          <p className="text-sm font-bold text-one">
+            Total: <span >{Math.round(totalYearlyHours)}:{totalYearlyMinutes}h</span>
           </p>
         </div>
         {totalYearlyHours > 0 ? (
