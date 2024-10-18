@@ -115,7 +115,7 @@ const TimePicker = ({ selectedHour, selectedMinute, setSelectedHour, setSelected
         {selectedHour}:{selectedMinute}
       </div> */}
 
-      <style jsx>{`
+      <style>{`
         .scrollbar-hidden::-webkit-scrollbar {
           display: none;
         }

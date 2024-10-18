@@ -15,18 +15,13 @@ moment.lang("es", {
 
 const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
 
-   // Para capturar las horas y minutos seleccionados en el TimePicker
-   const [selectedHour, setSelectedHour] = useState("00");
-   const [selectedMinute, setSelectedMinute] = useState("00");
 
   const [modalState, setModalState] = useState({
     visible: true,
     animating: true,
   });
-  const [hours, setHours] = useState(selectedEntry?.hoursWorked ?? "00");
-  const [minutes, setMinutes] = useState(
-    selectedEntry?.minutesWorked ?? "00"
-  );
+  const [hours, setHours] = useState("00");
+  const [minutes, setMinutes] = useState("00");
   const [date, setDate] = useState(
     selectedEntry?.date ? moment(selectedEntry.date).format("YYYY-MM-DD") : ""
   );
@@ -34,8 +29,8 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
 
   useEffect(() => {
     if (selectedEntry) {
-      setSelectedHour(selectedEntry.hoursWorked ?? "00");
-      setSelectedMinute(selectedEntry.minutesWorked ?? "00");
+      setHours(selectedEntry.hoursWorked);
+      setMinutes(selectedEntry.minutesWorked);
       setDate(
         selectedEntry.date
           ? moment(selectedEntry.date).format("YYYY-MM-DD")
@@ -134,7 +129,7 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
             modalState.animating ? "translate-y-full" : "translate-y-0"
           }`}
         >
-          <button
+          {/* <button
             onClick={closeModalWithAnimation}
             className="mb-4 text-gray-500 text-md text-right w-full font-black"
           >
@@ -142,7 +137,7 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
           </button>
           <h2 className="text-4xl font-bold mb-2 text-center text-gray-600">
             {hours}:{minutes}
-          </h2>
+          </h2> */}
 
           <form className="max-w-md m-auto" onSubmit={handleEditHours}>
             {/* Reemplazar los selectores de horas y minutos con el TimePicker */}
