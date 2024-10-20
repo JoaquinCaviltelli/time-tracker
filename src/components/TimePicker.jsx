@@ -44,7 +44,7 @@ const TimePicker = ({
       } else {
         centerScroll(minuteRef, selectedIndex);
       }
-    }, 100);
+    }, 300);
   };
 
   const centerScroll = (ref, selectedIndex) => {

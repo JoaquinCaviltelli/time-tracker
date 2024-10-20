@@ -144,9 +144,9 @@ const Home = () => {
           className="bg-one rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-6 cursor-pointer"
           onClick={() => setIsModalOpen(true)}
         >
-          <p className="text-sm font-light text-light">Tu meta es de:</p>
+          <p className="text-xs font-light text-light">Tu meta es de:</p>
           <p className="text-3xl font-bold text-light">{goal}h</p>
-          <p className="text-sm font-light text-light">este mes</p>
+          <p className="text-xs font-light text-light">este mes</p>
         </div>
 
         {goalReached ? (
