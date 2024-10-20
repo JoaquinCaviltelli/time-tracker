@@ -65,10 +65,10 @@ const TimePicker = ({
     setScrollActive(false);
     centerScroll(hourRef, initialHourIndex);
     centerScroll(minuteRef, initialMinuteIndex);
-    setTimeout(() => {
-      setScrollActive(true); // Activar scroll después de centrar
-    }, 100);
   }, [selectedHour, selectedMinute]);
+  setTimeout(() => {
+    setScrollActive(true); // Activar scroll después de centrar
+  }, 500);
 
   return (
     <div className="w-full py-4">
