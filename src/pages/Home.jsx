@@ -23,18 +23,16 @@ const Home = () => {
   const endOfMonth = moment().endOf("month"); // Fin del mes actual
   const remainingDays = endOfMonth.diff(today, "days") + 1; // Días restantes del mes
 
+  useEffect(() => {
+    // Cambiar el fondo del body al entrar en Home
+    document.body.style.backgroundColor = "#fff"; // Cambia este color al que quieras
 
-   useEffect(() => {
-     // Cambiar el fondo del body al entrar en Home
-     document.body.style.backgroundColor = "#fff"; // Cambia este color al que quieras
+    // Limpiar el efecto al salir del componente
+    return () => {
+      document.body.style.backgroundColor = ""; // Restaura el color por defecto
+    };
+  }, []);
 
-     // Limpiar el efecto al salir del componente
-     return () => {
-       document.body.style.backgroundColor = ""; // Restaura el color por defecto
-     };
-   }, []);
-  
-  
   useEffect(() => {
     if (user) {
       const fetchHours = async () => {
@@ -59,22 +57,22 @@ const Home = () => {
     );
   });
 
- useEffect(() => {
-   const fetchContacts = async () => {
-     const q = query(collection(db, "users", user.uid, "contacts"));
-     onSnapshot(q, (snapshot) => {
-       const contactsData = snapshot.docs.map((doc) => ({
-         ...doc.data(),
-         id: doc.id,
-       }));
-       setContacts(contactsData);
-     });
-   };
+  useEffect(() => {
+    const fetchContacts = async () => {
+      const q = query(collection(db, "users", user.uid, "contacts"));
+      onSnapshot(q, (snapshot) => {
+        const contactsData = snapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setContacts(contactsData);
+      });
+    };
 
-   if (user) {
-     fetchContacts();
-   }
- }, [user]);
+    if (user) {
+      fetchContacts();
+    }
+  }, [user]);
 
   const totalMinutesWorked = filteredHours.reduce(
     (acc, curr) => acc + curr.minutesWorked,
@@ -110,29 +108,29 @@ const Home = () => {
     }
   }, [totalHours, minutesRest, goal]);
 
-   useEffect(() => {
-     if (user) {
-       const courseRef = collection(db, "users", user.uid, "courses");
-       const startOfMonth = moment().startOf("month").format("YYYY-MM-DD");
-       const endOfMonth = moment().endOf("month").format("YYYY-MM-DD");
+  useEffect(() => {
+    if (user) {
+      const courseRef = collection(db, "users", user.uid, "courses");
+      const startOfMonth = moment().startOf("month").format("YYYY-MM-DD");
+      const endOfMonth = moment().endOf("month").format("YYYY-MM-DD");
 
-       const q = query(
-         courseRef,
-         where("date", ">=", startOfMonth),
-         where("date", "<=", endOfMonth)
-       );
+      const q = query(
+        courseRef,
+        where("date", ">=", startOfMonth),
+        where("date", "<=", endOfMonth)
+      );
 
-       const unsubscribe = onSnapshot(q, (snapshot) => {
-         const uniqueCourses = new Set();
-         const coursesData = snapshot.docs.map((doc) => doc.data());
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const uniqueCourses = new Set();
+        const coursesData = snapshot.docs.map((doc) => doc.data());
 
-         coursesData.forEach((course) => uniqueCourses.add(course.contactId));
-         setCourses([...uniqueCourses]);
-       });
+        coursesData.forEach((course) => uniqueCourses.add(course.contactId));
+        setCourses([...uniqueCourses]);
+      });
 
-       return () => unsubscribe();
-     }
-   }, [user, currentMonth, currentYear]);
+      return () => unsubscribe();
+    }
+  }, [user, currentMonth, currentYear]);
 
   return (
     <div className="flex flex-col items-center pt-10 max-w-lg m-auto">
@@ -140,7 +138,6 @@ const Home = () => {
         <Clock totalHours={totalHours} goal={goal} minutesRest={minutesRest} />
         <ModalAddHours />
       </div>
-   
 
       <div className="grid gap-2 grid-cols-6 w-11/12 mx-auto text-center mt-10">
         <div
@@ -153,35 +150,34 @@ const Home = () => {
         </div>
 
         {goalReached ? (
-  <div className="bg-acent rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-4">
-    <p className="text-sm font-light text-light">Has alcanzado la</p>
-    <p className="text-lg font-bold text-light">meta!</p>
-    <p className="text-sm font-light text-light">
-      adicional: {totalHours - goal}h {minutesRest > 0 ? `${minutesRest}m` : ""}
-    </p>
-  </div>
-) : (
-  <div className="bg-acent rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-4">
-    <p className="text-sm font-light text-light">Te faltan</p>
-    <p className="text-3xl font-bold text-light">
-      {hoursGoal > 0 ? `${hoursGoal}h` : ""}{" "}
-      {minutesGoal > 0 ? `${minutesGoal}m` : ""}
-    </p>
-    <p className="text-xs font-light text-light">
-  
-      {dailyHours > 0 ? `${dailyHours}h` : ""}{" "}
-      {dailyMinutes > 0 ? `${dailyMinutes}m` : ""} por día
-    </p>
-  </div>
-)}
-
+          <div className="bg-acent rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-4">
+            <p className="text-xs font-light text-light">Has alcanzado la</p>
+            <p className="text-lg font-bold text-light">meta!</p>
+            <p className="text-xs font-light text-light">
+              adicional: {totalHours - goal}h{" "}
+              {minutesRest > 0 ? `${minutesRest}m` : ""}
+            </p>
+          </div>
+        ) : (
+          <div className="bg-acent rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-4">
+            <p className="text-xs font-light text-light">Te faltan</p>
+            <p className="text-2xl font-bold text-light">
+              {hoursGoal > 0 ? `${hoursGoal}h` : ""}{" "}
+              {minutesGoal > 0 ? `${minutesGoal}m` : ""}
+            </p>
+            <p className="text-xs font-light text-light">
+              {dailyHours > 0 ? `${dailyHours}h` : ""}{" "}
+              {dailyMinutes > 0 ? `${dailyMinutes}m` : ""} por día
+            </p>
+          </div>
+        )}
 
         <div
           className="bg-acent rounded-lg shadow-lg flex flex-col items-center  p-4 col-span-2 cursor-pointer"
           onClick={() => setIsCourseModalOpen(true)}
         >
-          <p className="text-sm font-light text-light">Cursos</p>
-          <p className="text-3xl font-bold text-light">{courses.length}</p>
+          <p className="text-xs font-light text-light">Cursos</p>
+          <p className="text-2xl font-bold text-light">{courses.length}</p>
         </div>
       </div>
 

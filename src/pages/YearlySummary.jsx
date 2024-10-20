@@ -4,11 +4,25 @@ import { useNavigate } from "react-router-dom";
 import { Bar } from "react-chartjs-2";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../services/firebase";
-import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
+import {
+  Chart as ChartJS,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import moment from "moment";
-import ChartDataLabels from 'chartjs-plugin-datalabels'; // Asegúrate de importar el plugin
+import ChartDataLabels from "chartjs-plugin-datalabels"; // Asegúrate de importar el plugin
 
-ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend, ChartDataLabels);
+ChartJS.register(
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+  ChartDataLabels
+);
 
 const YearlySummary = () => {
   const { user } = useContext(HoursContext);
@@ -23,7 +37,8 @@ const YearlySummary = () => {
       const endMonth = 7; // Agosto
       const now = moment();
       const currentYear = now.year();
-      const startYear = now.month() >= startMonth ? currentYear : currentYear - 1;
+      const startYear =
+        now.month() >= startMonth ? currentYear : currentYear - 1;
       const endYear = startYear + 1;
 
       const hoursRef = collection(db, "users", user.uid, "hours");
@@ -45,7 +60,7 @@ const YearlySummary = () => {
             const index = (month - startMonth + 12) % 12;
 
             // Sumar horas y minutos por separado
-            hoursData[index] += hoursWorked + minutesWorked / 60; 
+            hoursData[index] += hoursWorked + minutesWorked / 60;
             totalHoursWorked += hoursWorked;
             totalMinutesWorked += minutesWorked;
           }
@@ -66,7 +81,20 @@ const YearlySummary = () => {
   }, [user]);
 
   const data = {
-    labels: ["Sep", "Oct", "Nov", "Dic", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago"],
+    labels: [
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dic",
+      "Ene",
+      "Feb",
+      "Mar",
+      "Abr",
+      "May",
+      "Jun",
+      "Jul",
+      "Ago",
+    ],
     datasets: [
       {
         label: "", // Eliminado el label
@@ -89,13 +117,13 @@ const YearlySummary = () => {
       },
       datalabels: {
         display: true,
-        anchor: 'end',
-        align: 'end',
+        anchor: "end",
+        align: "end",
         borderRadius: 4,
-        color: '#4a7766',
+        color: "#4a7766",
         font: {
           size: 12,
-          weight: 'bold',
+          weight: "bold",
         },
         formatter: (value) => `${value.toFixed(0)}`,
       },
@@ -122,25 +150,27 @@ const YearlySummary = () => {
   return (
     <div className="container max-w-xl mx-auto p-6 pb-28">
       <div className="flex justify-between mt-16 mb-6 items-center">
-
-      <h1 className="text-3xl font-extrabold text-acent">
-        Resumen
-      </h1>
+        <h1 className="text-3xl font-extrabold text-acent">Resumen</h1>
       </div>
       <div className="bg-white  mb-4">
         <div className=" mb-4">
           <p className="text-sm font-bold text-one">
-            Total: <span >{Math.round(totalYearlyHours)}:{totalYearlyMinutes}h</span>
+            Total:{" "}
+            <span>
+              {Math.round(totalYearlyHours)}:{totalYearlyMinutes}h
+            </span>
           </p>
         </div>
         {totalYearlyHours > 0 ? (
           <Bar data={data} options={options} />
         ) : (
-          <p className=" text-gray-500 ">No se registraron horas en el año de servicio.</p>
+          <p className=" text-gray-500 ">
+            No se registraron horas en el año de servicio.
+          </p>
         )}
       </div>
       <button
-        onClick={() => navigate("/Historial")}
+        onClick={() => navigate("/historial")}
         className="text-white bg-one border rounded p-2 mt-4 w-full"
       >
         Volver atras

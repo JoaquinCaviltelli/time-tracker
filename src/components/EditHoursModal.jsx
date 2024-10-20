@@ -14,14 +14,12 @@ moment.lang("es", {
 });
 
 const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
-
-
   const [modalState, setModalState] = useState({
     visible: true,
     animating: true,
   });
-  const [hours, setHours] = useState("00");
-  const [minutes, setMinutes] = useState("00");
+  const [hours, setHours] = useState();
+  const [minutes, setMinutes] = useState();
   const [date, setDate] = useState(
     selectedEntry?.date ? moment(selectedEntry.date).format("YYYY-MM-DD") : ""
   );

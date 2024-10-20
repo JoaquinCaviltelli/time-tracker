@@ -1,21 +1,32 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-const TimePicker = ({ selectedHour, selectedMinute, setSelectedHour, setSelectedMinute }) => {
-  const hours = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, "0"));
-  const minutes = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, "0"));
+const TimePicker = ({
+  selectedHour,
+  selectedMinute,
+  setSelectedHour,
+  setSelectedMinute,
+}) => {
+  // Almacenar los valores como números
+  const hours = Array.from({ length: 24 }, (_, i) => i); // Números de 0 a 23
+  const minutes = Array.from({ length: 12 }, (_, i) => i * 5); // Números de 0 a 55 (en pasos de 5)
 
   const hourRef = useRef(null);
   const minuteRef = useRef(null);
   const scrollTimeout = useRef(null);
 
+  const [scrollActive, setScrollActive] = useState(false);
+
   const itemHeight = 40;
   const containerHeight = 40;
 
   const handleScroll = (e, type) => {
+    if (!scrollActive) return;
+
     const scrollTop = e.target.scrollTop;
     const selectedIndex = Math.round(scrollTop / itemHeight);
 
     if (type === "hour") {
+      console.log(scrollTop);
       setSelectedHour(hours[selectedIndex]);
     } else {
       setSelectedMinute(minutes[selectedIndex]);
@@ -38,9 +49,11 @@ const TimePicker = ({ selectedHour, selectedMinute, setSelectedHour, setSelected
 
   const centerScroll = (ref, selectedIndex) => {
     if (ref.current) {
+      console.log(selectedIndex);
       ref.current.scrollTo({
-        top: selectedIndex * itemHeight - (containerHeight / 2 - itemHeight / 2),
-        behavior: "smooth"
+        top:
+          selectedIndex * itemHeight - (containerHeight / 2 - itemHeight / 2),
+        behavior: "smooth",
       });
     }
   };
@@ -49,14 +62,16 @@ const TimePicker = ({ selectedHour, selectedMinute, setSelectedHour, setSelected
     const initialHourIndex = hours.indexOf(selectedHour);
     const initialMinuteIndex = minutes.indexOf(selectedMinute);
 
+    setScrollActive(false);
     centerScroll(hourRef, initialHourIndex);
     centerScroll(minuteRef, initialMinuteIndex);
   }, [selectedHour, selectedMinute]);
+  setTimeout(() => {
+    setScrollActive(true); // Activar scroll después de centrar
+  }, 500);
 
   return (
     <div className="w-full py-4">
-      {/* <h2 className="text-xl font-bold mb-4 text-gray-600">Select Time</h2> */}
-
       <div className="flex w-full">
         <div className="picker flex flex-col  w-full">
           <div
@@ -69,14 +84,16 @@ const TimePicker = ({ selectedHour, selectedMinute, setSelectedHour, setSelected
               <div
                 key={index}
                 className={` text-4xl time-item p-2 text-right  text-one ${
-                  selectedHour === hour ? "text-accent font-bold" : "opacity-30 text-xl"
+                  selectedHour === hour
+                    ? "text-accent font-bold"
+                    : "opacity-30 text-xl"
                 }`}
                 style={{
                   height: `${itemHeight}px`,
                   lineHeight: `${itemHeight}px`,
                 }}
               >
-                {hour}
+                {String(hour).padStart(2, "0")}
               </div>
             ))}
             <div className="h-16"></div>
@@ -103,17 +120,13 @@ const TimePicker = ({ selectedHour, selectedMinute, setSelectedHour, setSelected
                   lineHeight: `${itemHeight}px`,
                 }}
               >
-                {minute}
+                {String(minute).padStart(2, "0")}
               </div>
             ))}
             <div className="h-16"></div>
           </div>
         </div>
       </div>
-
-      {/* <div className="mt-6 text-2xl font-semibold text-gray-600">
-        {selectedHour}:{selectedMinute}
-      </div> */}
 
       <style>{`
         .scrollbar-hidden::-webkit-scrollbar {

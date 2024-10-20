@@ -13,8 +13,8 @@ const ModalAddHours = () => {
   const modalRef = useRef(null);
 
   // Para capturar las horas y minutos seleccionados en el TimePicker
-  const [selectedHour, setSelectedHour] = useState("00");
-  const [selectedMinute, setSelectedMinute] = useState("00");
+  const [selectedHour, setSelectedHour] = useState(0);
+  const [selectedMinute, setSelectedMinute] = useState(0);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -24,8 +24,8 @@ const ModalAddHours = () => {
   };
 
   const openModal = () => {
-    setSelectedHour("00");
-    setSelectedMinute("00");
+    setSelectedHour(0);
+    setSelectedMinute(0);
     setDate(moment().format("YYYY-MM-DD"));
     setModalState({ visible: true, animating: true });
 
@@ -95,10 +95,17 @@ const ModalAddHours = () => {
               />
 
               <div className="flex w-full justify-between">
-                <button type="button" onClick={closeModal} className="bg-red-700 text-white px-4 py-2 rounded hover:bg-white transition">
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="bg-red-700 text-white px-4 py-2 rounded hover:bg-white transition"
+                >
                   Cancelar
                 </button>
-                <button type="submit" className="bg-acent text-white px-4 py-2 rounded hover:bg-white transition">
+                <button
+                  type="submit"
+                  className="bg-one text-white px-4 py-2 rounded hover:bg-white transition"
+                >
                   Guardar cambios
                 </button>
               </div>
