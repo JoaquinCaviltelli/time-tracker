@@ -71,7 +71,7 @@ const TimePicker = ({
       setTimeout(() => {
         setScrollActive(true); // Activar scroll solo después del centrado inicial
         setIsInitialLoad(false); // Desactivar el centrado inicial
-      }, 500); // Solo retraso en la inicialización
+      }, 1000); // Solo retraso en la inicialización
     }
   }, [isInitialLoad]); // Solo se dispara una vez al montar
 
@@ -88,7 +88,7 @@ const TimePicker = ({
             {hours.map((hour, index) => (
               <div
                 key={index}
-                className={` text-4xl time-item p-2 text-right  text-one ${
+                className={` text-4xl time-item py-2 px-1  text-right  text-one ${
                   selectedHour === hour
                     ? "text-accent font-bold"
                     : "opacity-30 text-xl"
@@ -99,6 +99,7 @@ const TimePicker = ({
                 }}
               >
                 {String(hour).padStart(2, "0")}
+                <span className="text-xl font-semibold">h</span>
               </div>
             ))}
             <div className="h-16"></div>
@@ -115,7 +116,7 @@ const TimePicker = ({
             {minutes.map((minute, index) => (
               <div
                 key={index}
-                className={`time-item text-4xl p-2 text-left text-one ${
+                className={`time-item text-4xl py-2 px-1 text-left text-one ${
                   selectedMinute === minute
                     ? "text-accent font-bold"
                     : "opacity-30 text-xl"
@@ -126,6 +127,7 @@ const TimePicker = ({
                 }}
               >
                 {String(minute).padStart(2, "0")}
+                <span className="text-xl font-semibold">h</span>
               </div>
             ))}
             <div className="h-16"></div>
