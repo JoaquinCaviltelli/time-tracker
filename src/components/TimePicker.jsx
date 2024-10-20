@@ -6,7 +6,6 @@ const TimePicker = ({
   setSelectedHour,
   setSelectedMinute,
 }) => {
-  // Almacenar los valores como números
   const hours = Array.from({ length: 24 }, (_, i) => i); // Números de 0 a 23
   const minutes = Array.from({ length: 12 }, (_, i) => i * 5); // Números de 0 a 55 (en pasos de 5)
 
@@ -15,6 +14,7 @@ const TimePicker = ({
   const scrollTimeout = useRef(null);
 
   const [scrollActive, setScrollActive] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true); // Nuevo estado
 
   const itemHeight = 40;
   const containerHeight = 40;
@@ -26,7 +26,6 @@ const TimePicker = ({
     const selectedIndex = Math.round(scrollTop / itemHeight);
 
     if (type === "hour") {
-      console.log(scrollTop);
       setSelectedHour(hours[selectedIndex]);
     } else {
       setSelectedMinute(minutes[selectedIndex]);
@@ -44,12 +43,11 @@ const TimePicker = ({
       } else {
         centerScroll(minuteRef, selectedIndex);
       }
-    }, 100);
+    }, 100); // Reducido el retraso para que sea más responsivo
   };
 
   const centerScroll = (ref, selectedIndex) => {
     if (ref.current) {
-      console.log(selectedIndex);
       ref.current.scrollTo({
         top:
           selectedIndex * itemHeight - (containerHeight / 2 - itemHeight / 2),
@@ -62,13 +60,20 @@ const TimePicker = ({
     const initialHourIndex = hours.indexOf(selectedHour);
     const initialMinuteIndex = minutes.indexOf(selectedMinute);
 
-    setScrollActive(false);
     centerScroll(hourRef, initialHourIndex);
     centerScroll(minuteRef, initialMinuteIndex);
-    setTimeout(() => {
-      setScrollActive(true); // Activar scroll después de centrar
-    }, 500);
   }, [selectedHour, selectedMinute]);
+  
+  useEffect(() => {
+    if (isInitialLoad) {
+     
+
+      setTimeout(() => {
+        setScrollActive(true); // Activar scroll solo después del centrado inicial
+        setIsInitialLoad(false); // Desactivar el centrado inicial
+      }, 500); // Solo retraso en la inicialización
+    }
+  }, [isInitialLoad]); // Solo se dispara una vez al montar
 
   return (
     <div className="w-full py-4">
