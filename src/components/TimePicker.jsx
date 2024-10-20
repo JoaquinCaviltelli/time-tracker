@@ -67,11 +67,18 @@ const TimePicker = ({
   useEffect(() => {
     if (isInitialLoad) {
      
+      if (selectedHour === 0 && selectedMinute === 0) {
+        
+          setScrollActive(true);
+          setIsInitialLoad(false); 
+      } else {
+        setTimeout(() => {
+          setScrollActive(true);
+          setIsInitialLoad(false);
+        }, 1000); 
+        
+      }
 
-      setTimeout(() => {
-        setScrollActive(true); // Activar scroll solo después del centrado inicial
-        setIsInitialLoad(false); // Desactivar el centrado inicial
-      }, 1000); // Solo retraso en la inicialización
     }
   }, [isInitialLoad]); // Solo se dispara una vez al montar
 
@@ -127,7 +134,7 @@ const TimePicker = ({
                 }}
               >
                 {String(minute).padStart(2, "0")}
-                <span className="text-xl font-semibold">h</span>
+                <span className="text-xl font-semibold">m</span>
               </div>
             ))}
             <div className="h-16"></div>
