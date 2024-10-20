@@ -44,7 +44,7 @@ const TimePicker = ({
       } else {
         centerScroll(minuteRef, selectedIndex);
       }
-    },);
+    }, 100);
   };
 
   const centerScroll = (ref, selectedIndex) => {
@@ -67,7 +67,7 @@ const TimePicker = ({
     centerScroll(minuteRef, initialMinuteIndex);
     setTimeout(() => {
       setScrollActive(true); // Activar scroll después de centrar
-    }, );
+    }, 100);
   }, [selectedHour, selectedMinute]);
 
   return (

@@ -111,12 +111,6 @@ const Historial = () => {
 
   return (
     <div className="container mx-auto p-4 max-w-lg">
-       <button
-        onClick={() => navigate("/YearlySummary")}
-        className="text-white bg-one border rounded p-2 mt-4 w-full"
-      >
-        Ver Resumen Anual
-      </button>
       <div className="flex justify-between items-center mb-4 text-xs">
         <button
           onClick={() =>
@@ -223,7 +217,12 @@ const Historial = () => {
           <span className="material-icons">share</span>
         </button>
       </div>
-     
+      <button
+        onClick={() => navigate("/YearlySummary")}
+        className="text-white bg-one border rounded p-2 mt-4 w-full"
+      >
+        Ver Resumen Anual
+      </button>
     </div>
   );
 };
