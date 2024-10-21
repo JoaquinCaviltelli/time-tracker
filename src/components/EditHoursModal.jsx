@@ -43,12 +43,11 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
       if (selectedEntry[0].serviceType === "credito") {
         if (service === "credito") {
           setServiceType(0);
-
         } else {
           setServiceType(1);
         }
       }
-    } 
+    }
   }, [service]);
 
   useEffect(() => {
@@ -107,8 +106,7 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
       });
       toast.success("Registro actualizado correctamente");
       closeModal();
-    } 
-    catch (error) {
+    } catch (error) {
       console.error(error);
     }
   };
@@ -175,47 +173,44 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
             {hours}:{minutes}
           </h2> */}
 
-{selectedEntry.length > 1 ? (
-                <button
-                  type="button"
-                  className="w-full text-one font-bold flex justify-center items-center flex-col"
-                  onClick={() => {
-                    if (service === "campo") {
-                      setService("credito");
-                    } else {
-                      setService("campo");
-                    }
-                  }}
-                >
+          {selectedEntry.length > 1 ? (
+            <button
+              type="button"
+              className="w-full text-one font-bold flex justify-center items-center flex-col"
+              onClick={() => {
+                if (service === "campo") {
+                  setService("credito");
+                } else {
+                  setService("campo");
+                }
+              }}
+            >
+              <>
+                {service === "campo" ? (
                   <>
-                  {
-                    service === "campo" ?
-                    
-                    <>
-                  <span className="material-icons font-semibold rotate-0 transition-all ">
-                    swap_horiz
-                  </span>
-<p>Servicio del campo</p>
-                    </>
-
-                    :
-                    <>
-                    <span className="material-icons font-semibold rotate-180 transition-all">
-                    swap_horiz
-                  </span>
-                  <p>Credito</p>
-                    </>
-                  }
+                    <span className="material-icons font-semibold rotate-0 transition-all ">
+                      swap_horiz
+                    </span>
+                    <p>Servicio del campo</p>
                   </>
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="w-full text-one font-bold pt-4 capitalize"
-                >
-                  {service}
-                </button>
-              )}
+                ) : (
+                  <>
+                    <span className="material-icons font-semibold rotate-180 transition-all">
+                      swap_horiz
+                    </span>
+                    <p>Credito</p>
+                  </>
+                )}
+              </>
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="w-full text-one font-bold pt-4 "
+            >
+              {service === "campo" ? "Servicio del campo" : "Credito"}
+            </button>
+          )}
           <form className="max-w-md m-auto mb-4" onSubmit={handleEditHours}>
             {/* Reemplazar los selectores de horas y minutos con el TimePicker */}
             <TimePicker
@@ -236,7 +231,7 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
               }}
             />
             {/* Input tipo radio para seleccionar el tipo de servicio */}
-            
+
             <div className="mt-6 flex w-full justify-between">
               <button
                 onClick={handleDeleteHours}
