@@ -85,37 +85,37 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center px-6 pt-20">
+    <div className="flex justify-center px-6 pt-20 max-w-md m-auto">
       <div className="">
-        <LogoChart />
-        <button
+        <LogoChart  />
+        {/* <button
           onClick={handleLogin}
-          className="w-full bg-white text-one font-medium px-4 py-2 rounded-md mt-20 "
+          className="w-full bg-white text-one font-medium px-4 py-2 rounded-md"
         >
           Iniciar con Google
-        </button>
+        </button> */}
 
-        <div className="flex items-center justify-between mt-3">
+        {/* <div className="flex items-center justify-between mt-3">
           <hr className="flex-grow border-light" />
           <span className="mx-2 text-white">o</span>
           <hr className="flex-grow border-light" />
-        </div>
+        </div> */}
 
         {/* Login con correo y contraseña */}
-        <div className="mt-3 ">
+        <div className="mt-20 ">
           <input
             type="email"
             placeholder="Correo electrónico"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 mb-2 border rounded-md text-center"
+            className="w-full px-4 py-2 mb-2 border rounded-md text-center outline-none"
           />
           <input
             type="password"
             placeholder="Contraseña"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 mb-2 border rounded-md text-center"
+            className="w-full px-4 py-2 mb-2 border rounded-md text-center outline-none"
           />
           <button
             onClick={handleEmailLogin}
@@ -125,17 +125,17 @@ const Login = () => {
           </button>
         </div>
 
-        <button
+        {/* <button
           onClick={handleDemoLogin}
-          className="w-full text-white font-medium text-sm hover:text-one mt-3"
+          className="w-full text-white font-medium text-sm hover:text-one mt-3 outline-none"
         >
           Entrar como usuario demo
-        </button>
+        </button> */}
 
         {/* Botón para abrir el modal de registro manualmente */}
         <button
           onClick={() => setIsRegisterModalOpen(true)} // Al hacer clic, abre el modal
-          className="w-full text-white font-medium text-sm hover:text-one mt-3"
+          className="w-full text-white font-medium text-sm  mt-6"
         >
           Registrarse
         </button>

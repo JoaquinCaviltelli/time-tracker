@@ -17,8 +17,8 @@ const RegisterModal = ({ isOpen, onClose, onRegister }) => {
   if (!isOpen) return null; // Si el modal no está abierto, no se muestra
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded-lg max-w-md w-full">
+    <div className="fixed inset-0 bg-white  flex justify-center items-center z-50">
+      <div className="bg-white p-6 max-w-md w-full">
         <h2 className="text-xl font-bold mb-4">Registrarse</h2>
 
         <div className="mb-4">
@@ -30,7 +30,7 @@ const RegisterModal = ({ isOpen, onClose, onRegister }) => {
             id="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md"
+            className="w-full px-4 py-2 border rounded-md outline-none"
             placeholder="Ingresa tu nombre"
           />
         </div>
@@ -44,7 +44,7 @@ const RegisterModal = ({ isOpen, onClose, onRegister }) => {
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md"
+            className="w-full px-4 py-2 border rounded-md outline-none"
             placeholder="Ingresa tu correo"
           />
         </div>
@@ -58,7 +58,7 @@ const RegisterModal = ({ isOpen, onClose, onRegister }) => {
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md"
+            className="w-full px-4 py-2 border rounded-md outline-none"
             placeholder="Ingresa tu contraseña"
           />
         </div>
@@ -66,13 +66,13 @@ const RegisterModal = ({ isOpen, onClose, onRegister }) => {
         <div className="flex justify-end space-x-4">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md"
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md outline-none"
           >
             Cancelar
           </button>
           <button
             onClick={handleRegister}
-            className="px-4 py-2 bg-one text-white rounded-md"
+            className="px-4 py-2 bg-one text-white rounded-md outline-none"
           >
             Registrarse
           </button>
