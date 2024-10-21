@@ -150,7 +150,11 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="border border-gray-300 p-2 mb-4 w-full rounded text-center"
+              className="border outline-none border-gray-300 p-4 mb-4 w-full rounded text-center bg-white flex justify-center appearance-none text-one font-bold"
+              style={{
+                WebkitAppearance: "none",
+                background: "transparent",
+              }}
             />
             <div className="flex w-full justify-between">
               <button
