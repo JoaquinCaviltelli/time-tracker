@@ -47,31 +47,33 @@ const Login = () => {
       await signInWithEmailAndPassword(auth, email, password);
       toast.success("Inicio de sesión exitoso");
     } catch (error) {
-      if (error.code === "auth/user-not-found") {
-        setUnregisteredEmail(email); // Guardar el correo no registrado
-        setIsRegisterModalOpen(true); // Mostrar el modal de registro
-      } else {
-        toast.error("Error al iniciar sesión");
-        console.error("Error al iniciar sesión con correo:", error);
+      switch (error.code) {
+        case "auth/user-not-found":
+          setUnregisteredEmail(email); // Guardar el correo no registrado
+          setIsRegisterModalOpen(true); // Mostrar el modal de registro
+          toast.error("Usuario no encontrado. ¿Quieres registrarte?");
+          break;
+        case "auth/wrong-password":
+          toast.error("Contraseña incorrecta. Intenta de nuevo.");
+          break;
+        case "auth/invalid-email":
+          toast.error("El correo electrónico no es válido.");
+          break;
+        case "auth/user-disabled":
+          toast.error("El usuario está deshabilitado. Contacta al soporte.");
+          break;
+        case "auth/network-request-failed":
+          toast.error("Error de red. Verifica tu conexión a Internet.");
+          break;
+        default:
+          toast.error("Error al iniciar sesión. Intenta de nuevo.");
+          console.error("Error al iniciar sesión con correo:", error);
       }
     }
   };
+  
 
-  const handleRegister = async (name, email, password) => {
-    try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      await updateProfile(userCredential.user, { displayName: name });
-      toast.success("Registro exitoso");
-      setIsRegisterModalOpen(false); // Cerrar el modal después del registro
-    } catch (error) {
-      toast.error("Error al registrarse");
-      console.error("Error al registrarse:", error);
-    }
-  };
+  
 
   const handleDemoLogin = async () => {
     try {
@@ -108,18 +110,18 @@ const Login = () => {
             placeholder="Correo electrónico"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 mb-2 border rounded-md text-center outline-none"
+            className="w-full px-4 py-3 mb-2 border border-white rounded-md text-center outline-none bg-one text-white placeholder:text-white placeholder:opacity-50"
           />
           <input
             type="password"
             placeholder="Contraseña"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 mb-2 border rounded-md text-center outline-none"
+            className="w-full px-4 py-3 mb-2 border border-white rounded-md text-center outline-none bg-one text-white placeholder:text-white placeholder:opacity-50"
           />
           <button
             onClick={handleEmailLogin}
-            className="w-full bg-white text-one font-medium px-4 py-2 rounded-md"
+            className="w-full bg-white text-one  px-4 py-3 rounded-md outline-none font-semibold"
           >
             Iniciar sesión con correo
           </button>
@@ -145,7 +147,6 @@ const Login = () => {
       <RegisterModal
         isOpen={isRegisterModalOpen}
         onClose={() => setIsRegisterModalOpen(false)}
-        onRegister={handleRegister}
       />
 
       <p className="fixed bottom-5 text-xs text-center text-white opacity-40">
