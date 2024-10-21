@@ -81,7 +81,33 @@ const ModalAddHours = () => {
             {/* <h2 className="text-4xl font-bold mb-2 text-center text-gray-600">
               {selectedHour}:{selectedMinute}
             </h2> */}
-
+  {serviceType === "campo" ? (
+                <button
+                  type="button"
+                  className="w-full text-one font-bold pt-4  flex justify-center items-center gap-2"
+                  onClick={() => {
+                    setServiceType("credito");
+                  }}
+                >
+                  {"Servicio al campo"}
+                  {/* <span className="material-icons font-semibold rotate-0 transition-all">
+                    swap_horiz
+                  </span> */}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="w-full text-one font-bold pt-4 capitalize flex justify-center items-center gap-2 "
+                  onClick={() => {
+                    setServiceType("campo");
+                  }}
+                >
+                  {"Credito"}
+                  {/* <span className="material-icons font-semibold rotate-180 transition-all">
+                    swap_horiz
+                  </span> */}
+                </button>
+              )}
             <form onSubmit={handleSubmit}>
               <div className="flex justify-center mb-4">
                 {/* Aquí se inserta el TimePicker */}
@@ -97,51 +123,25 @@ const ModalAddHours = () => {
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="border outline-none border-gray-300 p-4 mb-4 w-full rounded text-center bg-white flex justify-center appearance-none text-one font-bold pl-8"
+                className="border outline-none border-gray-300 p-4 mb-4 w-full rounded text-center bg-white flex justify-center appearance-none text-one font-bold pl-10"
                 style={{
                   WebkitAppearance: "none",
                   background: "transparent",
                 }}
               />
-              {serviceType === "campo" ? (
-                <button
-                  type="button"
-                  className="w-full text-one font-bold p-4  flex justify-center items-center gap-2"
-                  onClick={() => {
-                    setServiceType("credito");
-                  }}
-                >
-                  {"Servicio al campo"}
-                  <span className="material-icons font-semibold rotate-0 transition-all">
-                    swap_horiz
-                  </span>
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="w-full text-one font-bold p-4 capitalize flex justify-center items-center gap-2 "
-                  onClick={() => {
-                    setServiceType("campo");
-                  }}
-                >
-                  {"Credito"}
-                  <span className="material-icons font-semibold rotate-180 transition-all">
-                    swap_horiz
-                  </span>
-                </button>
-              )}
+              
 
-              <div className="mt-6 flex w-full justify-between">
-                <button
+              <div className="mt-6 flex w-full justify-center">
+                {/* <button
                   type="button"
                   onClick={closeModal}
                   className="bg-red-700 text-white px-4 py-2 rounded hover:bg-white transition"
                 >
                   Cancelar
-                </button>
+                </button> */}
                 <button
                   type="submit"
-                  className="bg-one text-white px-4 py-2 rounded hover:bg-white transition"
+                  className="bg-one text-white px-4 py-2 rounded hover:bg-white transition w-full"
                 >
                   Guardar cambios
                 </button>

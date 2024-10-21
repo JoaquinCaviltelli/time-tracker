@@ -175,6 +175,31 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
             {hours}:{minutes}
           </h2> */}
 
+{selectedEntry.length > 1 ? (
+                <button
+                  type="button"
+                  className="w-full text-one font-bold pt-4 capitalize flex justify-center items-center gap-2"
+                  onClick={() => {
+                    if (service === "campo") {
+                      setService("credito");
+                    } else {
+                      setService("campo");
+                    }
+                  }}
+                >
+                  {service}
+                  {/* <span className="material-icons font-semibold ">
+                    swap_horiz
+                  </span> */}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="w-full text-one font-bold pt-4 capitalize"
+                >
+                  {service}
+                </button>
+              )}
           <form className="max-w-md m-auto" onSubmit={handleEditHours}>
             {/* Reemplazar los selectores de horas y minutos con el TimePicker */}
             <TimePicker
@@ -196,31 +221,7 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
             />
             {/* Input tipo radio para seleccionar el tipo de servicio */}
             <div className="mb-4">
-              {selectedEntry.length > 1 ? (
-                <button
-                  type="button"
-                  className="w-full text-one font-bold p-6 capitalize flex justify-center items-center gap-2"
-                  onClick={() => {
-                    if (service === "campo") {
-                      setService("credito");
-                    } else {
-                      setService("campo");
-                    }
-                  }}
-                >
-                  {service}
-                  <span className="material-icons font-semibold ">
-                    swap_horiz
-                  </span>
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="w-full text-one font-bold p-6 capitalize"
-                >
-                  {service}
-                </button>
-              )}
+              
             </div>
             <div className="flex w-full justify-between">
               <button
