@@ -20,7 +20,7 @@ const Footer = () => {
           <li>
             <Link to="/" className="flex items-center">
               <span
-                className={`material-icons transition-transform rounded-full text-3xl h-16 w-16 flex justify-center items-center ${getActiveClass(["/"])} `}
+                className={`material-icons transition-transform rounded-full text-4xl h-20 w-20 flex justify-center items-center ${getActiveClass(["/"])} `}
               >
                 home
               </span>
@@ -29,7 +29,7 @@ const Footer = () => {
           <li>
             <Link to="/historial" className="flex items-center">
               <span
-                className={`material-icons transition-transform rounded-full text-3xl h-16 w-16 flex justify-center items-center ${getActiveClass(["/historial", "/YearlySummary"])} `}
+                className={`material-icons transition-transform rounded-full text-4xl h-20 w-20 flex justify-center items-center ${getActiveClass(["/historial", "/YearlySummary"])} `}
               >
                 calendar_today
               </span>
@@ -38,7 +38,7 @@ const Footer = () => {
           <li>
             <Link to="/agenda" className="flex items-center">
               <span
-                className={`material-icons transition-transform rounded-full text-3xl h-16 w-16 flex justify-center items-center ${getActiveClass([/\/agenda$/, /\/visitas\/.*/])} `}
+                className={`material-icons transition-transform rounded-full text-4xl h-20 w-20 flex justify-center items-center ${getActiveClass([/\/agenda$/, /\/visitas\/.*/])} `}
               >
                 group
               </span>
@@ -47,7 +47,7 @@ const Footer = () => {
           <li>
             <Link to="/configuracion" className="flex items-center">
               <span
-                className={`material-icons transition-transform rounded-full text-3xl h-16 w-16 flex justify-center items-center ${getActiveClass(["/configuracion"])} `}
+                className={`material-icons transition-transform rounded-full text-4xl h-20 w-20 flex justify-center items-center ${getActiveClass(["/configuracion"])} `}
               >
                 settings
               </span>
