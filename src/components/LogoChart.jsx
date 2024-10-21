@@ -32,7 +32,7 @@ const LogoChart = () => {
       },
       {
         // Segundo anillo: Horas
-        data: [daysPassed , daysRemaining],
+        data: [4 , 10],
         backgroundColor: ["#fff", "#fff"],
         borderColor: ["#4a7766", "#4a7766"],
         borderWidth: 4,
