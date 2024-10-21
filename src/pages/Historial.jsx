@@ -129,9 +129,9 @@ const Historial = () => {
 
   return (
     <div className="container mx-auto p-4 max-w-lg" {...handlers}>
-      <div className="w-full flex justify-end mt-4 gap-4 items-center">
-        <p className="text-sm text-right font-bold text-one">
-          Total de horas: {hoursFromMinutes}:{minutesRest < 10 ? `0${minutesRest}` : minutesRest}h <br />
+      <div className="w-full flex justify-end my-4 gap-6 items-center">
+        <p className="text-sm text-left font-bold text-one">
+          Total: {hoursFromMinutes}:{minutesRest < 10 ? `0${minutesRest}` : minutesRest}h <br />
           Cursos: {courses.length}
         </p>
         <button

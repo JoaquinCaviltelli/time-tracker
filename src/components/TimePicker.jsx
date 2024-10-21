@@ -26,6 +26,7 @@ const TimePicker = ({
     const scrollTop = e.target.scrollTop;
     const selectedIndex = Math.round(scrollTop / itemHeight);
 
+    
     if (type === "hour") {
       setSelectedHour(hours[selectedIndex]);
     } else {

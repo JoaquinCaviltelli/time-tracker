@@ -145,7 +145,14 @@ const YearlySummary = () => {
   return (
     <div className="container max-w-xl mx-auto p-6 pb-28">
       <div className="flex justify-between mt-16 mb-6 items-center">
-        <h1 className="text-3xl font-extrabold text-acent">Resumen</h1>
+        <h1 className="text-3xl font-extrabold text-acent">Resumen anual</h1>
+
+        <button
+          onClick={() => navigate("/historial")}
+          className="text-white bg-acent border rounded p-2 flex items-center"
+        >
+          <span className="material-icons">arrow_left</span>
+        </button>
       </div>
       <div className="bg-white mb-4">
         <div className="mb-4">
@@ -161,18 +168,13 @@ const YearlySummary = () => {
           </p>
         )}
       </div>
-      <button
-        onClick={() => navigate("/historial")}
-        className="text-white bg-acent border rounded p-2 mt-4 w-full"
-      >
-        Volver atrás
-      </button>
+      
       {/* Tabla de horas por mes */}
       <button
         onClick={() => setShowTable(!showTable)} // Toggle para mostrar/ocultar tabla
         className="text-white bg-acent border rounded p-2 mt-4 w-full"
       >
-        {showTable ? "Ocultar detalle" : "Mostrar detalle"}
+        {showTable ? "Menos detalle" : "Mas detalle"}
       </button>
 
       {/* Grid de resumen mensual */}
@@ -183,20 +185,31 @@ const YearlySummary = () => {
           <div className="font-bold">Crédito</div>
           <div className="font-bold">Total</div>
 
-          {["Sep", "Oct", "Nov", "Dic", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago"].map(
-            (month, index) => (
-              <React.Fragment key={index}>
-                <div>{month}</div>
-                <div>{monthlyHoursField[index].toFixed(2)}</div>
-                <div>{monthlyHoursCredit[index].toFixed(2)}</div>
-                <div className="font-bold text-one">{computedHours[index].toFixed(2)}</div>
-              </React.Fragment>
-            )
-          )}
+          {[
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dic",
+            "Ene",
+            "Feb",
+            "Mar",
+            "Abr",
+            "May",
+            "Jun",
+            "Jul",
+            "Ago",
+          ].map((month, index) => (
+            <React.Fragment key={index}>
+              <div>{month}</div>
+              <div>{monthlyHoursField[index].toFixed(2)}</div>
+              <div>{monthlyHoursCredit[index].toFixed(2)}</div>
+              <div className="font-bold text-one">
+                {computedHours[index].toFixed(2)}
+              </div>
+            </React.Fragment>
+          ))}
         </div>
       )}
-
-      
     </div>
   );
 };

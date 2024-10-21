@@ -14,10 +14,10 @@ const Footer = () => {
   };
 
   return (
-    <div className="bg-one bottom-0 w-full fixed shadow-up">
-      <nav className="container px-12 max-w-md mx-auto w-full ">
+    <div className="bg-one bottom-0 w-full fixed shadow-up rounded-t-lg">
+      <nav className="container px-12 py-1 max-w-md mx-auto w-full ">
         <ul className="flex w-full justify-center items-center gap-2">
-          <li>
+          <li className="">
             <Link to="/" className="flex items-center">
               <span
                 className={`material-icons transition-transform rounded-full text-3xl h-16 w-16 flex justify-center items-center ${getActiveClass(["/"])} `}
