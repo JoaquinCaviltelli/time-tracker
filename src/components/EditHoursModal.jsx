@@ -4,6 +4,7 @@ import { doc, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
 import { db } from "../services/firebase";
 import moment from "moment";
 import { useSwipeable } from "react-swipeable";
+import "/src/styles/tailwind.css"
 import TimePicker from "./TimePicker"; // Importar el TimePicker
 
 moment.lang("es", {
