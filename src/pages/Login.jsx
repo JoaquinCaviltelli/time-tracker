@@ -5,6 +5,7 @@ import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 import { HoursContext } from "../context/HoursContext";
 import { toast } from "react-toastify"; // Para notificaciones
 import logo from "/src/assets/timetracker-logo.png"
+import LogoChart from "/src/components/LogoChart.jsx";
 
 
 
@@ -50,24 +51,23 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center px-6  bg-one pt-28">
+    <div className="flex justify-center px-6 pt-20">
       <div className="">
-      <img src={logo} alt="Logo" className="mb-28" />
-        
+      <LogoChart className=""/>
         <button
           onClick={handleLogin}
-          className="w-full bg-light text-one font-medium px-4 py-2 rounded-md  "
+          className="w-full bg-white text-one font-medium px-4 py-2 rounded-md mt-20 "
         >
           Iniciar con Google
         </button>
         <div className="flex items-center justify-between mt-3">
           <hr className="flex-grow border-light" />
-          <span className="mx-2 text-light">o</span>
+          <span className="mx-2 text-white">o</span>
           <hr className="flex-grow border-light" />
         </div>
         <button
           onClick={handleDemoLogin}
-          className="w-full text-light font-medium text-sm hover:text-one"
+          className="w-full text-white font-medium text-sm hover:text-one"
         >
           Entrar como usuario demo
         </button>

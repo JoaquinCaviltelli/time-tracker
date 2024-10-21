@@ -94,11 +94,11 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
       );
 
       // Verifica si el documento existe antes de actualizar
-      const docSnapshot = await getDoc(entryRef);
-      if (!docSnapshot.exists()) {
-        toast.error("El registro no existe");
-        return;
-      }
+      // const docSnapshot = await getDoc(entryRef);
+      // if (!docSnapshot.exists()) {
+      //   toast.error("El registro no existe");
+      //   return;
+      // }
 
       await updateDoc(entryRef, {
         hoursWorked: parseInt(hours),
@@ -107,8 +107,8 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
       });
       toast.success("Registro actualizado correctamente");
       closeModal();
-    } catch (error) {
-      toast.error("Error al actualizar el registro");
+    } 
+    catch (error) {
       console.error(error);
     }
   };
