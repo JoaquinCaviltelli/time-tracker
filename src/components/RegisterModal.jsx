@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "../services/firebase";
 
-import { auth} from "../services/firebase";
 const RegisterModal = ({ isOpen, onClose }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -40,13 +40,14 @@ const RegisterModal = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-white flex flex-col items-center z-50 text-acent">
-      <h2 className="text-sm font-semibold mb-24 text-one  mt-6">Registrarse</h2>
+      <h2 className="text-sm font-semibold mb-24 text-one mt-6">Registrarse</h2>
       <div className="p-6 w-full max-w-lg flex flex-col gap-10">
         <input
           type="text"
           placeholder="nombre"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          autoComplete="name" // Autocompletado para nombre
           className="border-b text-acent bg-transparent outline-none w-full p-2 text-sm mb-1 font-medium placeholder:text-acent placeholder:text-sm placeholder:opacity-50"
         />
 
@@ -55,6 +56,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
           placeholder="correo electrónico"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          autoComplete="email" // Autocompletado para correo electrónico
           className="border-b text-acent bg-transparent outline-none w-full p-2 text-sm mb-1 font-medium placeholder:text-acent placeholder:text-sm placeholder:opacity-50"
         />
 
@@ -63,6 +65,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
           placeholder="contraseña"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          autoComplete="new-password" // Autocompletado para contraseña
           className="border-b text-acent bg-transparent outline-none w-full p-2 text-sm mb-1 font-medium placeholder:text-acent placeholder:text-sm placeholder:opacity-50"
         />
 
