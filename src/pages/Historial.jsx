@@ -6,20 +6,22 @@ import { collection, onSnapshot, query } from "firebase/firestore";
 import { db } from "../services/firebase";
 import moment from "moment";
 import "moment/locale/es";
+import { useSwipeable } from "react-swipeable"; // Importar la librería de deslizamiento
 
 moment.locale("es");
 
 const Historial = () => {
-  const { user } = useContext(HoursContext);
+  const { user, goal } = useContext(HoursContext); // Incluye el objetivo de horas desde el contexto
   const [hours, setHours] = useState([]);
   const [currentMonth, setCurrentMonth] = useState(moment().startOf("month"));
   const [selectedHour, setSelectedHour] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [courses, setCourses] = useState([]);
   
-  const today = moment(); // Definir el día de hoy
+  const today = moment();
   const navigate = useNavigate();
-  
+  const buffer = 5; // Buffer de horas adicionales
+
   useEffect(() => {
     if (user) {
       const fetchHours = async () => {
@@ -41,19 +43,28 @@ const Historial = () => {
     moment(hour.date).isSame(currentMonth, "month")
   );
 
-  const totalMinutesWorked = daysWithHours.reduce(
-    (acc, hour) => acc + hour.minutesWorked,
-    0
-  );
-  const totalHoursWorked = daysWithHours.reduce(
-    (acc, hour) => acc + hour.hoursWorked,
+  // Lógica para sumar horas de campo y crédito siguiendo el buffer y la meta
+  const totalFieldHours = daysWithHours.reduce(
+    (acc, hour) => (hour.serviceType === "campo" ? acc + hour.hoursWorked + hour.minutesWorked / 60 : acc),
     0
   );
 
-  const totalMinutes = totalMinutesWorked / 60;
-  const hoursFromMinutes = Math.floor(totalMinutes);
-  const minutesRest = Math.round((totalMinutes - hoursFromMinutes) * 60);
-  const totalHours = totalHoursWorked + hoursFromMinutes;
+  const totalCreditHours = daysWithHours.reduce(
+    (acc, hour) => (hour.serviceType === "credito" ? acc + hour.hoursWorked + hour.minutesWorked / 60 : acc),
+    0
+  );
+
+  const totalWorkedThisMonth = totalFieldHours + totalCreditHours;
+
+  // Aplicar lógica de meta + buffer
+  const totalHoursToCount = totalWorkedThisMonth > goal + buffer
+    ? totalFieldHours > goal + buffer
+      ? totalFieldHours
+      : goal + buffer
+    : totalWorkedThisMonth;
+
+  const hoursFromMinutes = Math.floor(totalHoursToCount);
+  const minutesRest = Math.round((totalHoursToCount - hoursFromMinutes) * 60);
 
   useEffect(() => {
     if (user) {
@@ -78,7 +89,7 @@ const Historial = () => {
 
   const handleShare = () => {
     const mes = currentMonth.format("MMMM YYYY");
-    const mensaje = `Informe de ${mes}:\nHoras: ${totalHours}:${
+    const mensaje = `Informe de ${mes}:\nHoras: ${hoursFromMinutes}:${
       minutesRest < 10 ? `0${minutesRest}` : minutesRest
     }h\nCursos: ${courses.length}`;
     const url = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
@@ -103,18 +114,24 @@ const Historial = () => {
       moment(hour.date).isSame(day, "day")
     );
     if (dayHours.length > 0) {
-      console.log("Selected hour entry:", dayHours);
       setSelectedHour(dayHours);
       setShowEditModal(true);
     }
   };
 
+  // Manejadores de deslizamiento
+  const handlers = useSwipeable({
+    onSwipedLeft: () => setCurrentMonth((prev) => moment(prev).add(1, "month")),
+    onSwipedRight: () => setCurrentMonth((prev) => moment(prev).subtract(1, "month")),
+    preventScrollOnSwipe: true,
+    trackMouse: true, // Permite usar también el mouse
+  });
+
   return (
-    <div className="container mx-auto p-4 max-w-lg">
+    <div className="container mx-auto p-4 max-w-lg" {...handlers}>
       <div className="w-full flex justify-end mt-4 gap-4 items-center">
         <p className="text-sm text-right font-bold text-one">
-          Total de horas: {totalHours}:
-          {minutesRest < 10 ? `0${minutesRest}` : minutesRest}h <br />
+          Total de horas: {hoursFromMinutes}:{minutesRest < 10 ? `0${minutesRest}` : minutesRest}h <br />
           Cursos: {courses.length}
         </p>
         <button
@@ -148,6 +165,8 @@ const Historial = () => {
         </button>
       </div>
 
+      {/* El resto del calendario y la lógica del componente */}
+      {/* El resto del código de tu componente queda igual */}
       <div className="grid grid-cols-7 gap-1 mb-2">
         {["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map((day) => (
           <div key={day} className="text-center text-sm font-medium text-acent">
@@ -155,7 +174,6 @@ const Historial = () => {
           </div>
         ))}
       </div>
-
       {calendar.map((week, i) => (
         <div key={i} className="grid grid-cols-7 gap-1 mb-1 text-xs">
           {week.map((day, index) => {
@@ -203,21 +221,18 @@ const Historial = () => {
           })}
         </div>
       ))}
-
       {daysWithHours.length === 0 && (
         <p className="text-gray-500 mt-4">
           No hay horas registradas para este mes.
         </p>
       )}
-
       {showEditModal && selectedHour && (
         <EditHoursModal
           closeModal={() => setShowEditModal(false)}
           selectedEntry={selectedHour}
-          userId={user.uid} // Pasa el userId a EditHoursModal
+          userId={user.uid}
         />
       )}
-      
       <button
         onClick={() => navigate("/YearlySummary")}
         className="text-white bg-acent border rounded p-2 mt-4 w-full"
