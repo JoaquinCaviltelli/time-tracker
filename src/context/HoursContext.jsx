@@ -82,40 +82,43 @@ export const HoursProvider = ({ children }) => {
     }
   };
 
-  const addHours = async (date, hours, minutes) => {
-    try {
-      if (user) {
-        // Referencia a la subcolección 'hours' dentro del documento del usuario
-        const userHoursRef = collection(db, "users", user.uid, "hours");
+const addHours = async (date, hours, minutes, serviceType) => {
+  try {
+    if (user) {
+      const userHoursRef = collection(db, "users", user.uid, "hours");
 
-        // Consultar si ya existen horas para esa fecha
-        const q = query(userHoursRef, where("date", "==", date));
-        const querySnapshot = await getDocs(q);
+      // Consultar si ya existen horas para esa fecha y servicio
+      const q = query(
+        userHoursRef,
+        where("date", "==", date),
+        where("serviceType", "==", serviceType)
+      );
+      const querySnapshot = await getDocs(q);
 
-        if (!querySnapshot.empty) {
-          // Si existe un registro para esa fecha, actualizamos las horas
-          const existingDoc = querySnapshot.docs[0]; // Obtenemos el primer documento encontrado
-          await updateDoc(existingDoc.ref, {
-            hoursWorked: existingDoc.data().hoursWorked + hours,
-            minutesWorked: existingDoc.data().minutesWorked + minutes,
-          });
-        } else {
-          // Si no existe, creamos un nuevo registro
-          await addDoc(userHoursRef, {
-            date: date,
-            hoursWorked: hours,
-            minutesWorked: minutes,
-          });
-        }
-        toast.success("Horas añadidas correctamente");
+      if (!querySnapshot.empty) {
+        const existingDoc = querySnapshot.docs[0];
+        await updateDoc(existingDoc.ref, {
+          hoursWorked: existingDoc.data().hoursWorked + hours,
+          minutesWorked: existingDoc.data().minutesWorked + minutes,
+        });
       } else {
-        throw new Error("Usuario no autenticado");
+        await addDoc(userHoursRef, {
+          date,
+          hoursWorked: hours,
+          minutesWorked: minutes,
+          serviceType, // Guardar el tipo de servicio
+        });
       }
-    } catch (error) {
-      console.error("Error al guardar las horas:", error);
-      toast.error("Error al guardar las horas");
+      toast.success("Horas añadidas correctamente");
+    } else {
+      throw new Error("Usuario no autenticado");
     }
-  };
+  } catch (error) {
+    console.error("Error al guardar las horas:", error);
+    toast.error("Error al guardar las horas");
+  }
+};
+
 
 
   const deleteHours = async (id) => {

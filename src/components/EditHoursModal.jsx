@@ -4,7 +4,7 @@ import { doc, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
 import { db } from "../services/firebase";
 import moment from "moment";
 import { useSwipeable } from "react-swipeable";
-import "/src/styles/tailwind.css"
+import "/src/styles/tailwind.css";
 import TimePicker from "./TimePicker"; // Importar el TimePicker
 
 moment.lang("es", {
@@ -15,6 +15,9 @@ moment.lang("es", {
 });
 
 const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
+  const [serviceType, setServiceType] = useState(0);
+  const [service, setService] = useState(selectedEntry[0].serviceType);
+
   const [modalState, setModalState] = useState({
     visible: true,
     animating: true,
@@ -22,23 +25,45 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
   const [hours, setHours] = useState();
   const [minutes, setMinutes] = useState();
   const [date, setDate] = useState(
-    selectedEntry?.date ? moment(selectedEntry.date).format("YYYY-MM-DD") : ""
+    selectedEntry?.date
+      ? moment(selectedEntry[serviceType].date).format("YYYY-MM-DD")
+      : ""
   );
   const modalRef = useRef(null);
 
   useEffect(() => {
+    if (selectedEntry.length > 1) {
+      if (selectedEntry[0].serviceType === "campo") {
+        if (service === "campo") {
+          setServiceType(0);
+        } else {
+          setServiceType(1);
+        }
+      }
+      if (selectedEntry[0].serviceType === "credito") {
+        if (service === "credito") {
+          setServiceType(0);
+
+        } else {
+          setServiceType(1);
+        }
+      }
+    } 
+  }, [service]);
+
+  useEffect(() => {
     if (selectedEntry) {
-      setHours(selectedEntry.hoursWorked);
-      setMinutes(selectedEntry.minutesWorked);
+      setHours(selectedEntry[serviceType].hoursWorked);
+      setMinutes(selectedEntry[serviceType].minutesWorked);
       setDate(
-        selectedEntry.date
-          ? moment(selectedEntry.date).format("YYYY-MM-DD")
+        selectedEntry[serviceType].date
+          ? moment(selectedEntry[serviceType].date).format("YYYY-MM-DD")
           : ""
       );
     } else {
       console.error("selectedEntry es undefined");
     }
-  }, [selectedEntry]);
+  }, [selectedEntry, serviceType]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -49,7 +74,7 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
 
   const handleEditHours = async (e) => {
     e.preventDefault();
-    if (!userId || !selectedEntry?.id) {
+    if (!userId || !selectedEntry[serviceType]?.id) {
       toast.error("Usuario o entrada no válidos");
       return;
     }
@@ -60,7 +85,13 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
     }
 
     try {
-      const entryRef = doc(db, "users", userId, "hours", selectedEntry.id);
+      const entryRef = doc(
+        db,
+        "users",
+        userId,
+        "hours",
+        selectedEntry[serviceType].id
+      );
 
       // Verifica si el documento existe antes de actualizar
       const docSnapshot = await getDoc(entryRef);
@@ -83,13 +114,19 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
   };
 
   const handleDeleteHours = async () => {
-    if (!userId || !selectedEntry?.id) {
+    if (!userId || !selectedEntry[serviceType]?.id) {
       toast.error("Usuario o entrada no válidos");
       return;
     }
 
     try {
-      const entryRef = doc(db, "users", userId, "hours", selectedEntry.id);
+      const entryRef = doc(
+        db,
+        "users",
+        userId,
+        "hours",
+        selectedEntry[serviceType].id
+      );
       await deleteDoc(entryRef);
       toast.success("Registro eliminado correctamente");
       closeModal();
@@ -145,17 +182,46 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
               selectedMinute={minutes}
               setSelectedHour={setHours}
               setSelectedMinute={setMinutes}
+              serviceType={serviceType}
             />
             <input
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="border outline-none border-gray-300 p-4 mb-4 w-full rounded text-center bg-white flex justify-center appearance-none text-one font-bold pl-6"
+              className="border outline-none border-gray-300 p-4 mb-4 w-full rounded text-center bg-white flex justify-center appearance-none text-one font-bold pl-8"
               style={{
                 WebkitAppearance: "none",
                 background: "transparent",
               }}
             />
+            {/* Input tipo radio para seleccionar el tipo de servicio */}
+            <div className="mb-4">
+              {selectedEntry.length > 1 ? (
+                <button
+                  type="button"
+                  className="w-full text-one font-bold p-6 capitalize flex justify-center items-center gap-2"
+                  onClick={() => {
+                    if (service === "campo") {
+                      setService("credito");
+                    } else {
+                      setService("campo");
+                    }
+                  }}
+                >
+                  {service}
+                  <span className="material-icons font-semibold ">
+                    swap_horiz
+                  </span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="w-full text-one font-bold p-6 capitalize"
+                >
+                  {service}
+                </button>
+              )}
+            </div>
             <div className="flex w-full justify-between">
               <button
                 onClick={handleDeleteHours}

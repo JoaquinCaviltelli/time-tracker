@@ -103,8 +103,8 @@ const Historial = () => {
       moment(hour.date).isSame(day, "day")
     );
     if (dayHours.length > 0) {
-      console.log("Selected hour entry:", dayHours[0]);
-      setSelectedHour(dayHours[0]);
+      console.log("Selected hour entry:", dayHours);
+      setSelectedHour(dayHours);
       setShowEditModal(true);
     }
   };

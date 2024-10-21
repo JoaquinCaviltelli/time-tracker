@@ -14,8 +14,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import Footer from "/src/components/Footer.jsx";
 import Loading from "./components/Loading";
 import NotFound from "./pages/NotFound"; // Importa tu componente NotFound
-import { useSwipeable } from "react-swipeable";
-import { useNavigate, useLocation } from "react-router-dom";
+
 
 const App = () => {
   return (
@@ -29,31 +28,8 @@ const App = () => {
 
 const MainApp = () => {
   const { loading, user } = useContext(HoursContext);
-  const navigate = useNavigate();
-  const location = useLocation();
+ 
 
-  const handleSwipeLeft = () => {
-    if (location.pathname === "/") {
-      navigate("/historial");
-    } else if (location.pathname === "/historial") {
-      navigate("/configuracion");
-    }
-  };
-
-  const handleSwipeRight = () => {
-    if (location.pathname === "/historial") {
-      navigate("/");
-    } else if (location.pathname === "/configuracion") {
-      navigate("/historial");
-    }
-  };
-
-  const swipeHandlers = useSwipeable({
-    onSwipedLeft: handleSwipeLeft,
-    onSwipedRight: handleSwipeRight,
-    preventDefaultTouchmoveEvent: true,
-    trackMouse: true,
-  });
 
   return (
     <div>

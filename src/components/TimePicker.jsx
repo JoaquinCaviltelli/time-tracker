@@ -5,6 +5,7 @@ const TimePicker = ({
   selectedMinute,
   setSelectedHour,
   setSelectedMinute,
+  serviceType,
 }) => {
   const hours = Array.from({ length: 24 }, (_, i) => i); // Números de 0 a 23
   const minutes = Array.from({ length: 12 }, (_, i) => i * 5); // Números de 0 a 55 (en pasos de 5)
@@ -63,24 +64,27 @@ const TimePicker = ({
     centerScroll(hourRef, initialHourIndex);
     centerScroll(minuteRef, initialMinuteIndex);
   }, [selectedHour, selectedMinute]);
-  
-  useEffect(() => {
-    if (isInitialLoad) {
-     
-      if (selectedHour === 0 && selectedMinute === 0) {
-        
-          setScrollActive(true);
-          setIsInitialLoad(false); 
-      } else {
-        setTimeout(() => {
-          setScrollActive(true);
-          setIsInitialLoad(false);
-        }, 1000); 
-        
-      }
 
+  useEffect(() => {
+    setScrollActive(false);
+    setTimeout(() => {
+      setScrollActive(true);
+    }, 800);
+   }, [serviceType]);
+
+  useEffect(() => {
+    if (selectedHour === 0 && selectedMinute === 0) {
+      setScrollActive(true);
+      setIsInitialLoad(false);
+    } else {
+      setTimeout(() => {
+        setScrollActive(true);
+        setIsInitialLoad(false);
+      }, 800);
     }
-  }, [isInitialLoad]); // Solo se dispara una vez al montar
+  }, [isInitialLoad]);
+  
+
 
   return (
     <div className="w-full py-4">

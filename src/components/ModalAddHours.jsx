@@ -15,11 +15,17 @@ const ModalAddHours = () => {
   // Para capturar las horas y minutos seleccionados en el TimePicker
   const [selectedHour, setSelectedHour] = useState(0);
   const [selectedMinute, setSelectedMinute] = useState(0);
+  const [serviceType, setServiceType] = useState("campo");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // Convertir a enteros y añadir horas
-    addHours(date, parseInt(selectedHour), parseInt(selectedMinute));
+    addHours(
+      date,
+      parseInt(selectedHour),
+      parseInt(selectedMinute),
+      serviceType
+    );
     closeModal();
   };
 
@@ -91,14 +97,41 @@ const ModalAddHours = () => {
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="border outline-none border-gray-300 p-4 mb-4 w-full rounded text-center bg-white flex justify-center appearance-none text-one font-bold pl-6"
+                className="border outline-none border-gray-300 p-4 mb-4 w-full rounded text-center bg-white flex justify-center appearance-none text-one font-bold pl-8"
                 style={{
                   WebkitAppearance: "none",
                   background: "transparent",
                 }}
               />
+              {serviceType === "campo" ? (
+                <button
+                  type="button"
+                  className="w-full text-one font-bold p-4  flex justify-center items-center gap-2"
+                  onClick={() => {
+                    setServiceType("credito");
+                  }}
+                >
+                  {"Servicio al campo"}
+                  <span className="material-icons font-semibold rotate-0 transition-all">
+                    swap_horiz
+                  </span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="w-full text-one font-bold p-4 capitalize flex justify-center items-center gap-2 "
+                  onClick={() => {
+                    setServiceType("campo");
+                  }}
+                >
+                  {"Credito"}
+                  <span className="material-icons font-semibold rotate-180 transition-all">
+                    swap_horiz
+                  </span>
+                </button>
+              )}
 
-              <div className="flex w-full justify-between">
+              <div className="mt-6 flex w-full justify-between">
                 <button
                   type="button"
                   onClick={closeModal}
