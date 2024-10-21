@@ -3,22 +3,24 @@ import { Link, useLocation } from "react-router-dom";
 const Footer = () => {
   const location = useLocation(); // Obtiene la ruta actual
 
-  const getActiveClass = (path) => {
-    return location.pathname === path
-      ? "bg-one font-bold  text-white"
-      : "text-one";
+  const getActiveClass = (paths) => {
+    return paths.some(path => 
+      path instanceof RegExp 
+        ? path.test(location.pathname) 
+        : location.pathname === path
+    )
+      ? "bg-white text-one -translate-y-4 border-8 border-one"
+      : "text-white";
   };
 
   return (
-    <div className="bg-white  bottom-0 w-full fixed shadow-up">
+    <div className="bg-one bottom-0 w-full fixed shadow-up">
       <nav className="container px-12 max-w-md mx-auto w-full ">
         <ul className="flex w-full justify-center items-center ">
           <li>
-            <Link to="/" className="flex items-center w-full">
+            <Link to="/" className="flex items-center">
               <span
-                className={`material-icons transition-all rounded-b-3xl  py-4 px-6 text-3xl  ${getActiveClass(
-                  "/"
-                )}`}
+                className={`material-icons transition-transform rounded-full text-3xl h-16 w-16 flex justify-center items-center ${getActiveClass(["/"])} `}
               >
                 home
               </span>
@@ -27,9 +29,7 @@ const Footer = () => {
           <li>
             <Link to="/historial" className="flex items-center">
               <span
-                className={`material-icons transition-all rounded-b-3xl py-4 px-6 text-3xl  ${getActiveClass(
-                  "/historial"
-                )} ${getActiveClass("/YearlySummary")}`}
+                className={`material-icons transition-transform rounded-full text-3xl h-16 w-16 flex justify-center items-center ${getActiveClass(["/historial", "/YearlySummary"])} `}
               >
                 calendar_today
               </span>
@@ -38,9 +38,7 @@ const Footer = () => {
           <li>
             <Link to="/agenda" className="flex items-center">
               <span
-                className={`material-icons transition-all rounded-b-3xl py-4 px-6 text-3xl  ${getActiveClass(
-                  "/agenda"
-                )}`}
+                className={`material-icons transition-transform rounded-full text-3xl h-16 w-16 flex justify-center items-center ${getActiveClass([/\/agenda$/, /\/visitas\/.*/])} `}
               >
                 group
               </span>
@@ -49,9 +47,7 @@ const Footer = () => {
           <li>
             <Link to="/configuracion" className="flex items-center">
               <span
-                className={`material-icons transition-all rounded-b-3xl py-4 px-6 text-3xl  ${getActiveClass(
-                  "/configuracion"
-                )}`}
+                className={`material-icons transition-transform rounded-full text-3xl h-16 w-16 flex justify-center items-center ${getActiveClass(["/configuracion"])} `}
               >
                 settings
               </span>
