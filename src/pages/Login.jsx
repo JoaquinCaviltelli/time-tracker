@@ -102,20 +102,20 @@ const Login = () => {
         </div>
 
         {/* Login con correo y contraseña */}
-        <div className="mt-3">
+        <div className="mt-3 ">
           <input
             type="email"
             placeholder="Correo electrónico"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 mb-2 border rounded-md"
+            className="w-full px-4 py-2 mb-2 border rounded-md text-center"
           />
           <input
             type="password"
             placeholder="Contraseña"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 mb-2 border rounded-md"
+            className="w-full px-4 py-2 mb-2 border rounded-md text-center"
           />
           <button
             onClick={handleEmailLogin}
