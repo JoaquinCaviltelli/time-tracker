@@ -2,7 +2,6 @@ import { useState, useContext, useRef, useEffect } from "react";
 import { HoursContext } from "../context/HoursContext";
 import moment from "moment";
 import TimePicker from "./TimePicker";
-import "/src/styles/tailwind.css";
 
 const ModalAddHours = () => {
   const [modalState, setModalState] = useState({
