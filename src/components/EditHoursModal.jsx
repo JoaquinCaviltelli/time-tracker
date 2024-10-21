@@ -178,7 +178,7 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
 {selectedEntry.length > 1 ? (
                 <button
                   type="button"
-                  className="w-full text-one font-bold pt-4 capitalize flex justify-center items-center gap-2"
+                  className="w-full text-one font-bold flex justify-center items-center flex-col"
                   onClick={() => {
                     if (service === "campo") {
                       setService("credito");
@@ -187,10 +187,26 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
                     }
                   }}
                 >
-                  {service}
-                  {/* <span className="material-icons font-semibold ">
+                  <>
+                  {
+                    service === "campo" ?
+                    
+                    <>
+                  <span className="material-icons font-semibold rotate-0 transition-all ">
                     swap_horiz
-                  </span> */}
+                  </span>
+<p>Servicio del campo</p>
+                    </>
+
+                    :
+                    <>
+                    <span className="material-icons font-semibold rotate-180 transition-all">
+                    swap_horiz
+                  </span>
+                  <p>Credito</p>
+                    </>
+                  }
+                  </>
                 </button>
               ) : (
                 <button
@@ -200,7 +216,7 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
                   {service}
                 </button>
               )}
-          <form className="max-w-md m-auto" onSubmit={handleEditHours}>
+          <form className="max-w-md m-auto mb-4" onSubmit={handleEditHours}>
             {/* Reemplazar los selectores de horas y minutos con el TimePicker */}
             <TimePicker
               selectedHour={hours}
@@ -220,10 +236,8 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
               }}
             />
             {/* Input tipo radio para seleccionar el tipo de servicio */}
-            <div className="mb-4">
-              
-            </div>
-            <div className="flex w-full justify-between">
+            
+            <div className="mt-6 flex w-full justify-between">
               <button
                 onClick={handleDeleteHours}
                 className="bg-red-700 text-white px-4 py-2 rounded hover:bg-white transition"

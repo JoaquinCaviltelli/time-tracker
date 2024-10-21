@@ -108,7 +108,7 @@ const Agenda = () => {
 
         <button
           onClick={handleAddContact}
-          className="text-white bg-one border rounded p-2 flex items-center"
+          className="text-white bg-acent border rounded p-2 flex items-center"
         >
           <span className="material-icons">add</span>
         </button>
@@ -130,7 +130,7 @@ const Agenda = () => {
           filteredContacts.map((contact) => (
             <div
               key={contact.id}
-              className="border bg-one text-white p-5 rounded cursor-pointer flex justify-between gap-4 items-center"
+              className="border bg-acent text-white p-5 rounded cursor-pointer flex justify-between gap-4 items-center"
             >
               <div className="w-full">
                 <p className="font-semibold text-lg mb-1">{contact.name}</p>

@@ -191,7 +191,7 @@ const YearlySummary = () => {
       </div>
       <button
         onClick={() => navigate("/historial")}
-        className="text-white bg-one border rounded p-2 mt-4 w-full"
+        className="text-white bg-acent border rounded p-2 mt-4 w-full"
       >
         Volver atrás
       </button>

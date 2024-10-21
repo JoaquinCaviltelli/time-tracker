@@ -99,15 +99,15 @@ const VisitsPage = () => {
 
         <button
           onClick={handleAddCourse}
-          className="text-white bg-one border rounded p-2 flex items-center"
+          className="text-white bg-acent border rounded p-2 flex items-center"
         >
           <span className="material-icons">add</span>
         </button>
         <button
           onClick={back}
-          className="text-white bg-acent border rounded p-2 flex items-cente absolute right-6 top-6"
+          className="text-white bg-one border rounded p-2 flex items-cente absolute right-6 top-6"
         >
-          <span className="material-icons">close</span>
+          <span className="material-icons">arrow_left</span>
         </button>
       </div>
       <div className="space-y-4">
@@ -115,7 +115,7 @@ const VisitsPage = () => {
           courses.map((course) => (
             <div
               key={course.id}
-              className="border bg-one p-4 rounded text-white flex justify-between items-center"
+              className="border bg-acent p-4 rounded text-white flex justify-between items-center"
             >
               <div>
                 <p className="font-semibold">{course.description}</p>

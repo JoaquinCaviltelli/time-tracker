@@ -111,6 +111,19 @@ const Historial = () => {
 
   return (
     <div className="container mx-auto p-4 max-w-lg">
+      <div className="w-full flex justify-end mt-4 gap-4 items-center">
+        <p className="text-sm text-right font-bold text-one">
+          Total de horas: {totalHours}:
+          {minutesRest < 10 ? `0${minutesRest}` : minutesRest}h <br />
+          Cursos: {courses.length}
+        </p>
+        <button
+          onClick={handleShare}
+          className="text-white border rounded p-2 flex items-center bg-one"
+        >
+          <span className="material-icons">share</span>
+        </button>
+      </div>
       <div className="flex justify-between items-center mb-4 text-xs">
         <button
           onClick={() =>
@@ -204,22 +217,10 @@ const Historial = () => {
           userId={user.uid} // Pasa el userId a EditHoursModal
         />
       )}
-      <div className="w-full flex justify-between mt-4">
-        <p className="text-sm font-medium text-acent">
-          Total de horas: {totalHours}:
-          {minutesRest < 10 ? `0${minutesRest}` : minutesRest}h <br />
-          Cursos: {courses.length}
-        </p>
-        <button
-          onClick={handleShare}
-          className="text-white border rounded p-2 flex items-center bg-one"
-        >
-          <span className="material-icons">share</span>
-        </button>
-      </div>
+      
       <button
         onClick={() => navigate("/YearlySummary")}
-        className="text-white bg-one border rounded p-2 mt-4 w-full"
+        className="text-white bg-acent border rounded p-2 mt-4 w-full"
       >
         Ver Resumen Anual
       </button>

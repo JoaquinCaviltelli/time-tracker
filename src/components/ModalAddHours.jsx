@@ -84,32 +84,37 @@ const ModalAddHours = () => {
   {serviceType === "campo" ? (
                 <button
                   type="button"
-                  className="w-full text-one font-bold pt-4  flex justify-center items-center gap-2"
+                  className="w-full text-one font-bold   flex justify-center flex-col items-center"
                   onClick={() => {
                     setServiceType("credito");
                   }}
                 >
-                  {"Servicio al campo"}
-                  {/* <span className="material-icons font-semibold rotate-0 transition-all">
+                  <p>
+
+                  <span className="material-icons font-semibold rotate-0 transition-all">
                     swap_horiz
-                  </span> */}
+                  </span>
+                  </p>
+                  {"Servicio al campo"}
                 </button>
               ) : (
                 <button
                   type="button"
-                  className="w-full text-one font-bold pt-4 capitalize flex justify-center items-center gap-2 "
+                  className="w-full text-one font-bold  capitalize flex justify-center items-center flex-col "
                   onClick={() => {
                     setServiceType("campo");
                   }}
                 >
-                  {"Credito"}
-                  {/* <span className="material-icons font-semibold rotate-180 transition-all">
+                  <p>
+
+                  <span className="material-icons font-semibold rotate-180 transition-all">
                     swap_horiz
-                  </span> */}
+                  </span>
+                  </p>
+                  {"Credito"}
                 </button>
               )}
-            <form onSubmit={handleSubmit}>
-              <div className="flex justify-center mb-4">
+            <form className="mb-4" onSubmit={handleSubmit}>
                 {/* Aquí se inserta el TimePicker */}
                 <TimePicker
                   selectedHour={selectedHour}
@@ -117,7 +122,7 @@ const ModalAddHours = () => {
                   setSelectedHour={setSelectedHour}
                   setSelectedMinute={setSelectedMinute}
                 />
-              </div>
+              
 
               <input
                 type="date"
