@@ -57,7 +57,7 @@ const MainApp = () => {
 
   return (
     <div>
-      {/* <Loading loading={loading} /> */}
+      <Loading loading={loading} />
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route

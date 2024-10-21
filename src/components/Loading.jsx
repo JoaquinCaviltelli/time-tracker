@@ -20,7 +20,7 @@ function LoadingComponent({ loading }) {
     } else {
       const timer = setTimeout(() => {
         setIsVisible(false);
-      }, 300); // Duración de la animación
+      }, 100); // Duración de la animación
       return () => clearTimeout(timer);
     }
   }, [loading]);
