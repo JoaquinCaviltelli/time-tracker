@@ -52,7 +52,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
         />
 
         <input
-          type="email"
+          type="text"
           placeholder="Usuario"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
