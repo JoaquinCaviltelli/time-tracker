@@ -1,6 +1,5 @@
 import React from 'react';
 import { useContext, useState, useEffect } from "react";
-
 import { HoursContext } from "../context/HoursContext";
 import { useNavigate } from "react-router-dom";
 import { Bar } from "react-chartjs-2";
@@ -30,7 +29,7 @@ const YearlySummary = () => {
   const { user, goal } = useContext(HoursContext);
   const [monthlyHoursField, setMonthlyHoursField] = useState(Array(12).fill(0));
   const [monthlyHoursCredit, setMonthlyHoursCredit] = useState(Array(12).fill(0));
-  const [computedHours, setComputedHours] = useState(Array(12).fill(0)); // Para horas computadas por mes
+  const [computedHours, setComputedHours] = useState(Array(12).fill(0));
   const [totalYearlyHours, setTotalYearlyHours] = useState(0);
   const [totalYearlyMinutes, setTotalYearlyMinutes] = useState(0);
   const [showTable, setShowTable] = useState(false);
@@ -53,6 +52,7 @@ const YearlySummary = () => {
         const hoursDataCredit = Array(12).fill(0);
         const computedHoursData = Array(12).fill(0);
         let yearlyHours = 0;
+        let yearlyMinutes = 0; // Añadido para los minutos
 
         snapshot.docs.forEach((doc) => {
           const { date, hoursWorked, minutesWorked, serviceType } = doc.data();
@@ -68,8 +68,10 @@ const YearlySummary = () => {
 
             if (serviceType === "campo") {
               hoursDataField[index] += hoursWorked + minutesWorked / 60;
+              yearlyMinutes += minutesWorked; // Sumar los minutos
             } else if (serviceType === "credito") {
               hoursDataCredit[index] += hoursWorked + minutesWorked / 60;
+              yearlyMinutes += minutesWorked; // Sumar los minutos
             }
           }
         });
@@ -94,9 +96,14 @@ const YearlySummary = () => {
         setMonthlyHoursCredit(hoursDataCredit);
         setComputedHours(computedHoursData);
         setTotalYearlyHours(yearlyHours);
+        setTotalYearlyMinutes(yearlyMinutes); // Guardar los minutos totales
       });
     }
   }, [user]);
+
+  // Calcular horas y minutos para mostrar
+  const totalHoursFromMinutes = Math.floor(totalYearlyHours);
+  const totalMinutesRest = Math.round(totalYearlyMinutes % 60);
 
   const data = {
     labels: [
@@ -171,45 +178,40 @@ const YearlySummary = () => {
       
       {/* Tabla de horas por mes */}
       <button
-        onClick={() => setShowTable(!showTable)} // Toggle para mostrar/ocultar tabla
+        onClick={() => setShowTable(!showTable)}
         className="text-white bg-acent border rounded p-2 mt-4 w-full"
       >
-        {showTable ? "Menos detalle" : "Mas detalle"}
+        {showTable ? "Ocultar detalle" : "Mostrar detalle"}
       </button>
 
       {/* Grid de resumen mensual */}
       {showTable && (
-        <div className="grid grid-cols-4 gap-2 text-xs text-center mt-8 bg-white p-4 max-w-sm m-auto">
-          <div className="font-bold">Mes</div>
-          <div className="font-bold">Campo</div>
-          <div className="font-bold">Crédito</div>
-          <div className="font-bold">Total</div>
+  <div className="grid grid-cols-4 gap-2 text-xs text-center mt-8 bg-white p-4 max-w-sm m-auto">
+    <div className="font-bold">Mes</div>
+    <div className="font-bold">Campo</div>
+    <div className="font-bold">Crédito</div>
+    <div className="font-bold">Total</div>
+    
 
-          {[
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dic",
-            "Ene",
-            "Feb",
-            "Mar",
-            "Abr",
-            "May",
-            "Jun",
-            "Jul",
-            "Ago",
-          ].map((month, index) => (
-            <React.Fragment key={index}>
-              <div>{month}</div>
-              <div>{monthlyHoursField[index].toFixed(2)}</div>
-              <div>{monthlyHoursCredit[index].toFixed(2)}</div>
-              <div className="font-bold text-one">
-                {computedHours[index].toFixed(2)}
-              </div>
-            </React.Fragment>
-          ))}
-        </div>
-      )}
+    {["Sep", "Oct", "Nov", "Dic", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago"].map(
+      (month, index) => {
+        const totalMinutesForMonth = (monthlyHoursField[index] + monthlyHoursCredit[index]) * 60; // Calcular minutos totales
+        const minutesField = (monthlyHoursField[index] % 1) * 60; // Minutos de campo
+        const minutesCredit = (monthlyHoursCredit[index] % 1) * 60; // Minutos de crédito
+        const totalMinutes = Math.round(minutesField + minutesCredit); // Sumar los minutos de campo y crédito
+
+        return (
+          <React.Fragment key={index}>
+            <div>{month}</div>
+            <div>{monthlyHoursField[index].toFixed(0)}:{minutesField.toFixed(0)}</div>
+            <div>{monthlyHoursCredit[index].toFixed(0)}:{minutesCredit.toFixed(0)}</div>
+            <div className="font-bold text-one">{computedHours[index].toFixed(0)}:{totalMinutes.toFixed(0)}</div>
+          </React.Fragment>
+        );
+      }
+    )}
+  </div>
+)}
     </div>
   );
 };
