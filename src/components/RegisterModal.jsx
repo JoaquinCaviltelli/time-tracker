@@ -10,15 +10,15 @@ const RegisterModal = ({ isOpen, onClose }) => {
 
   const handleRegister = async (name, email, password) => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, `${email}@timetrack.com`, password);
       await updateProfile(userCredential.user, { displayName: name });
-      toast.success("Registro exitoso");
+      toast.success(`Bienvenido ${name}`);
       onClose(); // Cierra el modal después del registro
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
-        toast.error("El correo electrónico ya está en uso.");
+        toast.error("El usuario ya está en uso.");
       } else if (error.code === 'auth/invalid-email') {
-        toast.error("El correo electrónico no es válido.");
+        toast.error("El usuario no es válido.");
       } else if (error.code === 'auth/weak-password') {
         toast.error("La contraseña es muy débil.");
       } else {
@@ -53,7 +53,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
 
         <input
           type="email"
-          placeholder="correo electrónico"
+          placeholder="Usuario"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           autoComplete="email" // Autocompletado para correo electrónico

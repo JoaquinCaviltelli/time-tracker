@@ -44,8 +44,12 @@ const Login = () => {
 
   const handleEmailLogin = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      toast.success("Inicio de sesión exitoso");
+      await signInWithEmailAndPassword(
+        auth,
+        `${email}@timetrack.com`,
+        password
+      );
+      toast.success(`Bienvenido ${email}`);
     } catch (error) {
       switch (error.code) {
         case "auth/user-not-found":
@@ -57,7 +61,7 @@ const Login = () => {
           toast.error("Contraseña incorrecta. Intenta de nuevo.");
           break;
         case "auth/invalid-email":
-          toast.error("El correo electrónico no es válido.");
+          toast.error("El usuario no es válido.");
           break;
         case "auth/user-disabled":
           toast.error("El usuario está deshabilitado. Contacta al soporte.");
@@ -107,7 +111,7 @@ const Login = () => {
         <div className="mt-20 ">
           <input
             type="email"
-            placeholder="Correo electrónico"
+            placeholder="Usuario"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full px-4 py-3 mb-2 border border-white rounded-md text-center outline-none bg-one text-white placeholder:text-white placeholder:opacity-50"
@@ -123,7 +127,7 @@ const Login = () => {
             onClick={handleEmailLogin}
             className="w-full bg-white text-one  px-4 py-3 rounded-md outline-none font-semibold"
           >
-            Iniciar sesión con correo
+            Ingresar
           </button>
         </div>
 
