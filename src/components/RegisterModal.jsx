@@ -7,6 +7,9 @@ const RegisterModal = ({ isOpen, onClose }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [randomUserName, setRandomUserName] = "asdad";
+
+
 
   const handleRegister = async (name, email, password) => {
     try {
@@ -54,9 +57,8 @@ const RegisterModal = ({ isOpen, onClose }) => {
         <input
           type="text"
           placeholder="Usuario"
-          value={email}
+          value={randomUserName}
           onChange={(e) => setEmail(e.target.value)}
-          autoComplete={"given-name" + Math.floor(Math.random() * 900) + 100} // Autocompletado para correo electrónico
           className="border-b text-acent bg-transparent outline-none w-full p-2 text-sm mb-1 font-medium placeholder:text-acent placeholder:text-sm placeholder:opacity-50"
         />
 
