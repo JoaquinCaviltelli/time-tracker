@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../services/firebase";
@@ -7,8 +7,14 @@ const RegisterModal = ({ isOpen, onClose }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [randomUserName, setRandomUserName] = "asdad";
+  const [randomUserName, setRandomUserName] = useState("");
 
+  useEffect(() => {
+    if(name){
+
+      setRandomUserName(name + Math.floor(Math.random() * 900))
+    }
+  },[name])
 
 
   const handleRegister = async (name, email, password) => {
