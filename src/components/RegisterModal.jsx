@@ -53,10 +53,10 @@ const RegisterModal = ({ isOpen, onClose }) => {
 
         <input
           type="text"
-          placeholder="Usuariott"
+          placeholder="Usuario"
           value={userName}
           onChange={(e) => setUserName(e.target.value)}
-          autoComplete="name" // Autocompletado para correo electrónico
+          autoComplete="username" // Autocompletado para correo electrónico
           className="border-b text-acent bg-transparent outline-none w-full p-2 text-sm mb-1 font-medium placeholder:text-acent placeholder:text-sm placeholder:opacity-50"
         />
 
