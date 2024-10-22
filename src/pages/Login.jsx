@@ -20,6 +20,9 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [unregisteredEmail, setUnregisteredEmail] = useState(null);
+  const [currentUserName, setCurrentUserName] = useState("");
+
+ 
 
   useEffect(() => {
     document.body.style.backgroundColor = "#4a7766";
@@ -30,6 +33,7 @@ const Login = () => {
 
   useEffect(() => {
     if (user) {
+      setCurrentUserName(user.displayName)
       navigate("/"); // Redirigir al home si ya está logeado
     }
   }, [user, navigate]);
@@ -46,10 +50,10 @@ const Login = () => {
     try {
       await signInWithEmailAndPassword(
         auth,
-        `${email}@timetrack.com`,
+        email,
         password
       );
-      toast.success(`Bienvenido ${email}`);
+      toast.success(`Bienvenido ${currentUserName}`);
     } catch (error) {
       switch (error.code) {
         case "auth/user-not-found":
