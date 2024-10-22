@@ -5,12 +5,12 @@ import { auth } from "../services/firebase";
 
 const RegisterModal = ({ isOpen, onClose }) => {
   const [name, setName] = useState("");
-  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleRegister = async (name, userName, password) => {
+  const handleRegister = async (name, email, password) => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, `${userName}@timetrack.com`, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, `${email}@timetrack.com`, password);
       await updateProfile(userCredential.user, { displayName: name });
       toast.success(`Bienvenido ${name}`);
       onClose(); // Cierra el modal después del registro
@@ -29,11 +29,11 @@ const RegisterModal = ({ isOpen, onClose }) => {
   };
 
   const handleSubmit = () => {
-    if (!name || !userName || !password) {
+    if (!name || !email || !password) {
       toast.error("Por favor, completa todos los campos.");
       return;
     }
-    handleRegister(name, userName, password);
+    handleRegister(name, email, password);
   };
 
   if (!isOpen) return null; // Si el modal no está abierto, no se muestra
@@ -54,9 +54,9 @@ const RegisterModal = ({ isOpen, onClose }) => {
         <input
           type="text"
           placeholder="Usuario"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          autoComplete="nickname" // Autocompletado para correo electrónico
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          autoComplete="given-name" // Autocompletado para correo electrónico
           className="border-b text-acent bg-transparent outline-none w-full p-2 text-sm mb-1 font-medium placeholder:text-acent placeholder:text-sm placeholder:opacity-50"
         />
 
