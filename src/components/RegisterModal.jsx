@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../services/firebase";
@@ -7,19 +7,10 @@ const RegisterModal = ({ isOpen, onClose }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [randomUserName, setRandomUserName] = useState("");
-
-  useEffect(() => {
-    if(name){
-
-      setRandomUserName(name + Math.floor(Math.random() * 900))
-    }
-  },[name])
-
 
   const handleRegister = async (name, email, password) => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, `${email}@timetrack.com`, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(userCredential.user, { displayName: name });
       toast.success(`Bienvenido ${name}`);
       onClose(); // Cierra el modal después del registro
@@ -61,10 +52,11 @@ const RegisterModal = ({ isOpen, onClose }) => {
         />
 
         <input
-          type="text"
+          type="email"
           placeholder="Usuario"
-          value={randomUserName}
+          value={email}
           onChange={(e) => setEmail(e.target.value)}
+          autoComplete="email" // Autocompletado para correo electrónico
           className="border-b text-acent bg-transparent outline-none w-full p-2 text-sm mb-1 font-medium placeholder:text-acent placeholder:text-sm placeholder:opacity-50"
         />
 
