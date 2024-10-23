@@ -22,7 +22,7 @@ export const HoursProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [hours, setHours] = useState([]);
   const [contacts, setContacts] = useState([]);
-  const [goal, setGoal] = useState(30);
+  const [goal, setGoal] = useState(15);
   const [loading, setLoading] = useState(true);
   const [range, setRange] = useState("publicador"); // Estado de rango
 
@@ -40,10 +40,10 @@ export const HoursProvider = ({ children }) => {
         const userDocSnap = await getDoc(userDocRef);
         if (userDocSnap.exists()) {
           const userData = userDocSnap.data();
-          setGoal(userData.goal || 30);
+          setGoal(userData.goal || 15);
           setRange(userData.rango || "publicador");
         } else {
-          await setDoc(userDocRef, { goal: 30, rango: "publicador" });
+          await setDoc(userDocRef, { goal: 15, rango: "publicador" });
         }
 
         const contactsRef = collection(db, "users", currentUser.uid, "contacts");
