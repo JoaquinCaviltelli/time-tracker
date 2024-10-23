@@ -27,7 +27,7 @@ ChartJS.register(
 );
 
 const YearlySummary = () => {
-  const { user, goal } = useContext(HoursContext);
+  const { user, goal, range } = useContext(HoursContext);
   const [monthlyHoursField, setMonthlyHoursField] = useState(Array(12).fill(0));
   const [monthlyHoursCredit, setMonthlyHoursCredit] = useState(
     Array(12).fill(0)
@@ -83,7 +83,8 @@ const YearlySummary = () => {
         for (let i = 0; i < 12; i++) {
           const monthlyFieldHours = hoursDataField[i];
           const monthlyCreditHours = hoursDataCredit[i];
-          const monthlyTotal = monthlyFieldHours + monthlyCreditHours;
+          const monthlyTotal = monthlyFieldHours;
+          // const monthlyTotal = monthlyFieldHours + monthlyCreditHours;
 
           if (monthlyTotal > goal + buffer) {
             computedHoursData[i] =
@@ -153,24 +154,24 @@ const YearlySummary = () => {
           },
         },
       },
-      {
-        label: "Crédito",
-        data: filteredMonthlyHoursCredit,
-        borderColor: "#dddddd",
-        pointBackgroundColor: "#bbbbbb",
-        pointBorderColor: "#fff",
-        pointBorderWidth: 2,
-        pointRadius: 5,
-        fill: true,
-        animation: {
-          delay: (context) => {
-            if (context.datasetIndex === 1) {
-              return context.dataIndex * 300; // Retraso de 100ms por punto
-            }
-            return 0; // Sin retraso para otros datasets
-          },
-        },
-      },
+      // {
+      //   label: "Crédito",
+      //   data: filteredMonthlyHoursCredit,
+      //   borderColor: "#dddddd",
+      //   pointBackgroundColor: "#bbbbbb",
+      //   pointBorderColor: "#fff",
+      //   pointBorderWidth: 2,
+      //   pointRadius: 5,
+      //   fill: true,
+      //   animation: {
+      //     delay: (context) => {
+      //       if (context.datasetIndex === 1) {
+      //         return context.dataIndex * 300; // Retraso de 100ms por punto
+      //       }
+      //       return 0; // Sin retraso para otros datasets
+      //     },
+      //   },
+      // },
     ],
   };
 
@@ -217,7 +218,7 @@ const YearlySummary = () => {
         <div onClick={() => setShowTable(!showTable)} className="bg-one mb-1 rounded-lg p-4 ">
           <p className="text-base font-medium text-light">Total anual</p>
           <p className="text-2xl font-bold text-light">
-            {Math.round(totalYearlyHours)}h / {goal *12}h
+            {Math.round(totalYearlyHours)}h {range === "regular" && "/ 600h"} {range === "especial" && "/ 720h"} 
           </p>
           <p className="text-xs font-light text-light">Ver detalle</p>
         </div>

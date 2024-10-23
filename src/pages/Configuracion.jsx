@@ -1,18 +1,15 @@
 import { useContext, useState } from "react";
 import { HoursContext } from "../context/HoursContext";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import EditGoalModal from "../components/EditGoalModal"; // Modal de meta
-import EditDisplayNameModal from "../components/EditDisplayNameModal"; // Importar el nuevo modal
+import EditGoalModal from "../components/EditGoalModal";
+import EditDisplayNameModal from "../components/EditDisplayNameModal";
+import EditRangeModal from "../components/EditRangeModal"; // Importar el modal de rango
 
 const Configuracion = () => {
-  const { goal, updateGoal, user, updateDisplayName, logout } =
-    useContext(HoursContext);
-  const [newGoal, setNewGoal] = useState(goal);
+  const { goal, user, updateDisplayName, logout, range } = useContext(HoursContext);
   const [displayName, setDisplayName] = useState(user?.displayName || "");
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
-  const [isDisplayNameModalOpen, setIsDisplayNameModalOpen] = useState(false); // Estado para el nuevo modal
-  const navigate = useNavigate();
+  const [isDisplayNameModalOpen, setIsDisplayNameModalOpen] = useState(false);
+  const [isRangeModalOpen, setIsRangeModalOpen] = useState(false); // Estado para el modal de rango
 
   const handleSaveDisplayName = async (newDisplayName) => {
     await updateDisplayName(newDisplayName);
@@ -26,31 +23,42 @@ const Configuracion = () => {
   return (
     <div className="container mx-auto p-6 max-w-lg pb-28">
       <div className="flex justify-between mt-16 mb-6 items-center">
-        <h1 className="text-3xl font-extrabold text-acent">Configuracion</h1>
+        <h1 className="text-3xl font-extrabold text-acent">Configuración</h1>
       </div>
 
       <div className="flex flex-col gap-3">
+        {/* Editar Rango */}
+        <div>
+          <button
+            onClick={() => setIsRangeModalOpen(true)} // Abrir el modal de rango
+            className="bg-one text-white rounded w-full p-4 pt-6"
+          >
+            <span className="text-xl font-bold capitalize">{range}</span>
+            <br />
+            <span className="font-light text-xs opacity-50">Editar rango</span>
+          </button>
+        </div>
         {/* Actualizar Meta */}
         <div className="">
           <button
             onClick={() => setIsGoalModalOpen(true)}
-            className="bg-one text-white rounded hover:bg-white w-full p-6 pt-8"
+            className="bg-one text-white rounded w-full p-4 pt-6"
           >
-            <span className="text-3xl  font-bold">{goal}h</span>
+            <span className="text-xl font-bold">{goal}h</span>
             <br />
-            <span className="font-light text-sm">Editar meta</span>
+            <span className="font-light text-xs opacity-50">Editar meta</span>
           </button>
         </div>
 
         {/* Editar Nombre */}
         <div>
           <button
-            onClick={() => setIsDisplayNameModalOpen(true)} // Abrir el nuevo modal
-            className="bg-one text-white rounded w-full p-6 pt-8"
+            onClick={() => setIsDisplayNameModalOpen(true)}
+            className="bg-one text-white rounded w-full p-4 pt-6"
           >
-            <span className="text-3xl font-bold">{displayName}</span>
+            <span className="text-xl font-bold">{displayName}</span>
             <br />
-            <span className="font-light text-sm">Editar nombre</span>
+            <span className="font-light text-xs opacity-50">Editar nombre</span>
           </button>
         </div>
 
@@ -58,7 +66,7 @@ const Configuracion = () => {
           onClick={handleLogout}
           className="bg-acent  w-full text-white p-3 rounded hover:bg-white"
         >
-          cerrar sesión
+          Cerrar sesión
         </button>
       </div>
 
@@ -66,6 +74,7 @@ const Configuracion = () => {
       {isGoalModalOpen && (
         <EditGoalModal onClose={() => setIsGoalModalOpen(false)} />
       )}
+
       {/* Modal para editar el nombre */}
       {isDisplayNameModalOpen && (
         <EditDisplayNameModal
@@ -73,6 +82,11 @@ const Configuracion = () => {
           initialDisplayName={displayName}
           onSave={handleSaveDisplayName}
         />
+      )}
+
+      {/* Modal para editar el rango */}
+      {isRangeModalOpen && (
+        <EditRangeModal onClose={() => setIsRangeModalOpen(false)} />
       )}
     </div>
   );

@@ -21,39 +21,38 @@ export const HoursContext = createContext("");
 export const HoursProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [hours, setHours] = useState([]);
-  const [contacts, setContacts] = useState([]); // Estado para contactos
-  const [goal, setGoal] = useState(30); // Meta mensual predeterminada
-  const [loading, setLoading] = useState(true); // Indicador de carga
+  const [contacts, setContacts] = useState([]);
+  const [goal, setGoal] = useState(30);
+  const [loading, setLoading] = useState(true);
+  const [range, setRange] = useState("publicador"); // Estado de rango
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
-        // Cargar las horas trabajadas
         const q = query(collection(db, "hours"), where("uid", "==", currentUser.uid));
         onSnapshot(q, (snapshot) => {
           const hoursData = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
           setHours(hoursData);
         });
 
-        // Cargar la meta de horas desde Firestore
         const userDocRef = doc(db, "users", currentUser.uid);
         const userDocSnap = await getDoc(userDocRef);
         if (userDocSnap.exists()) {
-          setGoal(userDocSnap.data().goal || 30); // Meta por defecto si no se encuentra
+          const userData = userDocSnap.data();
+          setGoal(userData.goal || 30);
+          setRange(userData.rango || "publicador");
         } else {
-          // Crear un documento para el usuario con la meta por defecto
-          await setDoc(userDocRef, { goal: 30 });
+          await setDoc(userDocRef, { goal: 30, rango: "publicador" });
         }
 
-        // Cargar contactos
         const contactsRef = collection(db, "users", currentUser.uid, "contacts");
         onSnapshot(contactsRef, (snapshot) => {
           const contactsData = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
           setContacts(contactsData);
         });
 
-        setLoading(false); // Dejamos de cargar cuando tenemos los datos
+        setLoading(false);
       } else {
         setLoading(false);
       }
@@ -65,16 +64,15 @@ export const HoursProvider = ({ children }) => {
     if (user) {
       const userDocRef = doc(db, "users", user.uid);
       await updateDoc(userDocRef, { goal: newGoal });
-      setGoal(newGoal); // Actualizar el estado local
+      setGoal(newGoal);
     }
   };
 
-  // Función para actualizar el displayName del usuario en Firebase
   const updateDisplayName = async (newDisplayName) => {
     if (user) {
       try {
         await updateProfile(auth.currentUser, { displayName: newDisplayName });
-        setUser({ ...user, displayName: newDisplayName }); // Actualizar el estado local del usuario
+        setUser({ ...user, displayName: newDisplayName });
       } catch (error) {
         console.error("Error al actualizar el displayName:", error);
         throw new Error("No se pudo actualizar el nombre.");
@@ -82,44 +80,50 @@ export const HoursProvider = ({ children }) => {
     }
   };
 
-const addHours = async (date, hours, minutes, serviceType) => {
-  try {
+  const updateRange = async (newRange) => {
     if (user) {
-      const userHoursRef = collection(db, "users", user.uid, "hours");
-
-      // Consultar si ya existen horas para esa fecha y servicio
-      const q = query(
-        userHoursRef,
-        where("date", "==", date),
-        where("serviceType", "==", serviceType)
-      );
-      const querySnapshot = await getDocs(q);
-
-      if (!querySnapshot.empty) {
-        const existingDoc = querySnapshot.docs[0];
-        await updateDoc(existingDoc.ref, {
-          hoursWorked: existingDoc.data().hoursWorked + hours,
-          minutesWorked: existingDoc.data().minutesWorked + minutes,
-        });
-      } else {
-        await addDoc(userHoursRef, {
-          date,
-          hoursWorked: hours,
-          minutesWorked: minutes,
-          serviceType, // Guardar el tipo de servicio
-        });
+      try {
+        const userDocRef = doc(db, "users", user.uid);
+        await updateDoc(userDocRef, { rango: newRange });
+        setRange(newRange);
+        toast.success("¡Rango actualizado correctamente!");
+      } catch (error) {
+        console.error("Error al actualizar el rango:", error);
+        throw new Error("No se pudo actualizar el rango.");
       }
-      toast.success("Horas añadidas correctamente");
-    } else {
-      throw new Error("Usuario no autenticado");
     }
-  } catch (error) {
-    console.error("Error al guardar las horas:", error);
-    toast.error("Error al guardar las horas");
-  }
-};
+  };
 
+  const addHours = async (date, hours, minutes, serviceType) => {
+    try {
+      if (user) {
+        const userHoursRef = collection(db, "users", user.uid, "hours");
+        const q = query(userHoursRef, where("date", "==", date), where("serviceType", "==", serviceType));
+        const querySnapshot = await getDocs(q);
 
+        if (!querySnapshot.empty) {
+          const existingDoc = querySnapshot.docs[0];
+          await updateDoc(existingDoc.ref, {
+            hoursWorked: existingDoc.data().hoursWorked + hours,
+            minutesWorked: existingDoc.data().minutesWorked + minutes,
+          });
+        } else {
+          await addDoc(userHoursRef, {
+            date,
+            hoursWorked: hours,
+            minutesWorked: minutes,
+            serviceType,
+          });
+        }
+        toast.success("Horas añadidas correctamente");
+      } else {
+        throw new Error("Usuario no autenticado");
+      }
+    } catch (error) {
+      console.error("Error al guardar las horas:", error);
+      toast.error("Error al guardar las horas");
+    }
+  };
 
   const deleteHours = async (id) => {
     await deleteDoc(doc(db, "hours", id));
@@ -162,7 +166,7 @@ const addHours = async (date, hours, minutes, serviceType) => {
       value={{
         user,
         hours,
-        contacts, // Incluyendo contactos en el contexto
+        contacts,
         goal,
         setGoal,
         addHours,
@@ -173,6 +177,8 @@ const addHours = async (date, hours, minutes, serviceType) => {
         editContact,
         updateGoal,
         updateDisplayName,
+        updateRange, // Actualización de rango
+        range, // Estado de rango
         logout,
         loading,
       }}
