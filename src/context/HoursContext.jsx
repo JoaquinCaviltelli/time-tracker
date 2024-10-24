@@ -22,30 +22,34 @@ export const HoursProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [hours, setHours] = useState([]);
   const [contacts, setContacts] = useState([]);
-  const [goal, setGoal] = useState(15);
+  const [goal, setGoal] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [range, setRange] = useState("publicador"); // Estado de rango
+  const [range, setRange] = useState(null); // Estado de rango, inicia como null para nuevos usuarios
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
+        // Cargar las horas trabajadas
         const q = query(collection(db, "hours"), where("uid", "==", currentUser.uid));
         onSnapshot(q, (snapshot) => {
           const hoursData = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
           setHours(hoursData);
         });
 
+        // Cargar los datos del usuario (incluyendo rango y meta)
         const userDocRef = doc(db, "users", currentUser.uid);
         const userDocSnap = await getDoc(userDocRef);
         if (userDocSnap.exists()) {
           const userData = userDocSnap.data();
-          setGoal(userData.goal || 15);
-          setRange(userData.rango || "publicador");
+          setGoal(userData.goal || 0);
+          setRange(userData.rango !== undefined ? userData.rango : null); // Asignar null si el rango no está definido
         } else {
-          await setDoc(userDocRef, { goal: 15, rango: "publicador" });
+          // Si el documento del usuario no existe, crear uno con rango null
+          await setDoc(userDocRef, { goal: 0, rango: null }); // Se establece rango como null por defecto
         }
 
+        // Cargar contactos del usuario
         const contactsRef = collection(db, "users", currentUser.uid, "contacts");
         onSnapshot(contactsRef, (snapshot) => {
           const contactsData = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
@@ -85,7 +89,7 @@ export const HoursProvider = ({ children }) => {
       try {
         const userDocRef = doc(db, "users", user.uid);
         await updateDoc(userDocRef, { rango: newRange });
-        setRange(newRange);
+        setRange(newRange); // Actualizar el rango en el estado local
       } catch (error) {
         console.error("Error al actualizar el rango:", error);
         throw new Error("No se pudo actualizar el rango.");
@@ -136,7 +140,6 @@ export const HoursProvider = ({ children }) => {
     if (user) {
       const contactsRef = collection(db, "users", user.uid, "contacts");
       await addDoc(contactsRef, { name, phone, address, description });
-      
     }
   };
 
@@ -144,7 +147,6 @@ export const HoursProvider = ({ children }) => {
     if (user) {
       const contactRef = doc(db, "users", user.uid, "contacts", id);
       await deleteDoc(contactRef);
-      
     }
   };
 
@@ -152,7 +154,6 @@ export const HoursProvider = ({ children }) => {
     if (user) {
       const contactRef = doc(db, "users", user.uid, "contacts", id);
       await updateDoc(contactRef, updatedData);
-      
     }
   };
 

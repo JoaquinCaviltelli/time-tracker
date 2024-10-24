@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../services/firebase";
+import { auth, db } from "../services/firebase"; // Importa Firestore
+import { doc, setDoc } from "firebase/firestore"; // Importa Firestore para crear documentos
 
 const RegisterModal = ({ isOpen, onClose }) => {
   const [name, setName] = useState("");
@@ -12,7 +13,17 @@ const RegisterModal = ({ isOpen, onClose }) => {
     try {
       onClose(); // Cierra el modal después del registro
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(userCredential.user, { displayName: name });
+      const user = userCredential.user;
+
+      // Actualiza el nombre de perfil del usuario
+      await updateProfile(user, { displayName: name });
+
+      // Crea el documento del usuario en Firestore con 'rango' como null y 'goal' predeterminado
+      await setDoc(doc(db, "users", user.uid), {
+        rango: null, // Establece rango como null para usuarios nuevos
+        goal: 0,    // Meta predeterminada
+      });
+
       toast.success(`Bienvenido ${name}`);
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
@@ -47,7 +58,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
           placeholder="nombre"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          autoComplete="name" // Autocompletado para nombre
+          autoComplete="name"
           className="border-b text-acent bg-transparent outline-none w-full p-2 text-sm mb-1 font-medium placeholder:text-acent placeholder:text-sm placeholder:opacity-50"
         />
 
@@ -56,7 +67,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
           placeholder="Usuario"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          autoComplete="email" // Autocompletado para correo electrónico
+          autoComplete="email"
           className="border-b text-acent bg-transparent outline-none w-full p-2 text-sm mb-1 font-medium placeholder:text-acent placeholder:text-sm placeholder:opacity-50"
         />
 
@@ -65,7 +76,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
           placeholder="contraseña"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          autoComplete="new-password" // Autocompletado para contraseña
+          autoComplete="new-password"
           className="border-b text-acent bg-transparent outline-none w-full p-2 text-sm mb-1 font-medium placeholder:text-acent placeholder:text-sm placeholder:opacity-50"
         />
 

@@ -33,6 +33,18 @@ const EditRankModal = ({ onClose }) => {
     }
   };
 
+  const handleCancel = async () => {
+    try {
+      onClose();
+      await updateRange("publicador"); // Guardar el rango seleccionado
+      await updateGoal(15); // Actualizar la meta según el rango
+      
+    } catch (error) {
+      toast.error("Error al actualizar el rango o la meta. Inténtalo de nuevo.");
+    }
+  };
+
+
   return (
     <div className="fixed z-50 inset-0">
       <div className="bg-one p-6 w-full h-full text-white flex flex-col">
@@ -46,7 +58,7 @@ const EditRankModal = ({ onClose }) => {
             Guardar Rango
           </button>
           <button
-            onClick={onClose}
+            onClick={handleCancel}
             className="mt-4 bg-one border border-white text-white text-sm font-semibold rounded-lg shadow hover:bg-one w-full p-3"
           >
             Cancelar
