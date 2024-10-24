@@ -20,13 +20,13 @@ const ModalAddHours = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Convertir a enteros y añadir horas
+    closeModal();
     addHours(
       date,
       parseInt(selectedHour),
       parseInt(selectedMinute),
       serviceType
     );
-    closeModal();
   };
 
   const openModal = () => {

@@ -26,6 +26,7 @@ const ContactModal = ({ closeModal, contact }) => {
 
   const handleSave = async () => {
     try {
+      closeModal();
       if (contact) {
         const contactRef = doc(db, "users", user.uid, "contacts", contact.id);
         await updateDoc(contactRef, { name, phone, address, description });
@@ -33,7 +34,6 @@ const ContactModal = ({ closeModal, contact }) => {
         const contactsRef = collection(db, "users", user.uid, "contacts");
         await addDoc(contactsRef, { name, phone, address, description });
       }
-      closeModal();
     } catch (error) {
       console.error("Error al guardar el contacto:", error);
     }

@@ -135,12 +135,12 @@ const Login = () => {
           </button>
         </div>
 
-        {/* <button
+        <button
           onClick={handleDemoLogin}
           className="w-full text-white font-medium text-sm hover:text-one mt-3 outline-none"
         >
           Entrar como usuario demo
-        </button> */}
+        </button>
 
         {/* Botón para abrir el modal de registro manualmente */}
         <button

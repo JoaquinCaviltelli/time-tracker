@@ -82,8 +82,9 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
       toast.error("Horas o minutos no válidos");
       return;
     }
-
+    
     try {
+      closeModal();
       const entryRef = doc(
         db,
         "users",
@@ -104,8 +105,6 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
         minutesWorked: parseInt(minutes),
         date: date,
       });
-      toast.success("Registro actualizado correctamente");
-      closeModal();
     } catch (error) {
       console.error(error);
     }

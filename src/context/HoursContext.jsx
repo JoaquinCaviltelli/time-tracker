@@ -86,7 +86,6 @@ export const HoursProvider = ({ children }) => {
         const userDocRef = doc(db, "users", user.uid);
         await updateDoc(userDocRef, { rango: newRange });
         setRange(newRange);
-        toast.success("¡Rango actualizado correctamente!");
       } catch (error) {
         console.error("Error al actualizar el rango:", error);
         throw new Error("No se pudo actualizar el rango.");
@@ -137,7 +136,7 @@ export const HoursProvider = ({ children }) => {
     if (user) {
       const contactsRef = collection(db, "users", user.uid, "contacts");
       await addDoc(contactsRef, { name, phone, address, description });
-      toast.success("Contacto añadido correctamente");
+      
     }
   };
 
@@ -145,7 +144,7 @@ export const HoursProvider = ({ children }) => {
     if (user) {
       const contactRef = doc(db, "users", user.uid, "contacts", id);
       await deleteDoc(contactRef);
-      toast.success("Contacto eliminado");
+      
     }
   };
 
@@ -153,7 +152,7 @@ export const HoursProvider = ({ children }) => {
     if (user) {
       const contactRef = doc(db, "users", user.uid, "contacts", id);
       await updateDoc(contactRef, updatedData);
-      toast.success("Contacto actualizado");
+      
     }
   };
 

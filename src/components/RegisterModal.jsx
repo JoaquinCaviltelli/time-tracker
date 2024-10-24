@@ -10,10 +10,10 @@ const RegisterModal = ({ isOpen, onClose }) => {
 
   const handleRegister = async (name, email, password) => {
     try {
+      onClose(); // Cierra el modal después del registro
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(userCredential.user, { displayName: name });
       toast.success(`Bienvenido ${name}`);
-      onClose(); // Cierra el modal después del registro
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
         toast.error("El usuario ya está en uso.");

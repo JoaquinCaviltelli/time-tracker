@@ -16,9 +16,8 @@ const EditGoalModal = ({ onClose }) => {
 
   const handleSaveGoal = async () => {
     try {
-      await updateGoal(newGoal);
-      toast.success("¡Meta de horas actualizada correctamente!");
       onClose();
+      await updateGoal(newGoal);
     } catch (error) {
       toast.error("Error al actualizar la meta. Inténtalo de nuevo.");
     }

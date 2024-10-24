@@ -27,12 +27,12 @@ const AddCourseModal = ({ onClose }) => {
     if (selectedContact) {
       const courseRef = collection(db, "users", user.uid, "courses");
       try {
+        onClose();
         await addDoc(courseRef, {
           contactId: selectedContact,
           date: date,
           description: description,
         });
-        onClose();
       } catch (error) {
         console.error("Error al agregar curso:", error);
       }

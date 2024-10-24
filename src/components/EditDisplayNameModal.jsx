@@ -6,9 +6,9 @@ const EditDisplayNameModal = ({ onClose, initialDisplayName, onSave }) => {
 
   const handleSaveDisplayName = async () => {
     try {
-      await onSave(newDisplayName); // Llamar a la función para guardar el nuevo nombre
-      toast.success("¡Nombre actualizado correctamente!"); // Mostrar notificación de éxito
       onClose(); // Cerrar el modal después de guardar
+      await onSave(newDisplayName); // Llamar a la función para guardar el nuevo nombre
+      
     } catch (error) {
       toast.error("Error al actualizar el nombre. Inténtalo de nuevo."); // Mostrar notificación de error
     }

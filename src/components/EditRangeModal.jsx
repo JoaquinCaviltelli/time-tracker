@@ -24,10 +24,10 @@ const EditRankModal = ({ onClose }) => {
 
   const handleSaveRank = async () => {
     try {
+      onClose();
       await updateRange(selectedRank); // Guardar el rango seleccionado
       await updateGoal(rankToGoal[selectedRank]); // Actualizar la meta según el rango
-      toast.success("¡Rango y meta actualizados correctamente!");
-      onClose();
+      
     } catch (error) {
       toast.error("Error al actualizar el rango o la meta. Inténtalo de nuevo.");
     }
