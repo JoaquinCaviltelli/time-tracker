@@ -22,9 +22,9 @@ export const HoursProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [hours, setHours] = useState([]);
   const [contacts, setContacts] = useState([]);
-  const [goal, setGoal] = useState(15);
+  const [goal, setGoal] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [range, setRange] = useState("publicador"); // Estado de rango
+  const [range, setRange] = useState(null); // Estado de rango
   const [isRangeModalOpen, setIsRangeModalOpen] = useState(false); // Estado para el modal de rango
 
 
@@ -42,10 +42,10 @@ export const HoursProvider = ({ children }) => {
         const userDocSnap = await getDoc(userDocRef);
         if (userDocSnap.exists()) {
           const userData = userDocSnap.data();
-          setGoal(userData.goal || 15);
-          setRange(userData.rango || "publicador");
+          setGoal(userData.goal || 0);
+          setRange(userData.rango || null);
         } else {
-          await setDoc(userDocRef, { goal: 15, rango: "publicador" });
+          await setDoc(userDocRef, { goal: 0, rango: null });
         }
 
         const contactsRef = collection(db, "users", currentUser.uid, "contacts");

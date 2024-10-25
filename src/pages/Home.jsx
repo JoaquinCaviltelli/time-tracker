@@ -33,6 +33,8 @@ const Home = () => {
     return () => {
       document.body.style.backgroundColor = ""; // Restaura el color por defecto
     };
+
+    
   }, []);
 
   useEffect(() => {
