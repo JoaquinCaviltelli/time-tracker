@@ -117,6 +117,7 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
     }
 
     try {
+      closeModal();
       const entryRef = doc(
         db,
         "users",
@@ -125,8 +126,6 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
         selectedEntry[serviceType].id
       );
       await deleteDoc(entryRef);
-      toast.success("Registro eliminado correctamente");
-      closeModal();
     } catch (error) {
       toast.error("Error al eliminar el registro");
       console.error(error);

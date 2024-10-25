@@ -116,7 +116,6 @@ export const HoursProvider = ({ children }) => {
             serviceType,
           });
         }
-        toast.success("Horas añadidas correctamente");
       } else {
         throw new Error("Usuario no autenticado");
       }

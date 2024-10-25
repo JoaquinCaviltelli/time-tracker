@@ -53,7 +53,6 @@ const Login = () => {
         email,
         password
       );
-      toast.success(`Bienvenido ${currentUserName}`);
     } catch (error) {
       switch (error.code) {
         case "auth/user-not-found":
