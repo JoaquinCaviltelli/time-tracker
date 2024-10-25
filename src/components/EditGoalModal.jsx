@@ -27,26 +27,27 @@ const EditGoalModal = ({ onClose }) => {
     <div className="fixed z-50 inset-0">
       <div className="bg-one p-6 w-full h-full text-white flex flex-col">
         <h2 className="text-base mt-6 text-center">Editar meta</h2>
-        <div className="max-w-md m-auto w-full">
+        <div className="max-w-md m-auto w-full relative h-full flex justify-center flex-col pb-28">
           {/* Integración del TimePicker */}
           <TimePickerGoal selectedValue={newGoal} setSelectedValue={setNewGoal} />
-          <button
-            onClick={handleSaveGoal}
-            className="bg-white text-one text-sm font-semibold rounded-lg shadow hover:bg-one w-full p-3"
-          >
-            Guardar meta
-          </button>
-          <button
-            onClick={onClose}
-            className="mt-4 bg-one border border-white text-white text-sm font-semibold rounded-lg shadow hover:bg-one w-full p-3"
-          >
-            Cancelar
-          </button>
+          <div className="absolute bottom-10 w-full">
+            <button
+              onClick={handleSaveGoal}
+              className="bg-white text-one text-xs font-semibold rounded-lg shadow hover:bg-one w-full p-3"
+            >
+              Guardar meta
+            </button>
+            <button
+              onClick={onClose}
+              className="mt-4 bg-one border border-white text-white text-xs font-semibold rounded-lg shadow hover:bg-one w-full p-3"
+            >
+              Cancelar
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
 };
-
 
 export default EditGoalModal;

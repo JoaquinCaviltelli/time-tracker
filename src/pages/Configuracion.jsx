@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { HoursContext } from "../context/HoursContext";
 import EditGoalModal from "../components/EditGoalModal";
 import EditDisplayNameModal from "../components/EditDisplayNameModal";
-import EditRangeModal from "../components/EditRangeModal"; 
+import EditRangeModal from "../components/EditRangeModal";
 import RegisterModal from "../components/RegisterModal"; // Importamos el modal de registro
 
 const Configuracion = () => {
@@ -44,10 +44,12 @@ const Configuracion = () => {
           >
             <span className="text-xl font-bold capitalize">{range}</span>
             <br />
-            <span className="font-light text-xs opacity-50">Editar rango</span>
+            <span className="font-light text-xs opacity-50">
+              Desbloquea nuevas herramientas
+            </span>
           </button>
         </div>
-        
+
         {/* Actualizar Meta */}
         <div className="">
           <button
@@ -62,39 +64,40 @@ const Configuracion = () => {
 
         {/* Editar Nombre */}
         {user?.email && (
-        <div>
-          <button
-            onClick={() => setIsDisplayNameModalOpen(true)}
-            className="bg-one text-white rounded w-full p-4 pt-6"
-          >
-            <span className="text-xl font-bold">{displayName}</span>
-            <br />
-            <span className="font-light text-xs opacity-50">Editar nombre</span>
-          </button>
-          <button
-          onClick={handleLogout}
-          className="bg-acent w-full text-white p-3 rounded hover:bg-white mt-3"
-        >
-          Cerrar sesión
-        </button>
-        </div>
-)}
+          <div>
+            <button
+              onClick={() => setIsDisplayNameModalOpen(true)}
+              className="bg-one text-white rounded w-full p-4 pt-6"
+            >
+              <span className="text-xl font-bold">{displayName}</span>
+              <br />
+              <span className="font-light text-xs opacity-50">
+                Editar nombre
+              </span>
+            </button>
+            <button
+              onClick={handleLogout}
+              className="bg-acent w-full text-white p-3 rounded hover:bg-white mt-3"
+            >
+              Cerrar sesión
+            </button>
+          </div>
+        )}
         {/* Registro de Cuenta */}
         {!user?.email && (
           <div>
-          <button
-            onClick={() => setIsRegisterModalOpen(true)}
-            className="bg-one text-white rounded w-full p-4 pt-6"
-          >
-            <span className="text-xl font-bold">Copia de seguridad</span>
-            <br />
-            <span className="font-light text-xs opacity-50">Registrate</span>
-          </button>
-        </div>
-          
+            <button
+              onClick={() => setIsRegisterModalOpen(true)}
+              className="bg-one text-white rounded w-full p-4 pt-6"
+            >
+              <div className="flex justify-center items-center gap-5">
+                <span className="text-xl font-bold ">Copia de seguridad</span>
+                <span className="material-icons">cloud_upload</span>
+              </div>
+              <span className="font-light text-xs opacity-50">Registrate</span>
+            </button>
+          </div>
         )}
-
-        
       </div>
 
       {/* Modales */}

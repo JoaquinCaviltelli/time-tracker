@@ -64,7 +64,7 @@ const ModalAddHours = () => {
         onClick={openModal}
         className="bg-acent text-white hover:bg-one transition rounded-full w-14 h-14 flex justify-center items-center absolute right-0 bottom-0"
       >
-        <span className="material-icons font-bold text-4xl">add</span>
+        <span className="material-icons font-bold text-2xl">add</span>
       </button>
 
       {modalState.visible && (

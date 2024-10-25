@@ -58,7 +58,7 @@ const EditRankModal = ({ onClose }) => {
             Guardar Rango
           </button>
           <button
-            onClick={handleCancel}
+            onClick={onClose}
             className="mt-4 bg-one border border-white text-white text-xs font-semibold rounded-lg shadow hover:bg-one w-full p-3"
           >
             Cancelar
