@@ -11,13 +11,13 @@ import { useSwipeable } from "react-swipeable"; // Importar la librería de desl
 moment.locale("es");
 
 const Historial = () => {
-  const { user, goal } = useContext(HoursContext); // Incluye el objetivo de horas desde el contexto
+  const { user, goal, range } = useContext(HoursContext); // Incluye el objetivo de horas desde el contexto
   const [hours, setHours] = useState([]);
   const [currentMonth, setCurrentMonth] = useState(moment().startOf("month"));
   const [selectedHour, setSelectedHour] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [courses, setCourses] = useState([]);
-  
+
   const today = moment();
   const navigate = useNavigate();
   const buffer = 5; // Buffer de horas adicionales
@@ -45,23 +45,30 @@ const Historial = () => {
 
   // Lógica para sumar horas de campo y crédito siguiendo el buffer y la meta
   const totalFieldHours = daysWithHours.reduce(
-    (acc, hour) => (hour.serviceType === "campo" ? acc + hour.hoursWorked + hour.minutesWorked / 60 : acc),
+    (acc, hour) =>
+      hour.serviceType === "campo"
+        ? acc + hour.hoursWorked + hour.minutesWorked / 60
+        : acc,
     0
   );
 
   const totalCreditHours = daysWithHours.reduce(
-    (acc, hour) => (hour.serviceType === "credito" ? acc + hour.hoursWorked + hour.minutesWorked / 60 : acc),
+    (acc, hour) =>
+      hour.serviceType === "credito"
+        ? acc + hour.hoursWorked + hour.minutesWorked / 60
+        : acc,
     0
   );
 
   const totalWorkedThisMonth = totalFieldHours + totalCreditHours;
 
   // Aplicar lógica de meta + buffer
-  const totalHoursToCount = totalWorkedThisMonth > goal + buffer
-    ? totalFieldHours > goal + buffer
-      ? totalFieldHours
-      : goal + buffer
-    : totalWorkedThisMonth;
+  const totalHoursToCount =
+    totalWorkedThisMonth > goal + buffer
+      ? totalFieldHours > goal + buffer
+        ? totalFieldHours
+        : goal + buffer
+      : totalWorkedThisMonth;
 
   const hoursFromMinutes = Math.floor(totalHoursToCount);
   const minutesRest = Math.round((totalHoursToCount - hoursFromMinutes) * 60);
@@ -122,25 +129,39 @@ const Historial = () => {
   // Manejadores de deslizamiento
   const handlers = useSwipeable({
     onSwipedLeft: () => setCurrentMonth((prev) => moment(prev).add(1, "month")),
-    onSwipedRight: () => setCurrentMonth((prev) => moment(prev).subtract(1, "month")),
+    onSwipedRight: () =>
+      setCurrentMonth((prev) => moment(prev).subtract(1, "month")),
     preventScrollOnSwipe: true,
     trackMouse: true, // Permite usar también el mouse
   });
 
   return (
     <div className="container mx-auto p-4 max-w-lg" {...handlers}>
-      <div className="w-full flex justify-end my-4 gap-6 items-center">
-        <p className="text-sm text-left font-bold text-one">
-          Total: {hoursFromMinutes}:{minutesRest < 10 ? `0${minutesRest}` : minutesRest}h <br />
-          Cursos: {courses.length}
-        </p>
-        <button
+      <div className="flex w-full gap-2 justify-between  mb-6 mt-4">
+        {range != "publicador" && (
+          <div
+            className="bg-one rounded-lg shadow-lg flex gap-6 items-center justify-between p-4 cursor-pointer w-full "
+            onClick={() => navigate("/YearlySummary")}
+          >
+            <p className="text-sm  text-white">Resumen anual</p>
+            <span className="material-icons text-white">equalizer</span>
+          </div>
+        )}
+
+        <div
+          className="bg-one rounded-lg shadow-lg flex gap-6 items-center justify-between p-4 cursor-pointer w-full"
           onClick={handleShare}
-          className="text-white border rounded p-2 flex items-center bg-one"
         >
-          <span className="material-icons">share</span>
-        </button>
+          <p className="text-sm  text-white">
+            Total: {hoursFromMinutes}:
+            {minutesRest < 10 ? `0${minutesRest}` : minutesRest}h <br />
+            Cursos: {courses.length}
+          </p>
+          <span className="material-icons text-white">share</span>
+        </div>
+        
       </div>
+
       <div className="flex justify-between items-center mb-4 text-xs">
         <button
           onClick={() =>
@@ -233,12 +254,6 @@ const Historial = () => {
           userId={user.uid}
         />
       )}
-      <button
-        onClick={() => navigate("/YearlySummary")}
-        className="text-white bg-acent border rounded p-2 mt-4 w-full"
-      >
-        Ver Resumen Anual
-      </button>
     </div>
   );
 };

@@ -64,7 +64,7 @@ const ModalAddHours = () => {
         onClick={openModal}
         className="bg-acent text-white hover:bg-one transition rounded-full w-14 h-14 flex justify-center items-center absolute right-0 bottom-0"
       >
-        <span className="material-icons font-semibold">add</span>
+        <span className="material-icons font-bold text-4xl">add</span>
       </button>
 
       {modalState.visible && (
@@ -81,48 +81,45 @@ const ModalAddHours = () => {
             {/* <h2 className="text-4xl font-bold mb-2 text-center text-gray-600">
               {selectedHour}:{selectedMinute}
             </h2> */}
-  {serviceType === "campo" ? (
-                <button
-                  type="button"
-                  className="w-full text-one font-bold   flex justify-center flex-col items-center"
-                  onClick={() => {
-                    setServiceType("credito");
-                  }}
-                >
-                  <p>
-
+            {/* {serviceType === "campo" ? (
+              <button
+                type="button"
+                className="w-full text-one font-bold   flex justify-center flex-col items-center"
+                onClick={() => {
+                  setServiceType("credito");
+                }}
+              >
+                <p>
                   <span className="material-icons font-semibold rotate-0 transition-all">
                     swap_horiz
                   </span>
-                  </p>
-                  {"Servicio al campo"}
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="w-full text-one font-bold  capitalize flex justify-center items-center flex-col "
-                  onClick={() => {
-                    setServiceType("campo");
-                  }}
-                >
-                  <p>
-
+                </p>
+                {"Servicio al campo"}
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="w-full text-one font-bold  capitalize flex justify-center items-center flex-col "
+                onClick={() => {
+                  setServiceType("campo");
+                }}
+              >
+                <p>
                   <span className="material-icons font-semibold rotate-180 transition-all">
                     swap_horiz
                   </span>
-                  </p>
-                  {"Credito"}
-                </button>
-              )}
+                </p>
+                {"Credito"}
+              </button>
+            )} */}
             <form className="mb-4" onSubmit={handleSubmit}>
-                {/* Aquí se inserta el TimePicker */}
-                <TimePicker
-                  selectedHour={selectedHour}
-                  selectedMinute={selectedMinute}
-                  setSelectedHour={setSelectedHour}
-                  setSelectedMinute={setSelectedMinute}
-                />
-              
+              {/* Aquí se inserta el TimePicker */}
+              <TimePicker
+                selectedHour={selectedHour}
+                selectedMinute={selectedMinute}
+                setSelectedHour={setSelectedHour}
+                setSelectedMinute={setSelectedMinute}
+              />
 
               <input
                 type="date"
@@ -134,7 +131,6 @@ const ModalAddHours = () => {
                   background: "transparent",
                 }}
               />
-              
 
               <div className="mt-6 flex w-full justify-center">
                 {/* <button

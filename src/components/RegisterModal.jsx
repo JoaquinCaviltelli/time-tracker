@@ -11,7 +11,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const { user, setIsRangeModalOpen, isRangeModalOpen } = useContext(HoursContext);
+  const { user, setIsRangeModalOpen, range } = useContext(HoursContext);
 
   const handleRegister = async (name, email, password) => {
     try {
@@ -25,7 +25,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
         await updateProfile(userCredential.user, { displayName: name });
       }
       navigate("/");
-      if(!isRangeModalOpen){
+      if(!range){
         setIsRangeModalOpen(true);
 
       }

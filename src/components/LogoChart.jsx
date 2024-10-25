@@ -6,14 +6,16 @@ import { useState, useEffect } from "react";
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
 const LogoChart = () => {
-  const today = new Date();
-  const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-  const currentDay = today.getDate();
-  const daysPassed = currentDay;
-  const daysRemaining = daysInMonth - daysPassed + 1;
+  const getRandomValue = () => Math.floor(Math.random() * 10) + 1; // Valor aleatorio entre 1 y 10
 
-  const [firstRingData, setFirstRingData] = useState([8, 10]);
-  const [secondRingData, setSecondRingData] = useState([4, 10]);
+  const [firstRingData, setFirstRingData] = useState([
+    getRandomValue(),
+    getRandomValue(),
+  ]);
+  const [secondRingData, setSecondRingData] = useState([
+    getRandomValue(),
+    getRandomValue(),
+  ]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -21,7 +23,7 @@ const LogoChart = () => {
       const randomDaysRemaining = Math.floor(Math.random() * 10) + 1; // Valor aleatorio entre 1 y 10
       const randomValue1 = Math.floor(Math.random() * 10) + 1; // Valor aleatorio entre 1 y 10
       const randomValue2 = Math.floor(Math.random() * 10) + 1; // Valor aleatorio entre 1 y 10
-      
+
       setFirstRingData([randomDaysPassed, randomDaysRemaining]);
       setSecondRingData([randomValue1, randomValue2]);
     }, 4000);

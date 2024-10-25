@@ -9,7 +9,7 @@ const EditRankModal = ({ onClose }) => {
 
   // Mapeo de rangos a metas
   const rankToGoal = {
-    publicador: 15,
+    publicador: 10,
     auxiliar: 30,
     regular: 50,
     especial: 70,
@@ -33,6 +33,17 @@ const EditRankModal = ({ onClose }) => {
     }
   };
 
+  const handleCancel = async () => {
+    
+      onClose();
+      await updateRange("publicador"); 
+      await updateGoal(10); // Actualizar la meta según el rango
+      
+   
+  };
+
+
+
   return (
     <div className="fixed z-50 inset-0">
       <div className="bg-one p-6 w-full h-full text-white flex flex-col">
@@ -47,7 +58,7 @@ const EditRankModal = ({ onClose }) => {
             Guardar Rango
           </button>
           <button
-            onClick={onClose}
+            onClick={handleCancel}
             className="mt-4 bg-one border border-white text-white text-xs font-semibold rounded-lg shadow hover:bg-one w-full p-3"
           >
             Cancelar

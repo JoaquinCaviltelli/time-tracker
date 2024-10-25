@@ -71,6 +71,12 @@ const Configuracion = () => {
             <br />
             <span className="font-light text-xs opacity-50">Editar nombre</span>
           </button>
+          <button
+          onClick={handleLogout}
+          className="bg-acent w-full text-white p-3 rounded hover:bg-white mt-3"
+        >
+          Cerrar sesión
+        </button>
         </div>
 )}
         {/* Registro de Cuenta */}
@@ -88,12 +94,7 @@ const Configuracion = () => {
           
         )}
 
-        <button
-          onClick={handleLogout}
-          className="bg-acent w-full text-white p-3 rounded hover:bg-white mt-3"
-        >
-          Cerrar sesión
-        </button>
+        
       </div>
 
       {/* Modales */}
