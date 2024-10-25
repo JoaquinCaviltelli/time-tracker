@@ -3,13 +3,15 @@ import { HoursContext } from "../context/HoursContext";
 import EditGoalModal from "../components/EditGoalModal";
 import ModalAddHours from "../components/ModalAddHours";
 import AddCourseModal from "../components/AddCourseModal";
+import EditRangeModal from "../components/EditRangeModal"; // Importar el modal de rango
+
 import Clock from "../components/Clock";
 import { db } from "../services/firebase";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import moment from "moment";
 
 const Home = () => {
-  const { user, goal } = useContext(HoursContext);
+  const { user, goal, isRangeModalOpen, setIsRangeModalOpen, } = useContext(HoursContext);
   const [hours, setHours] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCourseModalOpen, setIsCourseModalOpen] = useState(false);
@@ -187,6 +189,9 @@ const Home = () => {
           onClose={() => setIsCourseModalOpen(false)}
           contacts={contacts}
         />
+      )}
+      {isRangeModalOpen && (
+        <EditRangeModal onClose={() => setIsRangeModalOpen(false)} />
       )}
     </div>
   );

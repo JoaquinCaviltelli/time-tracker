@@ -25,6 +25,8 @@ export const HoursProvider = ({ children }) => {
   const [goal, setGoal] = useState(15);
   const [loading, setLoading] = useState(true);
   const [range, setRange] = useState("publicador"); // Estado de rango
+  const [isRangeModalOpen, setIsRangeModalOpen] = useState(false); // Estado para el modal de rango
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -180,6 +182,8 @@ export const HoursProvider = ({ children }) => {
         range, // Estado de rango
         logout,
         loading,
+        isRangeModalOpen,
+        setIsRangeModalOpen
       }}
     >
       {children}

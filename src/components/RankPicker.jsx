@@ -52,16 +52,16 @@ const RankPicker = ({ selectedRank, setSelectedRank }) => {
       <div className="flex w-full">
         <div className="picker flex flex-col w-full">
           <div
-            className="scroll-container h-[140px] overflow-y-scroll relative scrollbar-hidden"
+            className="scroll-container h-[180px] overflow-y-scroll relative scrollbar-hidden"
             ref={rankRef}
             onScroll={handleScroll}
           >
-            <div className="h-10"></div>
+            <div className="h-16"></div>
             {ranks.map((rank, index) => (
               <div
                 key={index}
-                className={`text-4xl rank-item py-2 px-1 text-center text-white ${
-                  selectedRank === rank ? "text-accent font-bold" : "opacity-30 text-xl"
+                className={`text-3xl rank-item py-2 px-1 text-center text-white ${
+                  selectedRank === rank ? "text-accent font-bold" : "opacity-30 text-base"
                 }`}
                 style={{
                   height: `${itemHeight}px`,

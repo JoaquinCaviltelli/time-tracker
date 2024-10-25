@@ -1,25 +1,33 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { toast } from "react-toastify";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../services/firebase";
+import { HoursContext } from "/src/context/HoursContext.jsx";
 
 const RegisterModal = ({ isOpen, onClose }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const { setIsRangeModalOpen } = useContext(HoursContext);
+
   const handleRegister = async (name, email, password) => {
     try {
+      setIsRangeModalOpen(true)
       onClose(); // Cierra el modal después del registro
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       await updateProfile(userCredential.user, { displayName: name });
       toast.success(`Bienvenido ${name}`);
     } catch (error) {
-      if (error.code === 'auth/email-already-in-use') {
+      if (error.code === "auth/email-already-in-use") {
         toast.error("El usuario ya está en uso.");
-      } else if (error.code === 'auth/invalid-email') {
+      } else if (error.code === "auth/invalid-email") {
         toast.error("El usuario no es válido.");
-      } else if (error.code === 'auth/weak-password') {
+      } else if (error.code === "auth/weak-password") {
         toast.error("La contraseña es muy débil.");
       } else {
         toast.error("Error al registrarse.");

@@ -5,11 +5,18 @@ import EditDisplayNameModal from "../components/EditDisplayNameModal";
 import EditRangeModal from "../components/EditRangeModal"; // Importar el modal de rango
 
 const Configuracion = () => {
-  const { goal, user, updateDisplayName, logout, range } = useContext(HoursContext);
+  const {
+    goal,
+    user,
+    updateDisplayName,
+    logout,
+    range,
+    isRangeModalOpen,
+    setIsRangeModalOpen,
+  } = useContext(HoursContext);
   const [displayName, setDisplayName] = useState(user?.displayName || "");
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
   const [isDisplayNameModalOpen, setIsDisplayNameModalOpen] = useState(false);
-  const [isRangeModalOpen, setIsRangeModalOpen] = useState(false); // Estado para el modal de rango
 
   const handleSaveDisplayName = async (newDisplayName) => {
     await updateDisplayName(newDisplayName);

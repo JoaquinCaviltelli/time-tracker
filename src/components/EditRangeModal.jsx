@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import RankPicker from "./RankPicker";
 
 const EditRankModal = ({ onClose }) => {
-  const { updateRange, updateGoal, range } = useContext(HoursContext); // Añadir updateGoal
+  const { updateRange, updateGoal, range, user } = useContext(HoursContext); // Añadir updateGoal
   const [selectedRank, setSelectedRank] = useState("publicador");
 
   // Mapeo de rangos a metas
@@ -36,21 +36,23 @@ const EditRankModal = ({ onClose }) => {
   return (
     <div className="fixed z-50 inset-0">
       <div className="bg-one p-6 w-full h-full text-white flex flex-col">
-        <h2 className="text-base mt-6 text-center">Editar Rango</h2>
-        <div className="max-w-md m-auto w-full">
+        <h2 className="text-base mt-6 text-center">{user.displayName}</h2>
+        <div className="max-w-md m-auto w-full relative h-full flex justify-center flex-col pb-28">
           <RankPicker selectedRank={selectedRank} setSelectedRank={setSelectedRank} />
-          <button
+         <div className="absolute bottom-10 w-full">
+         <button
             onClick={handleSaveRank}
-            className="bg-white text-one text-sm font-semibold rounded-lg shadow hover:bg-one w-full p-3"
+            className="bg-white text-one text-xs font-semibold rounded-lg shadow hover:bg-one w-full p-3"
           >
             Guardar Rango
           </button>
           <button
             onClick={onClose}
-            className="mt-4 bg-one border border-white text-white text-sm font-semibold rounded-lg shadow hover:bg-one w-full p-3"
+            className="mt-4 bg-one border border-white text-white text-xs font-semibold rounded-lg shadow hover:bg-one w-full p-3"
           >
             Cancelar
           </button>
+         </div>
         </div>
       </div>
     </div>
