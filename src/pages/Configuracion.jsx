@@ -2,7 +2,8 @@ import { useContext, useState } from "react";
 import { HoursContext } from "../context/HoursContext";
 import EditGoalModal from "../components/EditGoalModal";
 import EditDisplayNameModal from "../components/EditDisplayNameModal";
-import EditRangeModal from "../components/EditRangeModal"; // Importar el modal de rango
+import EditRangeModal from "../components/EditRangeModal"; 
+import RegisterModal from "../components/RegisterModal"; // Importamos el modal de registro
 
 const Configuracion = () => {
   const {
@@ -17,10 +18,11 @@ const Configuracion = () => {
   const [displayName, setDisplayName] = useState(user?.displayName || "");
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
   const [isDisplayNameModalOpen, setIsDisplayNameModalOpen] = useState(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false); // Estado para el modal de registro
 
   const handleSaveDisplayName = async (newDisplayName) => {
     await updateDisplayName(newDisplayName);
-    setDisplayName(newDisplayName); // Actualiza el estado local con el nuevo nombre
+    setDisplayName(newDisplayName);
   };
 
   const handleLogout = async () => {
@@ -37,7 +39,7 @@ const Configuracion = () => {
         {/* Editar Rango */}
         <div>
           <button
-            onClick={() => setIsRangeModalOpen(true)} // Abrir el modal de rango
+            onClick={() => setIsRangeModalOpen(true)}
             className="bg-one text-white rounded w-full p-4 pt-6"
           >
             <span className="text-xl font-bold capitalize">{range}</span>
@@ -45,6 +47,7 @@ const Configuracion = () => {
             <span className="font-light text-xs opacity-50">Editar rango</span>
           </button>
         </div>
+        
         {/* Actualizar Meta */}
         <div className="">
           <button
@@ -58,6 +61,7 @@ const Configuracion = () => {
         </div>
 
         {/* Editar Nombre */}
+        {user?.email && (
         <div>
           <button
             onClick={() => setIsDisplayNameModalOpen(true)}
@@ -68,21 +72,35 @@ const Configuracion = () => {
             <span className="font-light text-xs opacity-50">Editar nombre</span>
           </button>
         </div>
+)}
+        {/* Registro de Cuenta */}
+        {!user?.email && (
+          <div>
+          <button
+            onClick={() => setIsRegisterModalOpen(true)}
+            className="bg-one text-white rounded w-full p-4 pt-6"
+          >
+            <span className="text-xl font-bold">Copia de seguridad</span>
+            <br />
+            <span className="font-light text-xs opacity-50">Registrate</span>
+          </button>
+        </div>
+          
+        )}
 
         <button
           onClick={handleLogout}
-          className="bg-acent  w-full text-white p-3 rounded hover:bg-white"
+          className="bg-acent w-full text-white p-3 rounded hover:bg-white mt-3"
         >
           Cerrar sesión
         </button>
       </div>
 
-      {/* Modal para editar la meta */}
+      {/* Modales */}
       {isGoalModalOpen && (
         <EditGoalModal onClose={() => setIsGoalModalOpen(false)} />
       )}
 
-      {/* Modal para editar el nombre */}
       {isDisplayNameModalOpen && (
         <EditDisplayNameModal
           onClose={() => setIsDisplayNameModalOpen(false)}
@@ -91,10 +109,15 @@ const Configuracion = () => {
         />
       )}
 
-      {/* Modal para editar el rango */}
       {isRangeModalOpen && (
         <EditRangeModal onClose={() => setIsRangeModalOpen(false)} />
       )}
+
+      {/* Modal de Registro */}
+      <RegisterModal
+        isOpen={isRegisterModalOpen}
+        onClose={() => setIsRegisterModalOpen(false)}
+      />
     </div>
   );
 };
