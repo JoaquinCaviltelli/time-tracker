@@ -9,7 +9,7 @@ import RegisterModal from "/src/components/RegisterModal.jsx";
 import LoginModal from "/src/components/LoginModal.jsx"; // Importa el nuevo modal
 
 const Login = () => {
-  const { user } = useContext(HoursContext);
+  const { user, setIsRangeModalOpen } = useContext(HoursContext);
   const navigate = useNavigate();
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // Estado para el modal de login con email
@@ -30,7 +30,7 @@ const Login = () => {
   const handleAnonymousLogin = async () => {
     try {
       await signInAnonymously(auth);
-      toast.success("Has ingresado de forma anónima.");
+      setIsRangeModalOpen(true);
       navigate("/"); // Redirigir al home
     } catch (error) {
       toast.error("Error al iniciar sesión anónimamente");

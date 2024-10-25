@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword, updateProfile, EmailAuthProvider, linkWithCredential } from "firebase/auth";
 import { auth } from "../services/firebase";
 import { HoursContext } from "/src/context/HoursContext.jsx";
@@ -8,8 +9,9 @@ const RegisterModal = ({ isOpen, onClose }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const { user, setIsRangeModalOpen } = useContext(HoursContext);
+  const { user, setIsRangeModalOpen, isRangeModalOpen } = useContext(HoursContext);
 
   const handleRegister = async (name, email, password) => {
     try {
@@ -22,8 +24,11 @@ const RegisterModal = ({ isOpen, onClose }) => {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         await updateProfile(userCredential.user, { displayName: name });
       }
+      navigate("/");
+      if(!isRangeModalOpen){
+        setIsRangeModalOpen(true);
 
-      setIsRangeModalOpen(true);
+      }
       onClose();
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
