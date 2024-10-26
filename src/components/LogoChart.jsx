@@ -83,11 +83,19 @@ const LogoChart = () => {
   };
 
   return (
-    <Doughnut
-      className="w-full max-w-60 m-auto"
-      data={data}
-      options={chartOptions}
-    />
+    <div className="flex items-center justify-center mb-4 relative">
+                <div className="absolute inset-0 flex flex-col items-center justify-center cursor-pointer  rounded-full m-10">
+                    
+                    <img src="/src/assets/logoT.svg" className="w-14" alt="" />
+                </div>
+                
+                <Doughnut
+                  className="w-full max-w-60 m-auto"
+                  data={data}
+                  options={chartOptions}
+                />
+            </div>
+            
   );
 };
 
