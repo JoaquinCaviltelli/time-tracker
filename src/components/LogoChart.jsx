@@ -2,7 +2,6 @@ import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, Tooltip, Legend, ArcElement } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { useState, useEffect } from "react";
-import "/src/assets/logoT.svg"
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
@@ -84,20 +83,11 @@ const LogoChart = () => {
   };
 
   return (
-    <div className="flex items-center justify-center mb-4 relative">
-                <div className="absolute inset-0 flex flex-col items-center justify-center cursor-pointer  rounded-full m-10">
-                    
-                    <img src="src/assets/logoT.svg" className="w-14" alt="" />
-                    
-                </div>
-                
-                <Doughnut
-                  className="w-full max-w-60 m-auto"
-                  data={data}
-                  options={chartOptions}
-                />
-            </div>
-            
+    <Doughnut
+      className="w-full max-w-60 m-auto"
+      data={data}
+      options={chartOptions}
+    />
   );
 };
 
