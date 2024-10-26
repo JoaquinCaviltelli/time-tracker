@@ -4,7 +4,8 @@ import { toast } from "react-toastify";
 import RankPicker from "./RankPicker";
 
 const EditRankModal = ({ onClose }) => {
-  const { updateRange, updateGoal, range, user } = useContext(HoursContext); // Añadir updateGoal
+  const { updateRange, updateGoal, range, user, goal } =
+    useContext(HoursContext); // Añadir updateGoal
   const [selectedRank, setSelectedRank] = useState("publicador");
 
   // Mapeo de rangos a metas
@@ -27,43 +28,46 @@ const EditRankModal = ({ onClose }) => {
       onClose();
       await updateRange(selectedRank); // Guardar el rango seleccionado
       await updateGoal(rankToGoal[selectedRank]); // Actualizar la meta según el rango
-      
     } catch (error) {
-      toast.error("Error al actualizar el rango o la meta. Inténtalo de nuevo.");
+      toast.error(
+        "Error al actualizar el rango o la meta. Inténtalo de nuevo."
+      );
     }
   };
 
   const handleCancel = async () => {
-    
-      onClose();
-      await updateRange("publicador"); 
+    onClose();
+    if (!range) {
+      await updateRange("publicador");
+    }
+    if (goal === 0) {
       await updateGoal(10); // Actualizar la meta según el rango
-      
-   
+    }
   };
-
-
 
   return (
     <div className="fixed z-50 inset-0">
       <div className="bg-one p-6 w-full h-full text-white flex flex-col">
         <h2 className="text-base mt-6 text-center">{user.displayName}</h2>
         <div className="max-w-md m-auto w-full relative h-full flex justify-center flex-col pb-28">
-          <RankPicker selectedRank={selectedRank} setSelectedRank={setSelectedRank} />
-         <div className="absolute bottom-10 w-full">
-         <button
-            onClick={handleSaveRank}
-            className="bg-white text-one text-xs font-semibold rounded-lg shadow hover:bg-one w-full p-3"
-          >
-            Guardar Rango
-          </button>
-          <button
-            onClick={onClose}
-            className="mt-4 bg-one border border-white text-white text-xs font-semibold rounded-lg shadow hover:bg-one w-full p-3"
-          >
-            Cancelar
-          </button>
-         </div>
+          <RankPicker
+            selectedRank={selectedRank}
+            setSelectedRank={setSelectedRank}
+          />
+          <div className="absolute bottom-10 w-full">
+            <button
+              onClick={handleSaveRank}
+              className="bg-white text-one text-xs font-semibold rounded-lg shadow hover:bg-one w-full p-3"
+            >
+              Guardar Rango
+            </button>
+            <button
+              onClick={handleCancel}
+              className="mt-4 bg-one border border-white text-white text-xs font-semibold rounded-lg shadow hover:bg-one w-full p-3"
+            >
+              Cancelar
+            </button>
+          </div>
         </div>
       </div>
     </div>

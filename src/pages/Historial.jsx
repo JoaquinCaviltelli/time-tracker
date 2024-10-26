@@ -138,7 +138,7 @@ const Historial = () => {
   return (
     <div className="container mx-auto p-4 max-w-lg" {...handlers}>
       <div className="flex w-full gap-2 justify-between  mb-6 mt-4">
-        {range != "publicador" && (
+       
           <div
             className="bg-one rounded-lg shadow-lg flex gap-6 items-center justify-between p-4 cursor-pointer w-full "
             onClick={() => navigate("/YearlySummary")}
@@ -146,7 +146,7 @@ const Historial = () => {
             <p className="text-sm  text-white">Resumen anual</p>
             <span className="material-icons text-white">equalizer</span>
           </div>
-        )}
+        
 
         <div
           className="bg-one rounded-lg shadow-lg flex gap-6 items-center justify-between p-4 cursor-pointer w-full"

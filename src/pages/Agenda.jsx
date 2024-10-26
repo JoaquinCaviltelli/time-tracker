@@ -108,12 +108,10 @@ const Agenda = () => {
 
         <button
           onClick={handleAddContact}
-          className="text-white bg-acent border rounded p-2 flex items-center"
+          className="text-white bg-acent rounded p-2 flex items-center"
         >
           <span className="material-icons">add</span>
         </button>
-
-
       </div>
       {/* Campo de búsqueda */}
       <input
@@ -123,7 +121,6 @@ const Agenda = () => {
         onChange={(e) => setSearchTerm(e.target.value)}
         className="border text-acent p-2 mb-4 rounded w-full outline-none"
       />
-
 
       <div className="space-y-2">
         {filteredContacts.length > 0 ? (
@@ -161,7 +158,15 @@ const Agenda = () => {
             </div>
           ))
         ) : (
-          <p className="text-gray-500">No hay contactos en la agenda.</p>
+          <>
+            <p className="text-gray-500 mb-6">No hay contactos en la agenda.</p>
+            <button
+              onClick={handleAddContact}
+              className=" text-white w-full bg-acent rounded p-3"
+            >
+              <span>Agregar</span>
+            </button>
+          </>
         )}
       </div>
 

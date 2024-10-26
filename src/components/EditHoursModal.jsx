@@ -171,7 +171,7 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
             {hours}:{minutes}
           </h2> */}
 
-          {selectedEntry.length > 1 ? (
+          {/* {selectedEntry.length > 1 ? (
             <button
               type="button"
               className="w-full text-one font-bold flex justify-center items-center flex-col"
@@ -208,7 +208,7 @@ const EditHoursModal = ({ closeModal, selectedEntry, userId }) => {
             >
               {service === "campo" ? "Servicio del campo" : "Credito"}
             </button>
-          )}
+          )} */}
           <form className="max-w-md m-auto mb-4" onSubmit={handleEditHours}>
             {/* Reemplazar los selectores de horas y minutos con el TimePicker */}
             <TimePicker
