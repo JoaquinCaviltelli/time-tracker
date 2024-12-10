@@ -64,13 +64,12 @@ const AddRevisitModal = ({ onClose }) => {
             className="border-b text-acent bg-transparent outline-none w-full p-2 text-sm mb-1 font-medium placeholder:text-acent placeholder:opacity-50"
           />
 
-         <input
-            type="text"
+          <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             className="border-b text-acent bg-transparent outline-none w-full p-2 text-sm mb-1 font-medium placeholder:text-acent placeholder:opacity-50"
             placeholder="Notas sobre la revisita"
-          />
+          ></textarea>
 
           <div className="absolute bottom-10 w-full">
             <button
