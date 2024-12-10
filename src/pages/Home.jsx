@@ -3,7 +3,8 @@ import { HoursContext } from "../context/HoursContext";
 import EditGoalModal from "../components/EditGoalModal";
 import ModalAddHours from "../components/ModalAddHours";
 import AddCourseModal from "../components/AddCourseModal";
-import EditRangeModal from "../components/EditRangeModal"; // Importar el modal de rango
+import AddRevisitModal from "../components/AddRevisitModal";
+import EditRangeModal from "../components/EditRangeModal";
 
 import Clock from "../components/Clock";
 import { db } from "../services/firebase";
@@ -11,30 +12,26 @@ import { collection, query, where, onSnapshot } from "firebase/firestore";
 import moment from "moment";
 
 const Home = () => {
-  const { user, goal, isRangeModalOpen, setIsRangeModalOpen, } = useContext(HoursContext);
+  const { user, goal, isRangeModalOpen, setIsRangeModalOpen } = useContext(HoursContext);
   const [hours, setHours] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCourseModalOpen, setIsCourseModalOpen] = useState(false);
+  const [isRevisitModalOpen, setIsRevisitModalOpen] = useState(false);
   const [courses, setCourses] = useState([]);
   const [contacts, setContacts] = useState([]);
   const [goalReached, setGoalReached] = useState(false);
 
   const currentMonth = moment().month();
   const currentYear = moment().year();
-  const today = moment(); // Día actual
-  const endOfMonth = moment().endOf("month"); // Fin del mes actual
-  const remainingDays = endOfMonth.diff(today, "days") + 1; // Días restantes del mes
+  const today = moment();
+  const endOfMonth = moment().endOf("month");
+  const remainingDays = endOfMonth.diff(today, "days") + 1;
 
   useEffect(() => {
-    // Cambiar el fondo del body al entrar en Home
-    document.body.style.backgroundColor = "#fff"; // Cambia este color al que quieras
-
-    // Limpiar el efecto al salir del componente
+    document.body.style.backgroundColor = "#fff";
     return () => {
-      document.body.style.backgroundColor = ""; // Restaura el color por defecto
+      document.body.style.backgroundColor = "";
     };
-
-    
   }, []);
 
   useEffect(() => {
@@ -56,9 +53,7 @@ const Home = () => {
 
   const filteredHours = hours.filter((entry) => {
     const entryDate = moment(entry.date);
-    return (
-      entryDate.month() === currentMonth && entryDate.year() === currentYear
-    );
+    return entryDate.month() === currentMonth && entryDate.year() === currentYear;
   });
 
   useEffect(() => {
@@ -87,23 +82,19 @@ const Home = () => {
     0
   );
 
-  // Calcular el total de horas y minutos trabajados
   const totalMinutes = totalMinutesWorked / 60;
   const hoursFromMinutes = Math.floor(totalMinutes);
   const minutesRest = Math.round((totalMinutes - hoursFromMinutes) * 60);
   const totalHours = totalHoursWorked + hoursFromMinutes;
 
-  // Calcular el tiempo restante para alcanzar la meta en minutos
   const totalMinutesGoal = goal * 60 - (totalHours * 60 + minutesRest);
-  const hoursGoal = Math.floor(totalMinutesGoal / 60); // Horas totales restantes
-  const minutesGoal = Math.round(totalMinutesGoal % 60); // Minutos totales restantes
+  const hoursGoal = Math.floor(totalMinutesGoal / 60);
+  const minutesGoal = Math.round(totalMinutesGoal % 60);
 
-  // Calcular las horas y minutos diarios que debes trabajar para alcanzar la meta
   const dailyMinutesGoal = totalMinutesGoal / remainingDays;
-  const dailyHours = Math.floor(dailyMinutesGoal / 60); // Horas por día
-  const dailyMinutes = Math.round(dailyMinutesGoal % 60); // Minutos por día
+  const dailyHours = Math.floor(dailyMinutesGoal / 60);
+  const dailyMinutes = Math.round(dailyMinutesGoal % 60);
 
-  // Verificar si se alcanzó la meta
   useEffect(() => {
     if (totalHours * 60 + minutesRest >= goal * 60) {
       setGoalReached(true);
@@ -143,9 +134,9 @@ const Home = () => {
         <ModalAddHours />
       </div>
 
-      <div className="grid gap-2 grid-cols-6 w-11/12 mx-auto text-center mt-10">
+      <div className="grid gap-2 grid-cols-8 w-11/12 mx-auto text-center mt-10">
         <div
-          className="bg-one rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-6 cursor-pointer"
+          className="bg-one rounded-lg shadow-lg flex flex-col items-center justify-center p-4 col-span-8 cursor-pointer"
           onClick={() => setIsModalOpen(true)}
         >
           <p className="text-xs font-light text-light">Tu meta es de:</p>
@@ -183,6 +174,14 @@ const Home = () => {
           <p className="text-xs font-light text-light">Cursos</p>
           <p className="text-2xl font-bold text-light">{courses.length}</p>
         </div>
+
+        <div
+          className="bg-acent rounded-lg shadow-lg flex flex-col items-center  p-4 col-span-2 cursor-pointer"
+          onClick={() => setIsRevisitModalOpen(true)}
+        >
+          <p className="text-xs font-light text-light">Revisitas</p>
+          <p className="text-2xl font-bold text-light">+</p>
+        </div>
       </div>
 
       {isModalOpen && <EditGoalModal onClose={() => setIsModalOpen(false)} />}
@@ -191,6 +190,9 @@ const Home = () => {
           onClose={() => setIsCourseModalOpen(false)}
           contacts={contacts}
         />
+      )}
+      {isRevisitModalOpen && (
+        <AddRevisitModal onClose={() => setIsRevisitModalOpen(false)} />
       )}
       {isRangeModalOpen && (
         <EditRangeModal onClose={() => setIsRangeModalOpen(false)} />
